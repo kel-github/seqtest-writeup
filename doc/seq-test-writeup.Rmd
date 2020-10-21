@@ -1,0 +1,325 @@
+---
+title: "fMRI protocol optimisation for studying the basal ganglia and cortex during performance on a visual cueing task"
+author: "Kelly G. Garner, Christopher R. Nolan, Markus Barth, Ole Jensen and Marta I. Garrido"
+date: '`r format(Sys.time())`'
+output:
+  bookdown::pdf_document2:
+    includes:
+      before_body: ../template/doc_prefix.tex 
+      in_header: ../template/preamble.tex
+    keep_tex: yes
+    latex_engine: xelatex # may need to change this
+    number_sections: no
+    toc: no
+  bookdown::html_document2:
+    number_sections: no
+    theme: readable
+    toc: yes
+  bookdown::tufte_html2:
+    number_sections: no
+    toc: yes
+  bookdown::word_document2: null
+fontsize: 12pt
+linestretch: 1.5
+link-citations: yes
+csl: https://raw.githubusercontent.com/citation-style-language/styles/master/chicago-annotated-bibliography.csl
+bibliography: ../template/ref.bib
+always_allow_html: yes
+links-as-notes: true
+---
+
+```{r knitr_options, echo=FALSE}
+library(knitr)
+# rstudio will set the folder where .Rmd file seats as work directory
+# set it back to the folder where .Rproj seats
+opts_knit$set(root.dir = normalizePath("../")) 
+opts_chunk$set(fig.align = 'center', cache = FALSE, warning = FALSE,
+  message = TRUE, echo = FALSE)
+options(digits = 3, width = 88, knitr.graphics.auto_pdf = TRUE,
+        knitr.kable.NA = '')
+# download template files if not available
+tpl_1 = 'https://raw.githubusercontent.com/daijiang/workflow_demo/master/template/preamble.tex'
+tpl_2 = 'https://raw.githubusercontent.com/daijiang/workflow_demo/master/template/doc_prefix.tex'
+# bib_1 = 'https://raw.githubusercontent.com/daijiang/workflow_demo/master/template/ref.bib'
+# change directory accordingly
+if(!file.exists(tpl_1f <- '../template/preamble.tex')) download.file(tpl_1, tpl_1f)
+if(!file.exists(tpl_2f <- '../template/doc_prefix.tex')) download.file(tpl_2, tpl_2f)
+if(knitr::is_latex_output() | knitr::is_html_output()){
+  library(kableExtra)
+} else {
+  options(kableExtra.auto_format = FALSE) # for docx
+}
+```
+
+```{r, libraries, echo=FALSE, message=F, warning=F}
+#library(rmarkdown)    # You need this library to run this template.
+#library(epuRate) 
+library(tidyverse)
+library(cowplot)
+library(readr)
+library(wesanderson)
+#library(rjson)
+library(RJSONIO)
+library(cowplot)
+library(rlang)
+library(kableExtra)
+source("../R/R_rainclouds.R") # for the raincloud plot
+```
+
+
+
+**Running headline**: Environment and species richness
+
+**Abstract**: Your awesome abstract here.
+
+\clearpage
+
+# Introduction
+
+```{r aims, fig.align='center', out.width="600pix", fig.cap="Regions of interest. A) Basal Ganglia anterior view, B) Basal Ganglia posterior view, C) Cortical ROIs. CN = Caudate Nucleus, GPe = Globus Pallidus External, GPi = Globus Pallidus Internal, Put = Putamen, STN = Subthalamic Nucleus, VS = Ventral Striatum, FEF = Frontal Eye Fields, IPS = Intraparietal Sulcus, LOC = Lateral Occipital Complex"}
+paradigm.fig.pth <- '../images/Fig_ROIs.png' 
+#paradigm.fig <- readPNG(paradigm.fig.pth, native=TRUE, info=TRUE)
+include_graphics(paradigm.fig.pth)
+
+```
+
+# Methods
+
+<br>
+
+## Participants
+
+<br>
+
+A total of 5 participants [1 female, 1 left-handed, mean age: 30.6 yrs, std: 7.7] took part in the experiment. Participants had normal or corrected-to-normal vision, and all reported no major neurological or psychiatric diagnoses, nor did they report any use of psychoactive medications. All participants received 20 AUD per hour for participation. Participants also earned cash rewards, contingent on correct responses in the presence of value cues (~15 AUD per session). The University of Queensland Human Research Ethics Committee approved the study as being within the guidelines of the National Statement on Ethical Conduct in Human Research and all participants gave informed, written consent.
+
+<br>
+
+## Experimental Protocols
+
+<br>
+
+Participants attended four experimental sessions. An initial behavioural session, where participants learned the the task procedures, and three sessions in the MRI scanner. Only the behavioural procedures applied in the scanner sessions are discussed here. However a full description of the initial behavioural session can be found online [here](). 
+
+<br>
+
+### Experimental Design
+
+<br>
+
+```{r paradigm, fig.align='center', out.width="600pix", fig.cap="Cueing paradigm. A) Task and trial sequence, B) value- and C) spatial-cue contingencies, D) Predicted behaviour (IE=inverse efficiency)"}
+paradigm.fig.pth <- '../images/Fig_Paradigm.png' 
+#paradigm.fig <- readPNG(paradigm.fig.pth, native=TRUE, info=TRUE)
+include_graphics(paradigm.fig.pth)
+
+```
+
+### Magnetic resonance imaging data acquisition
+
+```{r acquistable, echo=FALSE, message=F, warning=F}
+
+# Show it:
+TRs <- data.frame(TR=c(700, 1510, 1920), 
+                  TE=c('10, 30.56','19.4','22'),
+                  VoxSizeIso = c(2, 1.5, 1.5),
+                  PhaseEncodingDirGRAPPA = c('2','3','2'),
+                  MultiBandFactor=c('4','3','CAiPI shift 1'),
+                  ExcitFlipAngle=c(35,60,15),
+                  ReceiverBand_Hz_Px=c(1930,1116,1116),
+                  partFourier=c('5/8','6/8','6/8'),
+                  FOV=c('192 x 192 x 96','192 x 192 x 122','192 x 192 x 120'),
+                  Nslices=c(48,81,80))
+rownames(TRs) <- c("P1", "P2", "P3")
+kable(t(TRs), caption="Table 1. Compared sequences")
+```
+
+### Preprocessing
+
+### Single-subject analysis
+
+<br>
+
+# Results
+
+<br>
+
+## Behaviour
+
+```{r loadbehdata, echo=FALSE, message=F, warning=F}
+# source the data wrangling functions
+source('../R/data_wrangles.R')
+subjects = c(1, 2, 3, 4, 5)
+sessions = c(1)
+data_path = "~/Dropbox/MC-Projects/imaging-value-cert-att/striwp1"
+raw.data <- get_participant_data(subjects, sessions, data_path, folstr="behav")
+
+# Show it:
+# raw.data %>% head(5)
+```
+
+```{r cleanbehdata, echo=FALSE, message=F, warning=F}
+
+# clean sub data (remove incorrect responses, and resps > 3 sds above the participant median)
+sub.data <- lapply(subjects, clean.sub.data, data = raw.data)
+sub.data <- do.call(rbind, sub.data)  
+# compute accuracy and inverse efficiency respectively from the two data frames (raw.data and sub.data), 
+acc.data = raw.data %>% group_by(sub, reward_type, cert) %>%
+            summarise(acc = mean(resp))
+sum.inv.eff = sub.data %>% group_by(sub, reward_type, cert) %>%
+              summarise(RT = median(rt)) %>%
+              inner_join(acc.data, sum.inv.eff, by=c("sub", "reward_type", "cert")) %>%
+              transform(inv_eff = RT/acc)
+```
+
+```{r plotbeh, warning=FALSE, fig.align='center', out.width="600pix", fig.cap="Showing RT, Accuracy and Inverse Efficiency scores for each subject"}
+fig.cols = wes_palette("IsleofDogs1")[4:1]
+IE <- plot.behav(sum.inv.eff, dv="inv_eff", iv="cert", grp="reward_type", ylims =c(0.4, 2), cols = fig.cols) + xlab("") + ylab("IE")
+RT <- plot.behav(sum.inv.eff, dv="RT", iv="cert", grp="reward_type", ylims =c(0.4, 0.9), cols = fig.cols) + xlab("cue certainty") 
+ACC <- plot.behav(sum.inv.eff, dv="acc", iv="cert", grp="reward_type", ylims =c(0, 1), cols = fig.cols) + xlab("") + ylab("ACC")
+
+# arrange plots
+prow <- plot_grid(
+  RT + theme(legend.position = "none"),
+  ACC + theme(legend.position = "none"),
+  IE + theme(legend.position = "none"), 
+  align = 'vh',
+  labels=c("A", "B", "C"),
+  hjust=-1,
+  nrow=1
+)
+# extract the legend from one of the plots
+legend <- get_legend(
+  # create some space to the left of the legend
+  RT + theme(legend.box.margin = margin(0, 0, 0, 12))
+)
+
+# add the legend to the row we made earlier. Give it one-third of 
+# the width of one plot (via rel_widths).
+plot_grid(prow, legend, rel_widths = c(3, .5))
+
+```
+
+```{r loadmribeh, warning=FALSE, echo=FALSE, message=F, warning=F}
+
+sessions = c(2, 3, 4)
+TRs = c(700, 1510, 1920)
+mri.beh.raw <- get_mri_data(subjects, sessions, data_path, TRs)
+
+```
+```{r cleanmribeh, echo=FALSE, message=F, warning=F}
+RT_min = .2
+sd_reject = 2.5
+mri.beh.clean <- mri.beh.raw %>% group_by(sub, sess, TR, reward_type, cert) %>%
+                                 filter(rt > RT_min) %>%
+                                 filter(resp == 1) %>%
+                                 filter(rt < median(rt) + sd_reject*sd(rt)) 
+```
+
+```{r, mriIE, echo = FALSE, message=F, warning=F}
+
+mri.acc = mri.beh.raw %>% group_by(sub, TR, reward_type, cert) %>%
+                          summarise(acc = mean(resp))
+mri.inv.eff = mri.beh.clean %>% group_by(sub, TR, reward_type, cert) %>%
+                           summarise(RT = median(rt)) %>%
+                           inner_join(mri.acc, sum.inv.eff, by=c("sub", "TR", "reward_type", "cert")) %>%
+                           transform(inv_eff = RT/acc)
+```
+
+```{r, plotmribeh, warning=FALSE, fig.align='center', out.width="600pix", fig.cap="Showing Inverse Efficiency scores by reward condition and cue probability for each TR"}
+
+plot.mri(mri.inv.eff, dv="inv_eff", iv="cert", grp="reward_type", facet="TR", ylims =c(0.4, 1), cols = fig.cols) + ylab("IE") + xlab("cue certainty")
+```
+
+
+<br>
+
+## CNR
+
+<br>
+
+```{r CNR_by_reg, fig.align='center', out.width="600pix", fig.cap="CNR across a subset of ROIs. A) Cue certainty contrast, B) Response hand contrast"}
+paradigm.fig.pth <- '../images/Fig_CNR_CN.png' 
+#paradigm.fig <- readPNG(paradigm.fig.pth, native=TRUE, info=TRUE)
+include_graphics(paradigm.fig.pth)
+
+```
+ <br>
+
+### Comparing CNR Between Sequences
+
+<br>
+
+```{r loadCNRdat, echo=FALSE, message=F, warning=F}
+
+# Load and tidy data
+CNR = read.csv('~/Dropbox/MC-Projects/imaging-value-cert-att/striwp1/CNR-data/CNR_aggregated.csv')
+CNR$sub <- factor(CNR$sub)
+CNR$TR <- factor(CNR$TR)
+CNR$roi <- factor(CNR$roi)
+CNR$contrast <- factor(CNR$contrast)
+
+CNR$roi <- CNR$roi %>% recode('1' = 'CN',
+                              '2' = 'FEF',
+                              '3' = 'GPe',
+                              '4' = 'GPi',
+                              '5' = 'IPS',
+                              '6' = 'LOC',
+                              '7' = 'Put', 
+                              '8' = 'STN',
+                               '9' = 'VS') 
+CNR$contrast <- CNR$contrast %>%  recode('1' = 'tgtLoc',
+                                         '2' = 'cueP',
+                                         '3' = 'cueP x tgtLoc',
+                                         '4' = 'AValue',
+                                         '5' = 'RelValue',
+                                         '6' = 'Value',
+                                         '7' = 'hand')
+
+CNR <- CNR %>% mutate(roi=factor(roi, levels = c('FEF', 'IPS', 'LOC', 'VS', 'CN', 'Put', 'GPe', 'GPi', 'STN')))
+
+CNR <- CNR %>% filter(sub != "1")
+```
+
+```{r, out.width="600px", fig.align='center', fig.cap="Showing the RMS CNR values for each subject, TR sequence, and ROI for the main effect of response hand (LvsR)"}
+
+draw.sub.plts <- function(data, C){
+  
+  data %>% filter(contrast == C) %>%
+           ggplot(aes(x=TR, y=R, group=sub)) +
+           geom_line(aes(color=sub), lwd=1.1) + facet_wrap(.~roi) +
+           scale_colour_manual(values=c(wes_palette("BottleRocket2"))) +
+           ylab("RMS CNR") +
+           theme_cowplot()
+}
+
+draw.sub.plts(CNR, C="hand")
+```
+
+
+```{r, out.width="600px", fig.align='center', fig.cap="Showing the RMS CNR values for each subject, TR sequence, and ROI for the interaction effect of cue probability (p=.5 vs .8) and target location (left vs right)"}
+draw.sub.plts(CNR, C=cs[3])
+```
+
+
+
+<br>
+
+# Supplemental Material
+
+```{r, out.width="600px", fig.align='center', fig.cap="Showing the RMS CNR values for each subject, TR sequence, and ROI for the main effect of target location (left vs right)"}
+cs <- levels(CNR$contrast)
+draw.sub.plts(CNR, C=cs[1])
+```
+```{r, out.width="600px", fig.align='center', fig.cap="Showing the RMS CNR values for each subject, TR sequence, and ROI for the interaction effect of cue probability (p=.5 vs .8) and target location (left vs right)"}
+draw.sub.plts(CNR, C=cs[3])
+```
+
+
+```{r, out.width="600px", fig.align='center', fig.cap="Showing the RMS CNR values for each subject, TR sequence, and ROI for the main effect of cue probability (p=.5 vs .8)"}
+draw.sub.plts(CNR, C="cueP")
+```
+
+```{r, out.width="600px", fig.align='center', fig.cap="Showing the RMS CNR values for each subject, TR sequence, and ROI for the main effect of Relative Value (low tgt/high dst vs opposite)"}
+draw.sub.plts(CNR, C=cs[5])
+```
+
