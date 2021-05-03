@@ -1,0 +1,103 @@
+---
+title: "fMRI protocol optimisation for studying the basal ganglia and cortex during performance on a visual cueing task - supplemental"
+author: "Kelly G. Garner, Christopher R. Nolan, Markus Barth, Sakia Bollmann, Ole Jensen and Marta I. Garrido"
+date: '`r format(Sys.time())`'
+output:
+#   bookdown::pdf_document2:
+#     includes:
+#       before_body: ../template/doc_prefix.tex 
+#       in_header: ../template/preamble.tex
+#     keep_tex: yes
+#     latex_engine: xelatex # may need to change this
+#     number_sections: no
+#     toc: no
+#   bookdown::html_document2:
+#     number_sections: no
+#     theme: readable
+#     toc: yes
+#   bookdown::tufte_html2:
+#     number_sections: no
+#     toc: yes
+#   bookdown::word_document2: null
+# fontsize: 12pt
+# linestretch: 1.5
+# link-citations: yes
+# csl: https://raw.githubusercontent.com/citation-style-language/styles/master/chicago-annotated-bibliography.csl
+# bibliography: ../template/library.bib
+# always_allow_html: yes
+# links-as-notes: true
+---
+
+
+```{r loadbehdata, echo=FALSE, message=F, warning=F}
+# source the data wrangling functions
+source('../R/data_wrangles.R')
+subjects = c(1, 2, 3, 4, 5)
+sessions = c(1)
+data_path = "~/Dropbox/MC-Projects/imaging-value-cert-att/striwp1"
+raw.data <- get_participant_data(subjects, sessions, data_path, folstr="behav")
+
+# Show it:
+# raw.data %>% head(5)
+```
+
+
+For each participant, individual RT data were analysed with trial as a regressor. 
+```{r, warning=FALSE}
+
+sub.model <- function(data, csub){
+  data = data %>% filter(sub == csub)
+  mod <- with(data, aov( rt ~ cert*reward_type+Error(factor(t)) ))
+  mod
+} 
+
+incls = lapply( unique(sub.data$sub), sub.model, data = sub.data  )
+lapply(as.numeric(unique(sub.data$sub)), function(x) summary(incls[[x]]))
+
+```
+
+```{r cleanbehdata, echo=FALSE, message=F, warning=F}
+
+# clean sub data (remove incorrect responses, and resps > 3 sds above the participant median)
+sub.data <- lapply(subjects, clean.sub.data, data = raw.data)
+sub.data <- do.call(rbind, sub.data)  
+# compute accuracy and inverse efficiency respectively from the two data frames (raw.data and sub.data), 
+acc.data = raw.data %>% group_by(sub, reward_type, cert) %>%
+            summarise(acc = mean(resp))
+sum.inv.eff = sub.data %>% group_by(sub, reward_type, cert) %>%
+              summarise(RT = median(rt)) %>%
+              inner_join(acc.data, sum.inv.eff, by=c("sub", "reward_type", "cert")) %>%
+              transform(inv_eff = RT/acc)
+```
+
+```{r plotbeh, warning=FALSE, fig.align='center', out.width="600pix", out.height="300pix", fig.cap="Showing RT, Accuracy and Inverse Efficiency scores for each subject"}
+fig.cols = wes_palette("IsleofDogs1")[4:1]
+IE <- plot.behav(sum.inv.eff, dv="inv_eff", iv="cert", grp="reward_type", ylims =c(0.4, 2), cols = fig.cols) + xlab("") + ylab("IE") + 
+                scale_y_continuous(breaks=pretty_breaks(n=5)) + theme_cowplot()
+RT <- plot.behav(sum.inv.eff, dv="RT", iv="cert", grp="reward_type", ylims =c(0.4, 0.9), cols = fig.cols) + xlab("cue certainty") +
+                scale_y_continuous(breaks=pretty_breaks(n=5)) + theme_cowplot()
+ACC <- plot.behav(sum.inv.eff, dv="acc", iv="cert", grp="reward_type", ylims =c(0, 1), cols = fig.cols) + xlab("") + ylab("ACC") + 
+                scale_y_continuous(breaks=pretty_breaks(n=5)) + theme_cowplot()
+
+# arrange plots
+prow <- plot_grid(
+  RT + theme(legend.position = "none"),
+  ACC + theme(legend.position = "none"),
+  IE + theme(legend.position = "none"), 
+  align = 'vh',
+  labels=c("A", "B", "C"),
+  hjust=-1,
+  nrow=1
+)
+# extract the legend from one of the plots
+legend <- get_legend(
+  # create some space to the left of the legend
+  RT + theme(legend.box.margin = margin(0, 0, 0, 12))
+)
+
+# add the legend to the row we made earlier. Give it one-third of 
+# the width of one plot (via rel_widths).
+plot_grid(prow, legend, rel_widths = c(3, .5))
+
+# note: refer to previous analysis
+```
