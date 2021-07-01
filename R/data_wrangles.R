@@ -205,5 +205,35 @@ plot.mri <- function(data, dv, iv, grp, facet, ylims, cols){
           panel.grid.major =   element_blank(),
           panel.grid.minor = element_blank(), 
           axis.line = element_line(colour = "black"),
-          legend.title=element_blank())
+          legend.title=element_blank()) +
+    theme_cowplot()
+}
+
+plot.mri.simp <- function(data, dv, iv, grp, ylims, cols){
+  # compute mean of data across the variables of interest
+  sum.dat <- data %>% group_by(eval(parse(text=grp)), eval(parse(text=iv))) %>%
+              summarise(mu=mean(eval(parse(text=dv))))
+  names(sum.dat) <- c(grp, iv, "mu")
+  sum.dat$cert <- factor(sum.dat$cert, c(".8", ".5", ".2"))
+  # now reorder the un-summarised data
+  data$cert <- factor(data$cert, c(".8", ".5", ".2"))
+  
+  # splitting the data into each reward condition for overlaying on plot
+  alpha = 1/4
+  ggplot(sum.dat, aes_string(x=iv, y="mu", col=grp)) +
+    geom_line(aes_string(group=grp), size=1.1) +
+    geom_line(data[data$reward_type == "htgt/ldst", ], mapping=aes_string(x=iv, y=dv, group="sub"), alpha=alpha, colour=cols[1]) +
+    geom_line(data[data$reward_type == "htgt/hdst", ], mapping=aes_string(x=iv, y=dv, group="sub"), alpha=alpha, colour=cols[2]) +
+    geom_line(data[data$reward_type == "ltgt/ldst", ], mapping=aes_string(x=iv, y=dv, group="sub"), alpha=alpha, colour=cols[3]) +
+    geom_line(data[data$reward_type == "ltgt/hdst", ], mapping=aes_string(x=iv, y=dv, group="sub"), alpha=alpha, colour=cols[4]) +
+    facet_wrap(.~eval(parse(text=facet)), nrow=1) +
+    scale_fill_manual(values=cols) +
+    scale_color_manual(values=cols) + 
+    ylab(dv) + xlab(iv) + ylim(ylims) +
+    theme(panel.border = element_blank(), 
+          panel.grid.major =   element_blank(),
+          panel.grid.minor = element_blank(), 
+          axis.line = element_line(colour = "black"),
+          legend.title=element_blank()) +
+    theme_cowplot()
 }
