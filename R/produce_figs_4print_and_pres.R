@@ -2,22 +2,7 @@
 #############################################################################################
 # Generate plots for the sequence comparison write up that require further post-processing in
 # lucid press
-library(magrittr)
-library(tidyverse)
-library(cowplot)
-library(readr)
-library(wesanderson)
-library(RJSONIO)
-library(cowplot)
-library(rlang)
-library(kableExtra)
-library(scales)
-library(rstatix)
-library(lme4) 
-library(emmeans)
-source("R_rainclouds.R") # for the raincloud plot
-source("data_wrangles.R")
-
+# this code needs to be run along side the document in order to produce outputs
 
 
 #############################################################################################
@@ -77,21 +62,19 @@ plt.crt.sum <- function(data, iv, grp, cols, ylb, ylims){
           axis.line = element_line(colour = "black")) 
 }
 plt.crt.sum(cert.inv.eff.grp, iv, grp, cols, ylb, c(0.5,.85))
-
+ggsave(filename="../images/behav_by_Prot.png", plot=last_plot(), dpi=300)
 
 #############################################################################################
+# plot distributions of CNR data 
+ggplot(CNR, aes(x=CNR, fill=sub)) +
+  geom_density(alpha=0.4, trim=TRUE) +
+  facet_grid(rows=vars(TR)) +
+  xlim(c(5.44, 25)) + xlab("CNR") + 
+  theme_cowplot() +
+  scale_colour_manual(values=wes_palette("IsleofDogs1")[1:5]) +
+  scale_fill_manual(values=wes_palette("IsleofDogs1")[1:5]) 
+ggsave(filename='~/Dropbox/documents/MC-Docs/seqtest-writeup/images/thrsh_comp_densities.png', plot=last_plot(), width=6, height=6, units="in", dpi=300)
 
-
-
-
-plt.crt.sum(cert.inv.eff.grp, iv, grp, cols, ylb, c(0.5,.85))
-
-cert.acc = mri.beh.raw %>% group_by(sub, TR, cert) %>%
-  summarise(acc = mean(resp))
-cert.inv.eff = mri.beh.clean %>% group_by(sub, TR, cert) %>%
-  summarise(RT = median(rt)) %>%
-  inner_join(mri.acc, sum.inv.eff, by=c("sub", "TR", "cert")) %>%
-  transform(inv_eff = RT/acc)
 
 
 
