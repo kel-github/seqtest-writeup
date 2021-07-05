@@ -8,7 +8,6 @@
 #############################################################################################
 ### Plot behavioural data by cue probability collapsed over value condition
 ### to go on plot with paradigm etc
-
 subjects = c(1, 2, 3, 4, 5)
 sessions = c(2, 3, 4)
 TRs = c(700, 1510, 1920)
@@ -17,16 +16,17 @@ mri.beh.raw <- get_mri_data(subjects, sessions, data_path, TRs)
 
 RT_min = .2
 sd_reject = 2.5
-
 mri.beh.clean <- mri.beh.raw %>% group_by(sub, sess, TR, cert) %>%
   filter(rt > RT_min) %>%
   filter(resp == 1) %>%
   ungroup()
-mri.beh.crit <- mri.beh.clean %>% group_by(sub, sess, TR, cert) %>%
-  summarise(crit = median(rt) + (sd_reject*sd(rt))) %>% ungroup()
-
-mri.beh.clean <- inner_join(mri.beh.clean, mri.beh.crit, by=c("sub", "sess", "TR", "cert")) %>%
-                 filter(rt < crit)
+mri.dat.4.filt <- mri.beh.clean %>% group_by(sub, sess, TR, cert) %>%
+  summarise(m = median(rt),
+            s = sd_reject*sd(rt),
+            f = m + s) %>%
+  ungroup()
+mri.beh.clean <- inner_join(mri.beh.clean, mri.dat.4.filt, by=c("sub", "sess", "TR", "cert")) %>%
+  filter(rt < f)
 
 ### calculate inv eff
 mri.acc = mri.beh.raw %>% group_by(sub, TR, cert) %>%
@@ -62,20 +62,83 @@ plt.crt.sum <- function(data, iv, grp, cols, ylb, ylims){
           axis.line = element_line(colour = "black")) 
 }
 plt.crt.sum(cert.inv.eff.grp, iv, grp, cols, ylb, c(0.5,.85))
-ggsave(filename="../images/behav_by_Prot.png", plot=last_plot(), dpi=300)
+ggsave(filename="../images/behav_by_Prot.png", plot=last_plot(), 
+                 width = 2.45, height = 2.95, units = "in", dpi=300)
 
 #############################################################################################
 # plot distributions of CNR data 
-ggplot(CNR, aes(x=CNR, fill=sub)) +
+CNR_dens <- ggplot(CNR, aes(x=CNR, fill=sub)) +
   geom_density(alpha=0.4, trim=TRUE) +
   facet_grid(rows=vars(TR)) +
   xlim(c(5.44, 25)) + xlab("CNR") + 
   theme_cowplot() +
-  scale_colour_manual(values=wes_palette("IsleofDogs1")[1:5]) +
-  scale_fill_manual(values=wes_palette("IsleofDogs1")[1:5]) 
-ggsave(filename='~/Dropbox/documents/MC-Docs/seqtest-writeup/images/thrsh_comp_densities.png', plot=last_plot(), width=6, height=6, units="in", dpi=300)
+  scale_colour_manual(values=wes_palette("FantasticFox1")[1:5]) +
+  scale_fill_manual(values=wes_palette("FantasticFox1")[1:5]) +
+  theme( axis.text.y = element_blank(),
+         strip.background = element_blank(),
+         strip.text.x = element_blank())
+ggsave(filename='~/Dropbox/documents/MC-Docs/seqtest-writeup/images/thrsh_comp_densities.png', 
+       plot=last_plot(), width= 2.45, height= 2.95, units="in", dpi=300)
 
+CNR.p <- roi_cnr %>% filter(roi == "IPS" | roi == "CN" | roi == "Put") %>%
+  group_by(sub, TR, roi) %>% summarise(R=mean(CNR)) %>%
+  ggplot(aes(x=TR, y=R, group=sub)) +
+  geom_line(aes(color=sub), lwd=1.1, alpha=.75) +
+  xlab(expression(italic("P"))) + 
+  facet_wrap(~roi, nrow=1) +
+  scale_colour_manual(values=c(wes_palette("FantasticFox1")[c(2:5)])) +
+  ylab("CNR") + 
+  theme(strip.text.x = element_text(size=8)) + 
+  theme_cowplot() +
+  theme( strip.background = element_blank(),
+         strip.text.x = element_blank(),
+         legend.position = "none",
+         text = element_text(size = 10),
+         axis.text.x = element_text(size = 8),
+         axis.text.y = element_text(size = 8))
+ggsave(filename='~/Dropbox/documents/MC-Docs/seqtest-writeup/images/CNR_by_key_reg.png', 
+       plot=CNR.p, width = 3.5, height = 2.45, units="in", dpi=300)
 
+#############################################################################################
+### Plot FIR by selected regions for each sequence
+mu_firs %>% filter(roi == "IPS" | roi == "CN" | roi == "Put") %>%
+  ggplot(aes(x=order, y=beta, group=sub)) +
+  geom_line(aes(color=sub), lwd=1.1, alpha=.75) +
+  xlab("t") +
+  scale_x_continuous(breaks=seq(2,18,by=2),
+                     labels = c("2","","","","10","","","","18")) +
+  facet_grid(vars(TR), vars(roi), scales="free_y") +
+  scale_colour_manual(values=c(wes_palette("FantasticFox1")[c(2:5)])) +
+  ylab(expression(beta)) + theme_cowplot() +
+  theme( strip.background = element_blank(),
+         strip.text.x = element_blank(),
+         strip.text.y = element_blank(),
+         legend.position = "none",
+         text = element_text(size = 10),
+         axis.text.x = element_text(size = 8),
+         axis.text.y = element_text(size = 8))
+ggsave(filename='~/Dropbox/documents/MC-Docs/seqtest-writeup/images/FIR_by_reg.png', 
+       plot=last_plot(), width=3.5, height=2.95, units="in", dpi=300)
+
+#############################################################################################
+### Plot tSNR data by key regions
+tSNR.p <- mutSNR %>% filter(roi == "IPS" | roi == "CN" | roi == "Put") %>%
+                    ggplot(aes(x=TR, y=tSNR, group=sub)) +
+                    geom_line(aes(color=sub), lwd=1.1, alpha=.75) +
+                    xlab(expression(italic("P"))) + 
+                    facet_wrap(~roi, nrow=1) +
+                    scale_colour_manual(values=c(wes_palette("FantasticFox1"))) +
+                    ylab("tSNR") + 
+                    theme(strip.text.x = element_text(size=8)) + 
+                    theme_cowplot() +
+                    theme( strip.background = element_blank(),
+                           strip.text.x = element_blank(),
+                           legend.position = "none",
+                           text = element_text(size = 10),
+                           axis.text.x = element_text(size = 8),
+                           axis.text.y = element_text(size = 8))
+ggsave(filename='~/Dropbox/documents/MC-Docs/seqtest-writeup/images/tSNR_by_key_reg.png', 
+       plot=tSNR.p, width = 3.5, height = 2.45, units="in", dpi=300)
 
 
 #############################################################################################

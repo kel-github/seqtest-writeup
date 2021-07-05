@@ -1,55 +1,63 @@
 ---
-title: "fMRI protocol optimisation for studying the basal ganglia and cortex during performance on a visual cueing task"
-author: "Kelly G. Garner, Christopher R. Nolan, Markus Barth, Sakia Bollmann, Ole Jensen and Marta I. Garrido"
-date: '`r format(Sys.time())`'
-output:
-#   bookdown::pdf_document2:
-#     includes:
-#       before_body: ../template/doc_prefix.tex 
-#       in_header: ../template/preamble.tex
-#     keep_tex: yes
-#     latex_engine: xelatex # may need to change this
-#     number_sections: no
-#     toc: no
-#   bookdown::html_document2:
-#     number_sections: no
-#     theme: readable
-#     toc: yes
-#   bookdown::tufte_html2:
-#     number_sections: no
-#     toc: yes
-#   bookdown::word_document2: null
-# fontsize: 12pt
-# linestretch: 1.5
-# link-citations: yes
-# csl: https://raw.githubusercontent.com/citation-style-language/styles/master/chicago-annotated-bibliography.csl
-# bibliography: ../template/library.bib
-# always_allow_html: yes
-# links-as-notes: true
+title: Quantifying effect sizes in implicit learning tasks; the role of some stuff
+authors:
+  - name: Kelly G. Garner
+    thanks: Corresponding author
+    department: School of Psychology
+    affiliation: University of Birmingham
+    location: Edgbaston, UK, B13 2TT
+    email: getkellygarner@gmail.com
+  - name: Christopher R. Nolan
+    department: School of Psychology
+    affiliation: University of New South Wales
+    location: Sydney, Australia
+    email: cnolan@cn.id.au
+  - name: Ole Jensen
+    department: School of Psychology
+    affiliation: University of Birmingham
+    location: Edgbaston, UK, B13 2TT
+    email: o.jensen@bham.ac.uk
+  - name: Markus Barth
+    department: Centre for Advanced Imaging
+    affiliation: University of Queensland
+    location: St. Lucia, Australia, 4072
+    email: m.barth@uq.edu.au   
+  - name: Saskia Bollmann
+    department: Centre for Advanced Imaging
+    affiliation: University of Queensland
+    location: St. Lucia, Australia, 4072
+    email: saskia.bollmann@cai.uq.edu.au
+  - name: Marta Garrido
+    department: School of Psychological Sciences
+    affiliation: University of Melbourne
+    location: Parkville, Australia, 3010
+    email: marta.garrido@unimelb.edu.au
+abstract: |
+  Enter the text of your abstract here.
+keywords:
+  - blah
+  - blee
+  - bloo
+  - these are optional and can be removed
+bibliography: refs.bib
+biblio-style: unsrt
+output: 
+  bookdown::word_document2:
+    toc: true
+  bookdown::pdf_book:
+    base_format: rticles::arxiv_article
+    keep_tex: true
 ---
 
 ```{r knitr_options, echo=FALSE}
 library(knitr)
-#rstudio will set the folder where .Rmd file seats as work directory
-#set it back to the folder where .Rproj seats
-opts_knit$set(root.dir = normalizePath("../"))
+# rstudio will set the folder where .Rmd file seats as work directory
+# set it back to the folder where .Rproj seats
+#opts_knit$set(root.dir = normalizePath("../")) 
 opts_chunk$set(fig.align = 'center', cache = FALSE, warning = FALSE,
   message = TRUE, echo = FALSE)
 options(digits = 3, width = 88, knitr.graphics.auto_pdf = TRUE,
         knitr.kable.NA = '')
-# download template files if not available
-tpl_1 = 'https://raw.githubusercontent.com/daijiang/workflow_demo/master/template/preamble.tex'
-tpl_2 = 'https://raw.githubusercontent.com/daijiang/workflow_demo/master/template/doc_prefix.tex'
-bib_1 = 'doc/refs.bib'
-# bib_1 = 'https://raw.githubusercontent.com/daijiang/workflow_demo/master/template/ref.bib'
-# change directory accordingly
-if(!file.exists(tpl_1f <- 'template/preamble.tex')) download.file(tpl_1, tpl_1f)
-if(!file.exists(tpl_2f <- 'template/doc_prefix.tex')) download.file(tpl_2, tpl_2f)
-if(knitr::is_latex_output() | knitr::is_html_output()){
-  library(kableExtra)
-} else {
-  options(kableExtra.auto_format = FALSE) # for docx
-}
 ```
 
 ```{r, libraries, echo=FALSE, message=F, warning=F}
@@ -66,121 +74,100 @@ library(scales)
 library(rstatix)
 library(lme4) 
 library(emmeans)
-source("R/R_rainclouds.R") # for the raincloud plot
-source("R/data_wrangles.R")
+source("../R/R_rainclouds.R") # for the raincloud plot
+source("../R/data_wrangles.R")
 #source("R/R_rainclouds.R") 
 ```
 
 
-
-**Running headline**:
-
-**Abstract**: 
-
 \clearpage
 
 # Introduction
+\label{sec:Introduction}
 
+  For the 
 -> Neurophysiology of visual spatial attention relatively well mapped out at the cortical level. However, the putative contribution of subcortical structures is becoming more evident (cite recent papers - Hikosake, & the nature topographical one & the Schmidt and Duncan one).
 -> to investigate the functional sensitivity of the human striatum to visual spatial attention, advances over the standard 3T sequences are required. this is owing to the increased iron content resulting in faster TE times.
 -> protocols at 7T have typically been optimised for action based tasks (attention to action - Puckett etc, executing and witholding actions - Forstmann etc), makes sense as the basal ganglia is well mapped to action selection and production. However, it remains unknown what is optimal for detecting contrasts that don't require an overt action.
 -> Multiple demands to meet when imaging the basal ganglia and the cortex during visual spatial attention tasks. Specifically field of view requirements to cover relevant cortical regions (frontal, parietal and occipital), as well as striatal. Resolution - some nuclei that are relevant are x mm size. Time - very rapid events of interest (several hundred ms).
 -> we sought to compare protocols collected while participants performed a visual cueing task. briefly describe task.
--> protocols we compared were x because of y.
+-> protocols we compared were x because of y. \@ref{fig:figaims}
+-> motivate tSNR and CNR e.g. For a measure of BOLD-sensitivity to each contrast, the resulting _t_-scores were used as a measure of activation sensitivity. Temporal SNR measures, once augmented to account for temporal correlations in the data, amount to computing the _t_-score for the mean signal change; i.e. the _t_-score serves as a contrast-to-noise ratio (CNR) measure  [@corbinAccurateModelingTemporal2018]. 
 
 
 
-```{r aims, fig.align='center', out.width="600pix", fig.cap="Regions of interest. A) Basal Ganglia anterior view, B) Basal Ganglia posterior view, C) Cortical ROIs. CN = Caudate Nucleus, GPe = Globus Pallidus External, GPi = Globus Pallidus Internal, Put = Putamen, STN = Subthalamic Nucleus, VS = Ventral Striatum, FEF = Frontal Eye Fields, IPS = Intraparietal Sulcus, LOC = Lateral Occipital Complex"}
-paradigm.fig.pth <- '/Users/kels/Dropbox/documents/MC-Docs/seqtest-writeup/images/Fig_ROIs.png'
+```{r aims, fig.align='center', out.width"70%", fig.cap="Regions of interest. A) Basal Ganglia anterior view, B) Basal Ganglia posterior view, C) Cortical ROIs. CN = Caudate Nucleus, GPe = Globus Pallidus External, GPi = Globus Pallidus Internal, Put = Putamen, STN = Subthalamic Nucleus, VS = Ventral Striatum, FEF = Frontal Eye Fields, IPS = Intraparietal Sulcus, LOC = Lateral Occipital Complex"}
+paradigm.fig.pth <- '../images/Fig_ROIs.png'
 #paradigm.fig <- readPNG(paradigm.fig.pth, native=TRUE, info=TRUE)
 include_graphics(paradigm.fig.pth)
-
 ```
 
-# Methods
 
-<br>
+# Methods
+\label{sec:Methods}
+
 
 ## Participants
+\label{sec:Participants}
 
-<br>
-
-  A total of 5 participants [1 female, 1 left-handed, mean age: 30.6 yrs, std: 7.7] took part in the experiment. Participants had normal or corrected-to-normal vision, and all reported no major neurological or psychiatric diagnoses, or use of psychoactive medications. All participants received 20 AUD per hour for participation. Participants also earned cash rewards, contingent on the speed of correct responses in the presence of incentive value cues (~15 AUD per session). The University of Queensland Human Research Ethics Committee approved the study as being within the guidelines of the National Statement on Ethical Conduct in Human Research and all participants gave informed, written consent.
-
-<br>
+A total of 5 participants [1 female, 1 left-handed, mean age: 30.6 yrs, std: 7.7] took part in the experiment. Participants had normal or corrected-to-normal vision, and all reported no major neurological or psychiatric diagnoses, or use of psychoactive medications. All participants received 20 AUD per hour for participation. Participants also earned cash rewards, contingent on the accuracy and speed of responses in the presence of incentive value cues (~15 AUD per session). The University of Queensland Human Research Ethics Committee approved the study as being within the guidelines of the National Statement on Ethical Conduct in Human Research and all participants gave informed, written consent.
 
 ## Experimental Protocols
+\label{sec:Protocols}
 
-<br>
-
-  Participants attended four experimental sessions; an initial behavioural session, where participants learned the the task procedures, and three sessions in the MRI scanner. A full description of the initial behavioural session can be found online [here](). 
+Participants attended four experimental sessions; an initial behavioural session, where participants learned the the task procedures, and three sessions in the MRI scanner. A full description of the initial behavioural session can be found online [here](). 
   
 ### Behavioural Paradigm
+\label{sec:BehavParadigm}
 
-<br>
+We adapted a previously published spatial cueing task where participants made orientation judgements to a visual target, while ignoring a distractor. The target and distractor are prececed by probabilistic spatial and incentive value cues [@garnerIncentiveValueSpatial2021] (see Figure \@ref{fig:paradigm}). Note that while we used a combination of value and spatial cues, as we intend to use both in future work, we currently focus on only the influence of spatial cues, given the robustness and size of this effect [posnerOrientingAttention1980; @chicaSpatialOrientingParadigm2014] and our current sample size.               
 
-  We used an adapted version of a spatial cueing task where participants make an orientation judgement to a visual target, while ignoring a distractor. The target and distractor are prececed by probabilistic spatial and incentive value cues [@garnerIncentiveValueSpatial2021] (see Figure xxx).                
+### Experimental Task Apparatus
+\label{sec:Apparatus}
 
-<br>
+Experimental procedures were run using a [blah blah PC]. Visual displays were projected with a [blah blah] projector, to a [blah blah] screen with a FOV of 358 x 230 mm, a resolution of 1600 x 1200 pixels, and a refresh rate of 60 Hz. Distance from the coil mirror to the projector screen was 1300 mm, and the distance of the participant to the coil mirror was approximately 50 mm. The experimental procedures were implemented using custom written software for Matlab 2018b and Psychtoolbox v3.0.15 [@brainardPsychophysicsToolbox1997; @pelliVideoToolboxSoftwareVisual1997]. 
 
-#### Experimental Task Apparatus
 
-<br>
+### Stimuli
+\label{sec:Stimuli}
 
-  Experimental procedures were run using a [blah blah PC]. Visual displays were projected with a [blah blah] projector, to a [blah blah] screen with a FOV of 358 x 230 mm, a resolution of 1600 x 1200 pixels, and a refresh rate of 60 Hz. Distance from the coil mirror to the projector screen was 1300 mm, and the distance of the participant to the coil mirror was approximately 50 mm. The experimental procedures were implemented using custom written software for Matlab 2018b and Psychtoolbox v3.0.15 [@brainardPsychophysicsToolbox1997; @pelliVideoToolboxSoftwareVisual1997]. 
+All stimuli were presented on a grey [RGB: 128, 128, 128] background. A grey cross [RGB: 115, 115, 115] superimposed over a diamond (rotated white square [RGB: 191, 191, 191, 45$^\circ$]) was presented in the centre of the screen and served as a fixation point. The grey cross subtended 0.8$^\circ$ visual angle, and the diamond subtended 1.6$^\circ$. A leftward or rightward facing triangle [RGB: 90, 90, 90], superimposed on one half of the white diamond served as the informative spatial cue (p=.8). Simultaneous presentation of both triangles served as an uninformative spatial cue (p=.5). The two triangles together comprised 80 % of the surface area of the underlying white square. Two coloured discs (!x! $^\circ$ in diameter, matched for luminance; [gold RGB: 182, 133, 58, rose RGB: 230, 93, 85]) served as value cues. These were presented 5.5$^\circ$ from the centre along, and 2$^\circ$ below  the horizontal meridian. Further information on the value configurations are presented in the procedure section below. Target and distractor stimuli were presented within the value cue discs. Targets were a gabor (3$^\circ$ in diameter, standard deviation of the Gaussian envelope, 0.3; spatial frequency, 2.5/ppd (pixels per degree)) oriented 45$^\circ$ clockwise or counter-clockwise. Distractors shared the same visual features except they were presented on one of the cardinal axes. The distance of the target and distractor from the centre was chosen so that the viewer could discriminate the gabors without making an eye-movement, while remaining just within the locus of high-acuity vision (~6$^\circ$). The target and distractors were followed by mask stimuli, which consituted a patch of pixels randomly weighted between the background grey and white, weighted by the same Gaussian envelope as was used for the target and distractor. Feedback reward values were presented centrally in alphanumeric characters, and were presented in yellow in the case of correct responses (i.e. in the case of reward gain, [RGB: 255, 215, 0]), and in grey [RGB: 90, 90, 90] for errors. 
 
-<br>
+### Behavioural Procedure
+\label{sec:BehavProcs}
 
-#### Stimuli
+  As shown in Figure \@ref{fig:paradigm}, each trial began with the the central fixation display (cross and diamond). The duration of this display varied across the protocols as we adjusted visual display onsets to coincide with the TR pulses sent from the MRI scanner ($a_t$; ME: 1100 ms, CMRR: 2020 ms, 3D-EPI: 2840 ms). The duration of the key visual events was held constant across all three protocols. Nexr, the fixation cross was removed and the value cues onset. After 400 ms, the spatial cue was presented for 300 ms. The target and distractor were presented after a random interval between 0-100 ms after spatial cue offset (selected from a uniform distribution). The target and distractor were displayed for 67 ms, and were followed by the masks which were displayed for 67 ms. The orientation of the target (45$^\circ$ clockwise or counterclockwise) and the distractor (vertical or horizontal) was fully counterbalanced across target-distractor pairing, location, and cueing condition. The value cues and central white diamond remained on display during the response interval [$b_t$; ME: 1826-1926 ms, CMRR: 2136-2146 ms, 3D EPI: 946 - 1046 ms]. Next, reward feedback was presented contingent on the participant's response. The duration of the feedback display was 1000 ms for both correct and incorrect responses. For correct responses, the maximum reward value available was weighted ($w$) by the proportion of the participant's response time (RT) of a given range (350 ($RT_{min}$) - 850 ($RT_{max}$) ms) - i.e. $w= \frac{RT_t - RT_{min}}{RT_{max} - RT_{min}}$. For the reward feedback display, the previous reward total was displayed on the left followed by a plus sign and the reward value attained on that trial to the right. Over the next second, the new reward value counted down as the previous reward value increased, over 50 ms intervals. In the case of an incorrect response, the previous points total was displayed in dark grey in the centre of the screen. 
 
-<br>
+**Value cue configurations** 
+Each value cue colour signalled the probability of attaining a high value reward, relative to attaining a low value reward, should the target appear at that location (see Figure \@ref{fig:paradigm}, Panel B). For example, for a given participant, the gold colour would predict a high reward value with p = .8, and therefore signalled a higher expected reward value ($H$). In contrast, the rose colour would predict a high reward value with p = .2, and would therefore signal a lower expected reward value ($L$). Value cues were presented in 4 different possible combinations, which where fully counterbalanced over location (left vs right), and from now are coded in relation to the location where the upcoming target and distractor appeared; 1) both the target and distractor locations could contain the high expected reward value colour ($H_{tgt}/H_{dst}$), 2) both locations could contain the low expected reward value colour ($L_{tgt}/L_{dst}$), 3) the target location could contain the high expected reward value colour, whereas the distractor location contained the low expected value colour ($H_{tgt}/L_{dst}$), or 4) vice-versa ($L_{tgt}/H_{dst}$). Participants learned the colour-reward associations in the previous behavioural session, specific colour-reward mappings were counterbalanced over participants. 
 
-  All stimuli were presented on a grey [RGB: 128, 128, 128] background. A grey cross [RGB: 115, 115, 115] superimposed over a diamond (rotated white square [RGB: 191, 191, 191, 45$^\circ$]) was presented in the centre of the screen and served as a fixation point. The grey cross subtended 0.8$^\circ$ visual angle, and the diamond subtended 1.6$^\circ$. A leftward or rightward facing triangle [RGB: 90, 90, 90], superimposed on one half of the white diamond served as the informative spatial cue (p=.8), whereas simultaneous presentation of both triangles served as the uninformative spatial cue (p=.5) (The two triangles together comprised 80 % of the surface area of the underlying white square). Two coloured discs ($^\circ$ in diameter, matched for luminance; [gold RGB: 182, 133, 58, rose RGB: 230, 93, 85]) served as value cues. These were presented 5.5$^\circ$ from the centre along, and 2$^\circ$ below  the horizontal meridian. Further information on the value configurations are presented in the procedure section below. Target and distractor stimuli were presented within the value cue discs. Targets were a gabor (3$^\circ$ in diameter, standard deviation of the Gaussian envelope, 0.3; spatial frequency, 2.5/ppd (pixels per degree)) oriented 45$^\circ$ clockwise or counter-clockwise. Distractors shared the same visual features except they were presented on one of the cardinal axes. The distance of the target and distractor from the centre was chosen so that the viewer could discriminate the gabors without making an eye-movement, while remaining just within the locus of high-acuity vision (~6$^\circ$). The target and distractors were followed by mask stimuli, which consituted a patch of pixels randomly weighted between the background grey and white, weighted by the same Gaussian envelope as was used for the target and distractor. Feedback reward values were presented centrally in alphanumeric characters, and were presented in yellow in the case of correct responses (i.e. in the case of reward gain, [RGB: 255, 215, 0]), and in grey [RGB: 90, 90, 90] for errors. 
+**Spatial cue probabilities** 
+Directional spatial cues (see Figure \@ref{fig:paradigm}, panel C) carried a p = ~.8 (.78) chance of validly signalling the upcoming target location. Bidirectional cues signalled either location with p = .5. Across each functional run, there were 72 trials containing a directional cue (56 valid, 16 invalid), and 56 trials containing a bidirectional cue. Laterality of target location was fully counterbalanced over all cue conditions. Note that when modelling the fMRI data focus on comparisons between the valid (p=.8) and bidirectional (p=.5) conditions. We don't make comparisons between these and the invalid trials, given the latter's lower trial numbers and consequent higher likelihood of variance differences to the other conditions. The reward available was matched across the spatial cueing trials, so that neither spatial cue condition (p=.2, .5, .8) nor location (left vs right) predicted a greater reward value than another. 
 
-<br>
-
-#### Behavioural Procedure
-
-<br>
-
-  As shown in Figure xxx, each trial began with the presentation of the central fixation display (cross and diamond). The duration of this display varied across the protocols as we adjusted visual display onsets to coincide with the TR pulses sent from the MRI scanner ($a_t$; P1: 1100 ms, P2: 2020 ms, P3: 2840 ms). The duration of the key visual events was held constant across all three protocols. The fixation cross was removed and the value cues onset. After 400 ms, the spatial cue was presented for 300 ms. The target and distractor were presented after a random interval between 0-100 ms after spatial cue offset (selected from a uniform distribution). The target and distractor were displayed for 67 ms, and were followed by the masks which were displayed for 67 ms. The orientation of the target (45$^\circ$ clockwise or counterclockwise) and the distractor (vertical or horizontal) was fully counterbalanced across target-distractor pairing, location, and cueing condition. The value cues and central diamond remained on display during the response interval [$b_t$; P1: 1826-1926 ms, P2: 2136-2146 ms, P3: 946 - 1046 ms]. Next, reward feedback was presented contingent on the participant's response. The duration of the feedback display was 1000 ms for both correct and incorrect responses. For correct responses, the maximum reward value available was weighted ($w$) by the proportion of the participant's response time (RT) of a given range (350 ($RT_{min}$) - 850 ($RT_{max}$) ms) - i.e. $w= \frac{RT_t - RT_{min}}{RT_{max} - RT_{min}}$. For the reward feedback display, the previous reward total was displayed on the left followed by a plus sign and the reward value attained on that trial to the right. Over the next second, the new reward value counted down as the previous reward value increased, over 50 ms intervals. In the case of an incorrect response, the previous points total was displayed in dark grey in the centre of the screen. 
-
-  Each value cue colour signalled the probability of attaining a high value reward, relative to attaining a low value reward, should the target appear at that location (see Figure 2, Panel B). For example, the gold colour could predict a high reward value with p = .8, and therefore signalled a higher expected reward value ($H$). In contrast, the rose colour would predict a high reward value with p = .2, and would therefore signal a lower expected reward value ($L$). Value cues were presented in 4 different possible combinations, which where fully counterbalanced over location (left vs right), and from now are coded in relation to the location where the upcoming target and distractor appeared; 1) both the target and distractor locations could contain the high expected reward value colour ($H_{tgt}/H_{dst}$), 2) both locations could contain the low expected reward value colour ($L_{tgt}/L_{dst}$), 3) the target location could contain the high expected reward value colour, whereas the distractor location contained the low expected value colour ($H_{tgt}/L_{dst}$), or 4) vice-versa ($L_{tgt}/H_{dst}$). Participants learned the colour-reward mappings in the previous behavioural session, specific colour-reward mappings were counterbalanced over participants. 
-
-  Directional spatial cues (see Figure 2, panel C) carried a p = ~.8 (.778) chance of validly signalling the upcoming target location. Bidirectional cues signaled that the target could appear in either location with p = .5. Across each functional run, there were 72 trials containing a directional cue (56 valid, 16 invalid), and 56 trials containing a bidirectional cue. Laterality of target presentation was fully counterbalanced across all cue conditions. Note that in the fMRI data we regress out variance linearly attributable to invalid trials, given their low number and higher susceptibility to variance differences to the other conditions, and focus on comparisons between the valid (p=.8) and bidirectional (p=.5) conditions. The reward available was matched across the spatial cueing trials, so that no spatial cue condition (p=.2, .5, .8) or location (left vs right) predicted a greater reward value than another. 
-
-  Participants had received extensive instructions and training in the aforementioned task, the details of which can be found [here](). In addition to these instructions, participants were requested to remain as still as possible during the functional runs.
+Participants had received extensive instructions and training in the aforementioned task during the initial behavioural session, the details of which can be found [here](). In addition to these instructions, participants were requested to remain as still as possible during the functional runs.
 
 <br>  
 
-```{r paradigm, fig.align='center', out.width="600pix", fig.cap="Cueing paradigm. A) Task and trial sequence, B) value- and C) spatial-cue contingencies, D) Predicted behaviour (IE=inverse efficiency)"}
-paradigm.fig.pth <- '/Users/kels/Dropbox/documents/MC-Docs/seqtest-writeup/images/Fig_Paradigm.png' 
-#paradigm.fig <- readPNG(paradigm.fig.pth, native=TRUE, info=TRUE)
+```{r paradigm, fig.align='center', out.width"70%", fig.cap="Cueing paradigm. A) Trial sequence, B) value- and C) spatial-cue contingencies, D) Behaviour: Inverse efficiency (RT/accuracy) given the probability of the target location, shown for each each protocol. Error bars reflect SEM. T=target, D=distractor, CW=clockwise, CCW=counterclockwise, ME=multi-echo, CMRR=, 3D=3D Echo Planar Imaging"}
+paradigm.fig.pth <- '../images/ParadigmBehav.png' 
 include_graphics(paradigm.fig.pth)
-
 ```
 
-<br>
 
-### Scanning Procedures
+## Scanning Procedures
+\label{sec:ScanProcs}
 
-<br>
+Each participant was scanned over three sessions, on a 7T MRI system (Siemens Healthineers, Germany) using a 32-channel phased array headcoil (Nova Medical, Wilmington, US). Within each session, participants completed 3 functional runs, 1 for each protocol (see Table \@ref(tab:acquistable) for protocol details). For each participant, all three sessions took place at the same time of day. Each session started with a short localizer scan, the anatomical scan, and then the 3 functional runs. The order of the protocols used for each functiona run was randomised across sessions. The functional runs varied slightly in duration, owing to the differences in the inter-trial-interval, which was dependent on the TR of each protocol (ME = 10:52 mins, CMRR = 13:02, 3D EPI = 12:44).
 
-  Each participant was scanned over three sessions, on a 7T MRI system (Siemens Healthineers, Germany) using a 32-channel phased array headcoil (Nova Medical, Wilmington, US). Within each session, participants completed 3 functional runs, 1 for each protocol (which are now referred to as P1, P2 & P3). For each participant, all three sessions took place at the same time of day.  The order of the protocols was randomised across sessions. Each session started with a short localizer scan, the anatomical scan, and then the 3 functional runs. The functional runs varied slightly in duration, owing to the differences in the inter-trial-interval, which was dependent on the TR of each protocol (P1 = 10:52 mins, P2 = 13:02, P3 = 12:44).
+Participant #1 completed only the first two sessions, due to scheduling error. For participant #3, the 3D EPI was stopped early in the third scanning session, rendering it impossible to reconstruct the images. All remaining data was included in the analysis.
 
-  Participant #1 completed only the first two sessions, due to scheduling error. For participant #3, P3 was stopped early in the third scanning session, rendering it impossible to subsequently build the images. All remaining data was included in the analysis.
-
-
-<br>
-
-#### MR Protocols
-
-<br>
+### MR Protocols
+\label{sec:MRProts}
 
 [would be good to have more prose here]
-  The details for each of the functional protocols are as follows; Protocol 1 (P1; multi-echo, multiband), TR = 700 ms, TE = 10 ms and 30.56 ms, 2 mm isotropic, GRAPPA 2 in phase encoding direction, excitation flip angle = 35$^\circ$, receiver bandwidth = 1930 Hz/pixel, partial Fourier 5/8, FOV = 192 mm x 192 mm x 96 mm, 48 slices, P2: (single-echo multiband), TR = 1510, TE = 19.4 ms, 1.5 mm isotropic, GRAPPA 3 in phase encoding direction, excitation flip angle 60$^\circ$, receiver bandwidth = 1116 Hz/pixel, partial Fourier 6/8, FOV = 192 mm x 192 mm x 122 mm, 81 slices, P3: (3D EPI) TR = 60 ms (Effective TR = 1920 ms), TE = 22 ms, 1.5 mm isotropic, GRAPPA 2 in phase encoding direction, excitation flip angle = 15$^\circ$, receiver bandwidth = 1116 Hz/pixel, partial Fourier 6/8, FOV - 192 mm x 192  mm x 120 mm, 80 slices. 
+The details for each of the functional protocols are defined in Table 1. Each was chosen to yield high resolution while maintaining the field of view (FOV) required to assess BOLD activity changes in both the subcortical and cortical ROIs.
 
-  The MP2RAGE was acquired with the following parameters: TR = 4300 ms, TE = 3.38 ms, 0.8 mm isotropic, T1 1 = 840 ms, T1 2 = 2370 ms, flip angle 1 = 5$^\circ$, flip angle 2 = 6$^\circ$, FOV = 240 mm x 225 mm x 192 mm. 
+The MP2RAGE was acquired with the following parameters: TR = 4300 ms, TE = 3.38 ms, 0.8 mm isotropic, T1 1 = 840 ms, T1 2 = 2370 ms, flip angle 1 = 5$^\circ$, flip angle 2 = 6$^\circ$, FOV = 240 mm x 225 mm x 192 mm. 
 
 ```{r acquistable, echo=FALSE, message=F, warning=F}
 
@@ -195,168 +182,150 @@ TRs <- data.frame(TR=c(700, 1510, 1920),
                   partFourier=c('5/8','6/8','6/8'),
                   FOV=c('192 x 192 x 96','192 x 192 x 122','192 x 192 x 120'),
                   Nslices=c(48,81,80))
-rownames(TRs) <- c("P1", "P2", "P3")
-kable(t(TRs), caption="Table 1. Compared Protocols") 
-#%>% kable_classic(full_width=F, html_font="Cambria")
+rownames(TRs) <- c("ME", "CMRR", "3DEPI")
+kable(t(TRs), caption="Table 1. Compared Protocols") %>% kable_classic(full_width=F, html_font="Cambria")
+
 ```
 
-<br>
-
 ### Preprocessing
+\label{sec:Preproc}
 
-<br>
-
-  All functional data were preprocessed using _fMRIprep_ (version 1.5.8; [estebanFMRIPrepRobustPreprocessing2019]), which is based on _Nipype 1.4.1_ [@gorgolewskiNipypeFlexibleLightweight2011, @estebanNipyNipype2020]. 
+All anatomical and functional data were preprocessed using _fMRIprep_ (version 1.5.8; [estebanFMRIPrepRobustPreprocessing2019]), which is based on _Nipype 1.4.1_ [@gorgolewskiNipypeFlexibleLightweight2011, @estebanNipyNipype2020]. 
 
 **Anatomical data preprocessing** 
-  Each T1-weighted (T1w) image was corrected for intensity non-uniformity (INU) with `N4BiasFieldCorrection` [@tustisonN4ITKImprovedN32010], distributed with ANTs 2.2.0 [@avantsSymmetricDiffeomorphicImage2008, RRID:SCR_004757]. The T1w-reference was then skull-stripped with a *Nipype* implementation of the `antsBrainExtraction.sh` workflow (from ANTs), using OASIS30ANTs as target template. Brain tissue segmentation of cerebrospinal fluid (CSF), white-matter (WM) and gray-matter (GM) was performed on the brain-extracted T1w using `fast` [FSL 5.0.9, RRID:SCR_002823, @zhangSegmentationBrainMR2001]. A T1w-reference map was computed after registration of 3 T1w images (after INU-correction) using `mri_robust_template` [FreeSurfer 6.0.1, @reuterHighlyAccurateInverse2010]. Brain surfaces were reconstructed using `recon-all` [FreeSurfer 6.0.1, RRID:SCR_001847, @daleCorticalSurfaceBasedAnalysis1999], and the brain mask estimated previously was refined with a custom variation of the method to reconcile ANTs-derived and FreeSurfer-derived segmentations of the cortical gray-matter of Mindboggle [RRID:SCR_002438, @kleinMindbogglingMorphometryHuman2017]. Volume-based spatial normalization to one standard space (MNI152NLin2009cAsym) was performed through nonlinear registration with `antsRegistration` (ANTs 2.2.0), using brain-extracted versions of both T1w reference and the T1w template. The following template was selected for spatial normalization: *ICBM 152 Nonlinear Asymmetrical template version 2009c* [@fonovUnbiasedNonlinearAverage2009, RRID:SCR_008796; TemplateFlow ID: MNI152NLin2009cAsym]. 
+Each T1-weighted (T1w) image was corrected for intensity non-uniformity (INU) with `N4BiasFieldCorrection` [@tustisonN4ITKImprovedN32010], distributed with ANTs 2.2.0 [@avantsSymmetricDiffeomorphicImage2008, RRID:SCR_004757]. The T1w-reference was then skull-stripped with a *Nipype* implementation of the `antsBrainExtraction.sh` workflow (from ANTs), using OASIS30ANTs as target template. Brain tissue segmentation of cerebrospinal fluid (CSF), white-matter (WM) and gray-matter (GM) was performed on the brain-extracted T1w using `fast` [FSL 5.0.9, RRID:SCR_002823, @zhangSegmentationBrainMR2001]. A T1w-reference map was computed after registration of 3 T1w images (after INU-correction) using `mri_robust_template` [FreeSurfer 6.0.1, @reuterHighlyAccurateInverse2010]. Brain surfaces were reconstructed using `recon-all` [FreeSurfer 6.0.1, RRID:SCR_001847, @daleCorticalSurfaceBasedAnalysis1999], and the brain mask estimated previously was refined with a custom variation of the method to reconcile ANTs-derived and FreeSurfer-derived segmentations of the cortical gray-matter of Mindboggle [RRID:SCR_002438, @kleinMindbogglingMorphometryHuman2017]. Volume-based spatial normalization to one standard space (MNI152NLin2009cAsym) was performed through nonlinear registration with `antsRegistration` (ANTs 2.2.0), using brain-extracted versions of both T1w reference and the T1w template. The following template was selected for spatial normalization: *ICBM 152 Nonlinear Asymmetrical template version 2009c* [@fonovUnbiasedNonlinearAverage2009, RRID:SCR_008796; TemplateFlow ID: MNI152NLin2009cAsym]. 
+
+**Regions of Interest**
+Of pertinent interest to the current work was the sensitivity of the three protocols to activation in the basal ganglia and in cortical nodes that have been consistently related to visual selection behaviours. Thus, ROIs were selected based on human striatal anatomy, and on a meta-analysis of results from functional mapping of visual selection behaviours to the cortex.
+
+_Nuclei of the Basal Ganglia_: The ROIs from the basal ganglia were the caudate nucleus (CN), the ventral striatum (VS), putamen (Put), globus pallidus external (GPe), globus pallidus internal (GPi), and the sub-thalamic nucleus (STN). These were identifed using a published atlas derived from high-resolution 7T anatomical imaging [@keukenProbabilisticAtlasBasal2015], including the manual division of the striatum into the CN, Put, and VS reported in [@puckettUsingMultiechoSimultaneous2018]. As the goal of the analysis was to ascertain the sensitivity of each protocol to the contrasts of interest in each ROI, rather than seeking to assess any directional relationships between spatial attention and laterality of functional response, the left and right images of each ROI were joined to form a bilateral mask image. 
+  
+_Cortical ROIs_: The cortical regions of interest were identified using the Neurosynth meta-analytic association test from  [topic 303](https://neurosynth.org/analyses/topics/v4-topics-400/303), of the set [v4-topics-400](https://neurosynth.org/analyses/topics/v4-topics-400/), which contains the top-loading topic terms: attention, orienting, spatial, attentional, cued, target, cue, cueing and endogenous cues. This meta-analysis identified 5 ROIs including the left and right frontal eye fields (FEF), left and right intra-parietal sulcus (IPS), and the left lateral occipital complex (LOC). The approximate centre of each ROI was defined in MNI co-ordinates, and a sphere with a radius of 5 mm was defined around the co-ordinates using `fslmaths`. The resulting images were binarised and served as the cortical masks.
+
+Each mask was transformed from MNI space to participant space using the ANTs `ApplyTransforms` wrapper, using the reverse of the transforms provided by fMRIprep [*from-MNI152NLin2009cAsym_to_t1w_mode-image_xfm.h5*]. Each mask file in subject space was then resliced (using SPM's `Reslice` wrapper) to match the dimensions of the functional images from each T2* protocol. The resulting resliced mask files were then used to extract the relevant data from the ROIs using FSLs `BinaryMaths` wrapper.
 
 **Functional data processing**
-  For each BOLD run, the following preprocessing was performed. First, a reference volume and its skull-stripped version were generated using a custom methodology of *fMRIPrep*. A deformation field to correct for susceptibility distortions was estimated based on *fMRIPrep*'s *fieldmap-less* approach. The deformation field is that resulting from co-registering the BOLD reference to the same-subject T1w-reference with its intensity inverted [@wangComparisonImageIntensity2017; @huntenburgLaminarPythonTools2017]. Registration is performed with `antsRegistration` (ANTs 2.2.0), and the process regularized by constraining deformation to be nonzero only along the phase-encoding direction, and modulated with an average fieldmap template [@treiberCharacterizationCorrectionGeometric2016]. Based on the estimated susceptibility distortion, a corrected EPI (echo-planar imaging) reference was calculated for a more accurate co-registration with the anatomical reference. The BOLD reference was then co-registered to the T1w reference using `bbregister` (FreeSurfer) which implements boundary-based registration [@greveAccurateRobustBrain2009]. Co-registration was configured with six degrees of freedom. Head-motion parameters with respect to the BOLD reference (transformation matrices, and six corresponding rotation and translation parameters) are estimated before any spatiotemporal filtering using `mcflirt` [FSL 5.0.9, @jenkinsonImprovedOptimizationRobust2002]. BOLD runs were slice-time corrected using `3dTshift` from AFNI 20160207 [@coxSoftwareToolsAnalysis1997, RRID:SCR_005927]. The BOLD time-series, were resampled to surfaces on the following spaces: *fsaverage*, *fsnative*. The BOLD time-series (including slice-timing correction) were resampled onto their original, native space by applying a single, composite transform to correct for head-motion and susceptibility distortions. These resampled BOLD time-series will be referred to as *preprocessed BOLD in original space*, or just *preprocessed BOLD*. The BOLD time-series were resampled into standard space, generating a *preprocessed BOLD run in 'MNI152NLin2009cAsym' space*. First, a reference volume and its skull-stripped version were generated using a custom methodology of *fMRIPrep*. Several confounding time-series were calculated based on the *preprocessed BOLD*: framewise displacement (FD), DVARS and three region-wise global signals. FD and DVARS are calculated for each functional run, both using their implementations in *Nipype* [following the definitions by @power_fd_dvars]. The three global signals are extracted within the CSF, the WM, and the whole-brain masks. 
+For each BOLD run, the following preprocessing was performed. First, a reference volume and its skull-stripped version were generated using a custom methodology of *fMRIPrep*. A deformation field to correct for susceptibility distortions was estimated based on *fMRIPrep*'s *fieldmap-less* approach. The deformation field is that resulting from co-registering the BOLD reference to the same-subject T1w-reference with its intensity inverted [@wangComparisonImageIntensity2017; @huntenburgLaminarPythonTools2017]. Registration is performed with `antsRegistration` (ANTs 2.2.0), and the process regularized by constraining deformation to be nonzero only along the phase-encoding direction, and modulated with an average fieldmap template [@treiberCharacterizationCorrectionGeometric2016]. Based on the estimated susceptibility distortion, a corrected EPI (echo-planar imaging) reference was calculated for a more accurate co-registration with the anatomical reference. The BOLD reference was then co-registered to the T1w reference using `bbregister` (FreeSurfer) which implements boundary-based registration [@greveAccurateRobustBrain2009]. Co-registration was configured with six degrees of freedom. Head-motion parameters with respect to the BOLD reference (transformation matrices, and six corresponding rotation and translation parameters) are estimated before any spatiotemporal filtering using `mcflirt` [FSL 5.0.9, @jenkinsonImprovedOptimizationRobust2002]. BOLD runs were slice-time corrected using `3dTshift` from AFNI 20160207 [@coxSoftwareToolsAnalysis1997, RRID:SCR_005927]. The BOLD time-series, were resampled to surfaces on the following spaces: *fsaverage*, *fsnative*. The BOLD time-series (including slice-timing correction) were resampled onto their original, native space by applying a single, composite transform to correct for head-motion and susceptibility distortions. These resampled BOLD time-series will be referred to as *preprocessed BOLD in original space*, or just *preprocessed BOLD*. The BOLD time-series were resampled into standard space, generating a *preprocessed BOLD run in 'MNI152NLin2009cAsym' space*. First, a reference volume and its skull-stripped version were generated using a custom methodology of *fMRIPrep*. Several confounding time-series were calculated based on the *preprocessed BOLD*: framewise displacement (FD), DVARS and three region-wise global signals. FD and DVARS are calculated for each functional run, both using their implementations in *Nipype* [following the definitions by @power_fd_dvars]. The three global signals are extracted within the CSF, the WM, and the whole-brain masks. 
 
-  Processing performed subsequent to running *fMRIprep* was completed using a computing environment defined by [a singularity container for which the recipe is available online](https://github.com/kel-github/code-4-seq-comp-test-7T/blob/master/Singularity). All remaining processing was implemented using Nipype (version 1.6.0), ANTs 2.2.0, and SPM12-r7219, using [jupyter notebooks that are available online](https://github.com/kel-github/code-4-seq-comp-test-7T). 
+Further pre-processing and analyses performed subsequent to running *fMRIprep* was completed using a computing environment defined by [a singularity container for which the recipe is available online](https://github.com/kel-github/code-4-seq-comp-test-7T/blob/master/Singularity). All remaining procedures were implemented using Nipype (version 1.6.0), ANTs 2.2.0, and SPM12-r7219, using a combination of [Python Jupyter notebooks and custom Matlab code that are available online](https://github.com/kel-github/code-4-seq-comp-test-7T). 
+**Multi-echo combination**
 
-  First, the multi-echo images were combined within each session, using a weighted summation as defined in Puckett et al, [-@puckettUsingMultiechoSimultaneous2018]. Specifically, weights were calculated per voxel, $w_n$, using the following:
-
-<br>
+Next, the multi-echo images were combined within each session, using a weighted summation as defined in Puckett et al, [-@puckettUsingMultiechoSimultaneous2018]. Specifically, weights were calculated per voxel, $w_n$, using the formula:
 
 $w_n = \frac{AVG_n \cdot TE_n}{\sum AVG_n \cdot TE_n}$
 
-<br>
-
-where $AVG$ is the temporal average of the time-series. This weighting scheme carries the advantage that the weights can be directly estimated from the data, and no additional calibration scans or model assumptions are required. Moreover, this method has been shown to work as equally well as other combination schemes [@kettingerInvestigatingGroupLevelImpact2016]. Then, all data were temporally filtered using a highpass filter (cut-off 1/128 Hz) to remove slow drifts.
-
-<br>
+where $AVG$ is the temporal average of the time-series. This weighting scheme carries the advantage that the weights can be directly estimated from the data, and no additional calibration scans or model assumptions are required. Moreover, this method has been shown to work as equally well as other combination schemes [@kettingerInvestigatingGroupLevelImpact2016]. 
 
 ### Single subject analysis
+\label{sec:SingSub}
 
-<br>
+As we were concerned with the contrast-to-noise ratios observed within _a priori_ defined anatomical ROIs, we opted to conduct the analysis in subject space, rather than normalised space. This was motivated by the requirement for anatomical accuracy. Thus all the subsequent analyses were performed on the pre-processed BOLD (as defined above). We sought to examine protocol quality on two indices of interest; the tSNR ($\frac{\mu}{\sigma}$) and CNR for contrasts of theoretical interest.
+  
+#### tSNR 
+\label{sec:tSNRMeth}
 
-  As we were concerned with the contrast-to-noise ratios observed within _a priori_ defined regions of interest, we opted to conduct the analysis in subject space, rather than examining data that has been transformed to a normalised space. This was motivated by both the requirement for anatomical accuracy, and due to the absence of requirements to perform statistical parametric mapping at the second-level statistical analysis. Thus the subsequent analyses were performed on the pre-processed BOLD. Moreover, as we sought to examine signal quality in regions of interest, rather than at the whole brain level, no spatial smoothing was applied to the data, so that signal within each ROI was not contaminated with signal from outside each ROI [@hollanderSubcorticalCocktailProblem2015].
-  To statistically assess differences between protocols, we first fit GLMs to each participant's data from each protocol, using the canonical double-gamma haemodynamic response function (HRF) [@fristonAnalysisFunctionalMRI1994, @fristonEventRelatedFMRICharacterizing1998, @fristonStatisticalParametricMaps1994, @gloverDeconvolutionImpulseResponse1999] with time and dispersion derivatives, and using the FAST option for pre-whitening [@corbinAccurateModelingTemporal2018]. GLM model specification and estimation were conducted using the `SpecifySPMModel`, `Level1Design` and `EstimateModel` wrapper functions from Nipype. The design matrix contained regressors for the onset of each configuration of value cues, spatial cue laterality (left vs right) and probability (left p =.5, & p = .8), target location (left vs right), reward received (high vs low by its probability, p = .2 & p = .8), and response hand (left vs right, at the response onset time). A separate regressor denoted the occurence of invalid spatial cue trials. 
-  We sought to determine the sensitivity of the three protocols to specific contrasts of interest between trials in the design. Contrasts between trials have smaller effect sizes than events against baseline, and therefore were of pertinent interest to the current work. [PROBABLY SHOULD INCLUDE THE AGAINST BASELINE TESTS]. Three contrasts were of particular interest to the current work; the motoric contrast (left hand > right hand response), as this contrast is anticipated to yield activation differences in the basal ganglia e.g. [@puckettUsingMultiechoSimultaneous2018], target location (left vs right hemifield) as previous evidence suggests that cells in the striatum respond to combined object location and identity [@yamamotoWhatWhereInformation2012], and a consistent response (if present) should be detectable given the trial numbers for each condition in the current task (which are more numerable than the remaining contrasts and are comparable to the motoric contrast). Lastly, we examined the spatial cue contrast (cue probability x cue laterality), to determine whether CNR estimates in relation to functional activity occurring prior to target onset is comparable to that elicited by the onset of the visual target. 
-  
-<br>
-  
+We computed tSNR for each functional run, by computing for each voxel the ratio between the mean and the standard deviation of the time series. The resulting tSNR images were then averaged over session for each subject, and the average tSNR was taken from each ROI, using `spm_read_vols` (to get the x, y, z coordinates for each ROI) and `spm_get_data` to extract the tSNR values from the voxels of interest. 
+
 #### CNR
+\label{sec:CNRMeth}
 
-<br>
+All T2* data were then temporally filtered using a highpass filter (cut-off 1/128 Hz) to remove slow drifts. Spatial smoothing was applied, using a Gaussian kernel of 2 mm FWHM, as this was found to stabilise CNR estimates. We next fit two GLMs to each participant's data, one to model the effect of the response hand of the button press, and one to model the effect of spatial cue and the laterality of the visual target. Response hand was modelled using two regressors; one for each hand of response (left or right). We chose to model response hand as motoric contrasts are typically used to assess sensitivity of imaging sequences to signal in the basal ganglia [@puckettUsingMultiechoSimultaneous2018; mileticFMRIProtocolOptimization2020], and this therefore provides a good basis for comparison to our attentional manipulations of interest. To assess the effect of the attentional manipulations, the second GLM contained 4 regressors, reflecting the 2 x 2 design of target laterality (left vs right_ x spatial cue probability (p= .5 vs .8). GLMs were fit using the canonical double-gamma haemodynamic response function (HRF) [@fristonAnalysisFunctionalMRI1994, @fristonEventRelatedFMRICharacterizing1998, @fristonStatisticalParametricMaps1994, @gloverDeconvolutionImpulseResponse1999] with time and dispersion derivatives, and using the FAST option for pre-whitening [@corbinAccurateModelingTemporal2018]. GLM model specification and estimation were conducted using the `SpecifySPMModel`, `Level1Design` and `EstimateModel` wrapper functions from Nipype. 
 
-  For a measure of BOLD-sensitivity to each contrast, the resulting _t_-scores were used as a measure of activation sensitivity. Temporal SNR measures, once augmented to account for temporal correlations in the data, amount to computing the _t_-score for the mean signal change; i.e. the _t_-score serves as a contrast-to-noise ratio (CNR) measure  [@corbinAccurateModelingTemporal2018]. 
-  Statistical analyses comparing the protocols were based on those presented in Puckett et al [-@puckettUsingMultiechoSimultaneous2018] and Miletic et al [-@mileticFMRIProtocolOptimization2020]. We extracted average _t_-scores per subject, protocol and ROI (from the fixed effects analysis) and applied a linear mixed effects model with _t_-scores as the dependent variable, using the lme4 package [@batesFittingLinearMixedEffects2015]. As we are concerned with the magnitude rather than the direction of the effects, we tool the absolute value of the _t_-scores prior to averaging. ROI, contrast, and protocol served as predictor variables, including all possible interaction terms. Random intercepts were included for each subject. Statistical significance of the predictor variables was assessed using Type II Wald chisquare tests, using the car package [foxCompanionAppliedRegression2019]. Post-hoc follow up tests were conducted using  Tukey's test, applying the Sidak correction for multiple comparisons [@sidakRectangularConfidenceRegions1967].
-
-<br>
+We sought to determine the sensitivity of the three protocols to the following contrasts; the main effect of response hand (left hand vs right hand response), as this manipulation is most likely to yield the largest differences in the basal ganglia e.g. [@puckettUsingMultiechoSimultaneous2018]. the main effect of target laterality (left vs right), as previous evidence suggests that cells in the striatum respond to combined object location and identity [@yamamotoWhatWhereInformation2012]. The main effect of cue probability (p=.5 vs .8), as the basal ganglia has been hypothesised to encode the probability of sensory inputs in visual decision making [@caballeroProbabilisticDistributedRecursive2018]. The cue probability x target location interaction, to ascertain sensitivity to the lateralised expectation and inhibition that has been hypothesised to occur when spatial targets enable prioritisation of locations for upcoming target processing [@schmitzNormalizationCholinergicMicrocircuit2018; @reynoldsNormalizationModelAttention2009].
 
 #### Assessment of recovered HRF functions
+\label{sec:AssessHRF}
 
-<br>
-
-  To assess visually whether the current protocols yielded a typical HRF, a first-level GLM was fit to each participant's data using a Finite Impulse Response (FIR) function (length: 18 seconds, order: 9). If a typical HRF function is present, then the parameters of the FIR should recover the HRF shape. To avoid potential overfitting to noise owing to the increase of number of parameters in the FIR function, a simplified design matrix was defined, which contained regressors for the onset of left and right hemifield targets only. As above, this was achieved using the `SpecifySPMModel` and `Level1Design` Nipype wrappers. Prior to model estimation, and owing to the presence of overlapping trials within a condition (due to the fast event-related design of the protocols), the regressors were de-orthogonalised (within condition) using a custom adaptation of the [`spm_fMRI_design`](https://github.com/kel-github/code-4-seq-comp-test-7T/blob/master/spm_fMRI_design_copy.m) function. The resulting GLMs were estimated as above. 
-
-<br>
-
-#### Regions of Interest
-
-<br>
-
-  Of pertinent interest to the current work was the sensitivity of the three protocols to activation in the basal ganglia and in cortical nodes that have been consistently related to the spatial visual selection. Thus, ROIs were selected based on human striatal anatomy, and on functional mapping of visual selection behaviours to the cortex.
-
-<br>
-
-  _Nuclei of the Basal Ganglia_: The ROIs from the basal ganglia were the caudate nucleus (CN), the ventral striatum (VS), putamen (P), globus pallidus external (GPe), globus pallidus internal (GPi), and the sub-thalamic nucleus (STN). These were identifed using a published atlas derived from high-resolution 7T anatomical imaging [@keukenProbabilisticAtlasBasal2015], including the manual division of the striatum into the CN, P, and VS reported in [@puckettUsingMultiechoSimultaneous2018]. As the goal of the analysis was to ascertain the sensitivity of each protocol to the contrasts of interest in each ROI, rather than seeking to assess any specific relationships between spatial attention and laterality of functional response, the left and right images of each ROI were joined to form a bilateral mask image. 
+To assess visually whether the current protocols yielded a typical HRF in subcortical ROIs, a GLM was fit to each participant's data using a Finite Impulse Response (FIR) function (length: 18 seconds, order: 9). If a typical HRF function is present, then the parameters of the FIR should recover the HRF shape. To avoid potential overfitting to noise owing to the increase of number of parameters in the FIR function, a simplified design matrix was defined, which contained regressors for target laterality only. As above, this was achieved using the `SpecifySPMModel` and `Level1Design` Nipype wrappers. Prior to model estimation, and owing to the presence of overlapping trials within a condition (due to the fast event-related design of the protocols), the regressors were de-orthogonalised (within condition) using a custom adaptation of the [`spm_fMRI_design`](https://github.com/kel-github/code-4-seq-comp-test-7T/blob/master/spm_fMRI_design_copy.m) function. The resulting GLMs were estimated as above. 
   
-  _Cortical ROIs_: The cortical regions of interest were identified using the Neurosynth meta-analytic association test from  [topic 303](https://neurosynth.org/analyses/topics/v4-topics-400/303), of the set [v4-topics-400](https://neurosynth.org/analyses/topics/v4-topics-400/), which contains the top-loading topic terms: attention, orienting, spatial, attentional, cued, target, cue, cueing and endogenous cues. This meta-analysis identified 5 ROIs including the left and right frontal eye fields (FEF), left and right intra-parietal sulcus (IPS), and the left lateral occipital complex (LOC). The approximate centre of each ROI was defined in MNI co-ordinates, and a sphere with a radius of 5 mm was defined around the co-ordinates using `fslmaths`. The resulting images were binarised and served as the cortical masks.
+#### Statistical Approach
+\label{sec:StatsApproach}
 
-  Each mask was transformed from MNI space to participant space using the ANTs `ApplyTransforms` wrapper, where the mask files were transformed to the space of the participant's preprocessed T1w image, using the reverse of the transforms provided by fMRIprep [*from-MNI152NLin2009cAsym_to_t1w_mode-image_xfm.h5*]. Each mask file in participant space was then resliced (using SPM's `Reslice` wrapper) to match the dimensions of the CNR images from each T2* protocol (P1, P2, P3). The resulting resliced mask files were then used to extract the CNR data from the ROIs using FSLs `BinaryMaths` wrapper.
-
-  CNR data from each ROI were extracted using `spm_read_vols` (to get the x, y, z coordinates for each ROI) and `spm_get_data` (to extract the CNR from the given coordinates). 
-
-
-<br>
+Statistical analyses comparing the protocols were based on those presented in Puckett et al [-@puckettUsingMultiechoSimultaneous2018] and Miletic et al [-@mileticFMRIProtocolOptimization2020]. We extracted average tSNR or CNR scores per subject, protocol and ROI (from the fixed effects analysis) and applied a linear mixed effects model with  average scores as the dependent variable, using the lme4 package [@batesFittingLinearMixedEffects2015]. ROI, contrast, and protocol served as predictor variables, including all possible interaction terms. Random intercepts were included for each subject. Statistical significance of the predictor variables was assessed using Type II Wald chisquare tests, using the car package [foxCompanionAppliedRegression2019]. Post-hoc follow up tests were conducted using  Tukey's test, applying the Sidak correction for multiple comparisons [@sidakRectangularConfidenceRegions1967].
 
 # Results
+\label{sec:Results}
 
-<br>
+This and all subsequent analyses were conducted using R (version 3.3.2, [@Rcitation]) and RStudio (version 1.1.456, [@rstudiocitation]). 
 
 ## Behaviour
+\label{sec:Behaviour}
 
-<br>
+Given the N of 5 participants, we present the influence of cue certainty on participant's behaviour for visual inspection (see Figure \@ref{fig:paradigm}, panel D), rather than applying inferential statistics, owing to the low statistical power for group-level inference. However, analysis of the individual participant data from the previous behavioural session that contained more trials demonstrated a statistically significant influence of both cue types (spatial and value) on each participant's response times (RTs). An online description of this data is available [here](). 
 
-  This and all subsequent analysis was conducted using R (version 3.3.2, [@Rcitation]) and RStudio (version 1.1.456, [@rstudiocitation]). 
-  Given the N of 5 participants, we present only the influence of cue certainty on participant's behaviour for visual inspection, rather than applying inferential statistics. Outliers from correct response times (RTs) for each participant, protocol and cueing condition were defined as those less than 200 ms, or greater than 2.5 times the standard deviation above the mean, and were removed from the data. As both RT and accuracy are influenced by the certainty offered by spatial cues, an inverse efficiency score was computed for each participant, protocol and cueing condition by taking $\frac{RT_{mu}}{Acc}$. Given the widespread replication of the influence of spatial cues on visual selection [@chicaSpatialOrientingParadigm2014], including in a paradigm with a very similar set up [@garnerIncentiveValueSpatial2021], we interpret our data as reflecting a cost to visual selection at unlikely target locations (p=.2).
+Outliers from correct response times (RTs) for each participant, protocol and cueing condition were defined as those less than 200 ms, or greater than 2.5 times the standard deviation above the mean, and were removed from the data. As both RT and accuracy are influenced by the certainty offered by spatial cues, an inverse efficiency score was computed for each participant, protocol and cueing condition by taking $\frac{RT_{mu}}{Acc}$. Given the widespread replication of the influence of spatial cues on visual selection [@chicaSpatialOrientingParadigm2014], including in a paradigm with a very similar set up [@garnerIncentiveValueSpatial2021], we interpret our data as reflecting a cost to visual selection at unlikely target locations (p=.2).
 
-```{r loadmribeh, warning=FALSE, echo=FALSE, message=F, warning=F}
+## tSNR
+\label{sec:tSNRResults}
 
-subjects = c(1, 2, 3, 4, 5)
-sessions = c(2, 3, 4)
-TRs = c(700, 1510, 1920)
-data_path = 'data/'
-mri.beh.raw <- get_mri_data(subjects, sessions, data_path, TRs)
+```{r loadtSNR, echo=FALSE, message=F, warning=F}
+
+# Load and tidy data HAND GLM DATA
+
+tSNR = read.csv('~/Dropbox/documents/MC-Docs/seqtest-writeup/data/tSNR_ROI_agg.csv')
+tSNR $sub <- factor(tSNR$sub)
+tSNR$TR <- factor(tSNR$TR)
+tSNR$roi <- factor(tSNR$roi)
+names(tSNR)[names(tSNR) == "contrast"] = "session"
+tSNR$session <- factor(tSNR$session)
+names(tSNR)[names(tSNR) == "tT"] = "tSNR"
+
+tSNR$TR <- tSNR$TR %>% recode('700' = 'ME',
+                              '1510' = 'CMRR',
+                              '1920' = '3D')
+tSNR <- tSNR %>% mutate(roi=factor(roi, levels = c('FEF', 'IPS', 'LOC', 'VS', 'CN', 'Put', 'GPe', 'GPi', 'STN')))
+
+mutSNR <-tSNR %>% group_by(sub, TR, roi) %>%
+                           summarise(tSNR = mean(tSNR)) %>%
+                           ungroup()
 
 ```
 
-```{r cleanmribeh, echo=FALSE, message=F, warning=F}
-RT_min = .2
-sd_reject = 2.5
-mri.beh.clean <- mri.beh.raw %>% group_by(sub, sess, TR, reward_type, cert) %>%
-                                 filter(rt > RT_min) %>%
-                                 filter(resp == 1) %>%
-                                 filter(rt < median(rt) + sd_reject*sd(rt)) 
+```{r, tSNRanalysis, echo=FALSE, message=F, warning=F}
+
+tsnr_mod <- lmer( tSNR ~ TR*roi+ (1|sub), data=mutSNR)
+tst_tsnr_mod <- Anova(tsnr_mod, test.statistic="F")
+tst_tsnr_mod 
 ```
 
-```{r, mriIE, echo = FALSE, message=F, warning=F}
+```{r, tSNRFU}
+## testing cortical 
+cort_tsnr <- mutSNR %>% filter(roi == "FEF" | roi == "IPS" | roi == "LOC")
+cort_tsnr_mod <- lmer(tSNR ~ TR*roi+ (1|sub), data = cort_tsnr)
+tst_cort_tsnr_mod <- Anova(cort_tsnr_mod, test.statistic = "F")
+tst_cort_tsnr_mod
+```
 
-mri.acc = mri.beh.raw %>% group_by(sub, TR, reward_type, cert) %>%
-                          summarise(acc = mean(resp))
-mri.inv.eff = mri.beh.clean %>% group_by(sub, TR, reward_type, cert) %>%
-                           summarise(RT = median(rt)) %>%
-                           inner_join(mri.acc, sum.inv.eff, by=c("sub", "TR", "reward_type", "cert")) %>%
-                           transform(inv_eff = RT/acc)
+```{r, fuMEcorttSNR}
+
+cort_tsnr_me <- emmeans(cort_tsnr_mod, "TR")
+cntrst_cort_tsnr_me <- contrast(cort_tsnr_me, 'tukey') 
+cntrst_cort_tsnr_me <- cntrst_cort_tsnr_me %>% broom::tidy()
+cntrst_cort_tsnr_me <- cntrst_cort_tsnr_me %>% filter(adj.p.value<.05)
+cntrst_cort_tsnr_me
+```
+
+```{r, tSNRFU}
+## testing cortical 
+sc_tsnr <- mutSNR %>% filter(roi != "FEF" & roi != "IPS" & roi != "LOC")
+sc_tsnr_mod <- lmer(tSNR ~ TR*roi+ (1|sub), data = sc_tsnr)
+tst_sc_tsnr_mod <- Anova(sc_tsnr_mod, test.statistic = "F")
+tst_sc_tsnr_mod
+```
+
+```{r}
+# here I need to test for the main effect of protocol for each roi
+
 ```
 
 
-```{r, certIE, echo = FALSE, message=F, warning=F}
 
-cert.acc = mri.beh.raw %>% group_by(sub, TR, cert) %>%
-                          summarise(acc = mean(resp))
-cert.inv.eff = mri.beh.clean %>% group_by(sub, TR, cert) %>%
-                           summarise(RT = median(rt)) %>%
-                           inner_join(mri.acc, sum.inv.eff, by=c("sub", "TR", "cert")) %>%
-                           transform(inv_eff = RT/acc)
+```{r tSNR, fig.align='center', out.width"50%", fig.cap="tSNR observed for the 3 protocols. A) tSNR across the whole brain for each protocol, for one example subject and session. B) Mean tSNR values from 3 key ROIs, across protocols (x-axis). Each line reflects data from one subject. ME = multi-echo, CMRR =, 3D = 3D Echo Planar Imaging, IPS = intra-parietal sulcus, CN = caudate nucleus, Put = putamen"}
+
+tSNR_fig_pth <- '../images/tSNR_wholebrain_byReg.png' 
+include_graphics(tSNR_fig_pth)
 ```
 
-```{r, plotmribeh, warning=FALSE, fig.align='center', out.width="600pix", fig.cap="Showing Inverse Efficiency scores by cue probability condition for each protocol"}
-cert.inv.eff.grp <- cert.inv.eff %>% group_by(TR, cert) %>%
-                    summarise(mu=mean(inv_eff),
-                              N=length(inv_eff),
-                              se=sd(inv_eff)/sqrt(N))
-fig.cols = wes_palette("IsleofDogs1")
-iv = "cert"
-grp = "TR"
-cols = fig.cols[c(1,3,4)]
-ylb = "IE"
-ylims=c(0,5)
-
-plt.crt.sum <- function(data, iv, grp, cols, ylb, ylims){
-  data$TR <- as.factor(data$TR)
-  ggplot(data, aes_string(x=iv, y="mu", col=grp, group="TR")) +
-    geom_line(lwd=1.5) +
-    geom_errorbar(aes(ymin=mu-se, ymax=mu+se), lwd=1.5, width=.2) +
-    scale_fill_manual(values=cols) +
-    scale_color_manual(values=cols) + 
-    ylab(ylb) + xlab(iv) + ylim(ylims) +
-    theme_cowplot() +
-    theme(panel.border = element_blank(), 
-          panel.grid.major =   element_blank(),
-          panel.grid.minor = element_blank(), 
-          axis.line = element_line(colour = "black"),
-          legend.position = "none") 
-}
-
-plt.crt.sum(cert.inv.eff.grp, iv, grp, cols, ylb, c(0.5,.85))
-```
-
-<br>
 
 ## CNR
 
@@ -367,20 +336,17 @@ plt.crt.sum(cert.inv.eff.grp, iv, grp, cols, ylb, c(0.5,.85))
  <br>
 
 ### Comparing CNR Between Sequences
-
-<br>
-
-  Visual inspection of the CNR data showed that one of the participants scored greater than 3 standard deviations from the group mean on all measures. Therefore their data is excluded from the subsequent analysis. 
+#### Thresholded voxels
 
 ```{r loadCNRdat, echo=FALSE, message=F, warning=F}
 
-# Load and tidy data
-CNR = read.csv('~/Dropbox/documents/MC-Docs/seqtest-writeup/data/tCNR_agg.csv')
+# Load and tidy data HAND GLM DATA
+CNR = read.csv('~/Dropbox/documents/MC-Docs/seqtest-writeup/data/HANDSs_tCNR_stat_vox_agg.csv')
 CNR$sub <- factor(CNR$sub)
 CNR$TR <- factor(CNR$TR)
 CNR$roi <- factor(CNR$roi)
 CNR$contrast <- factor(CNR$contrast)
-names(CNR)[names(CNR) == "tT"] = "R"
+names(CNR)[names(CNR) == "tT"] = "CNR"
 
 # CNR$roi <- CNR$roi %>% recode('1' = 'CN',
 #                           '2' = 'FEF',
@@ -391,40 +357,38 @@ names(CNR)[names(CNR) == "tT"] = "R"
 #                               '7' = 'Put', 
 #                               '8' = 'STN',
 #                               '9' = 'VS') 
-CNR$contrast <- CNR$contrast %>%  recode('1' = 'left_tgt',
-                                         '2' = 'right_tgt',
-                                         '5' = 'left_tgt vs right_tgt',
-                                         '7' = 'tgt_side x cue_P',
-                                         '13' = 'right_hand',
-                                         '14' = 'left_hand',
-                                         '15' = 'left_vs_right_hand')
-CNR$contrast_type = c('vs_base', 'vs_base', 'condition', 'condition', 'vs_base', 'vs_base', 'condition')
-CNR$contrast_type <- as.factor(CNR$contrast_type)
+CNR$contrast <- CNR$contrast %>%  recode('1' = 'left_vs_right_hand') 
 
-CNR <- CNR %>% mutate(roi=factor(roi, levels = c('FEF', 'IPS', 'LOC', 'VS', 'CN', 'Put', 'GPe', 'GPi', 'STN')))
-CNR <- CNR %>% mutate(cort=if_else(roi %in% c("FEF", "IPS", "LOC"), "cortical", "striatal")) %>%
-               mutate(cort=factor(cort, levels = c("cortical", "striatal")))
+tmp = read.csv('~/Dropbox/documents/MC-Docs/seqtest-writeup/data/TC_tCNR_stat_vox_agg.csv')
+tmp$sub <- factor(tmp$sub)
+tmp$TR <- factor(tmp$TR)
+tmp$roi <- factor(tmp$roi)
+tmp$contrast <- factor(tmp$contrast)
+names(tmp)[names(tmp) == "tT"] = "CNR"
+
+tmp$contrast <- tmp$contrast %>% recode('1' = 'tgt side',
+                                        '2' = 'cert',
+                                        '3' = 'cert x tgt side')
+
+CNR <- rbind(CNR, tmp)
+
+CNR$TR <- CNR$TR %>% recode('700' = 'ME',
+                            '1510' = 'CMRR',
+                            '1920' = '3D EPI')
+
+muCNR <- CNR %>% group_by(sub, TR, contrast) %>%
+                 summarise(mu = mean(CNR))
+
 ```
 
-
-```{r, boxplot, echo=TRUE, results="hide"}
-
-with(CNR, boxplot(R~contrast*roi*TR))
-
-# is it subject 1?
-with(CNR[CNR$sub != "1", ], boxplot(R~contrast*roi*TR))
-# subject 1 is > 3 sdevs from the mean on all measures, so excluding from the CNR analysis
-CNR <- CNR %>% filter(sub != "1") 
+```{r thrshlook, echo=FALSE, message=F, warning=F}
+with(muCNR, boxplot(mu~contrast*TR))
 ```
 
-```{r, stats_bl_conts, echo=TRUE, results="hide"}
-
-# this code shows the main effect of TR, and then shows the followup comparisions
-
-mod <- lmer( R ~ TR*roi*contrast + (1|sub), data=CNR %>% filter(contrast_type == "vs_base") )
+```{r thrshLME, echo=FALSE, message=F, warning=F}
+mod <- lmer( mu ~ TR*contrast + (1|sub), data=muCNR)
 lme.an <- Anova(mod, test.statistic="F")
 lme.an
-
 ```
 
 ```{r, FUProt, echo=TRUE, results="hide"}
@@ -434,22 +398,66 @@ c.prot <- c.prot %>% broom::tidy()
 c.prot <- c.prot %>% filter(adj.p.value<.05)
 c.prot
 ```  
-```{r, plotMEprot, echo=TRUE, results="hide"}  
 
-c.prot <- c.prot %>% mutate(lower=estimate-(1.96*std.error), upper=estimate+(1.96*std.error))
-me.prot.p <-  c.prot %>% ggplot(aes(contrast, estimate, ymin=lower, ymax=upper, col=contrast)) +
-                    geom_pointrange() + ylab("CNR") + xlab("protocol contrast") + theme_cowplot() +
-                    scale_colour_manual(values=wes_palette("Darjeeling2")[c(2,2,2,2,2,2,2,2,2,2)]) +
-                    scale_fill_manual(values=wes_palette("Darjeeling2")[c(2,2,2,2,2,2,2,2,2,2)]) +
-                    geom_hline(yintercept=0, linetype=2) +
-                    theme(legend.position = "None")
+```{r, plotCNRDens, warning=FALSE, fig.align='center', out.width="600pix", fig.cap="Do caption later"}
+
+```
+
+<br>
+
+  Visual inspection of the CNR data showed that one of the participants scored greater than 3 standard deviations from the group mean on all measures. Therefore their data is excluded from the subsequent analysis. 
+
+```{r loadCNRdat, echo=FALSE, message=F, warning=F}
+
+# Load and tidy data
+roi_cnr = read.csv('~/Dropbox/documents/MC-Docs/seqtest-writeup/data/TC_tCNR_ROI_agg.csv')
+roi_cnr$sub <- factor(roi_cnr$sub)
+roi_cnr$TR <- factor(roi_cnr$TR)
+roi_cnr$roi <- factor(roi_cnr$roi)
+roi_cnr$contrast <- factor(roi_cnr$contrast)
+names(roi_cnr)[names(roi_cnr) == "tT"] = "CNR"
+
+roi_cnr$contrast <- roi_cnr$contrast %>% recode('1' = 'tgt side',
+                                        '2' = 'cert',
+                                        '3' = 'cert x tgt side')
+roi_cnr$TR <- roi_cnr$TR %>% recode('700' = 'ME',
+                                    '1510' = 'CMRR',
+                                    '1920' = '3D')
+roi_cnr <- roi_cnr %>% mutate(roi=factor(roi, levels = c('FEF', 'IPS', 'LOC', 'VS', 'CN', 'Put', 'GPe', 'GPi', 'STN')))
+
+tmp <- read.csv('~/Dropbox/documents/MC-Docs/seqtest-writeup/data/HANDS_tCNR_ROI_agg.csv')
+names(tmp)[names(tmp) == "tT"] = "CNR"
+tmp$contrast <- "resp hand"
+tmp$TR <- factor(tmp$TR)
+tmp$TR <- tmp$TR %>% recode('700' = 'ME',
+                             '1510' = 'CMRR',
+                              '1920' = '3D')
+roi_cnr <- rbind(roi_cnr, tmp)
+
+```
+
+
+```{r, boxplot, echo=TRUE, results="hide"}
+
+with(roi_cnr, boxplot(CNR~contrast*roi*TR))
+with(roi_cnr %>% filter(sub != "1"), boxplot(CNR~contrast*roi*TR)) # sub 1 = outlier, remove
+roi_cnr <-roi_cnr %>% filter(sub != "1")
+```
+
+```{r, stats_bl_conts, echo=TRUE, results="hide"}
+
+# this code shows the main effect of TR, and then shows the followup comparisions
+
+roi.mod <- lmer( CNR ~ TR*roi*contrast + (1|sub), data=roi_cnr )
+roi.lme.an <- Anova(roi.mod, test.statistic="F")
+roi.lme.an
 
 ```
 
 
 ```{r, FUPROI, echo=TRUE, results="hide"}
 
-m.roi <- emmeans(mod, "roi")
+m.roi <- emmeans(roi.mod, "roi")
 c.roi <- contrast(m.roi, 'tukey')
 c.roi <- c.roi %>% broom::tidy()
 c.roi <- c.roi %>% filter(adj.p.value < .05)
@@ -461,54 +469,34 @@ c.roi
 c.roi <- c.roi %>% mutate(lower=estimate-(1.96*std.error), upper=estimate+(1.96*std.error))
 me.roi.p <-  c.roi %>% ggplot(aes(contrast, estimate, ymin=lower, ymax=upper, col=contrast)) +
                         geom_pointrange() + ylab("CNR") + xlab("ROI contrast") + theme_cowplot() +
-                        scale_colour_manual(values=wes_palette("Darjeeling2")[rep(3,5)]) +
-                        scale_fill_manual(values=wes_palette("Darjeeling2")[rep(3,5)]) +
+                        scale_colour_manual(values=wes_palette("IsleofDogs1")[rep(1,13)]) +
+                        scale_fill_manual(values=wes_palette("IsleofDogs1")[rep(1,13)]) +
                         geom_hline(yintercept=0, linetype=2) +
                         theme(legend.position = "None")
 
 ```
 
-```{r, FUCONT, echo=TRUE, results="hide"}
-
-m.con <- emmeans(mod, "contrast")
-c.con <- contrast(m.con, 'tukey')
-#c.con <- c.con %>% broom::tidy()
-#c.con <- c.con %>% filter(adj.p.value < .05)
-c.con
-```  
 
 ```{r, plot_sub_resp_byROI, echo=TRUE, results="hide"}
 
-CNR.p <- CNR %>% group_by(sub, TR, roi) %>%
-                 filter(contrast == "left_tgt") %>%
+CNR.p <- CNR %>% group_by(sub, TR, roi) %>% summarise(R=mean(R)) %>%
                  ggplot(aes(x=TR, y=R, group=sub)) +
                  geom_line(aes(color=sub), lwd=1.1, alpha=.75) +
                  xlab("P") + 
-                 facet_wrap(~roi, scales="free_y") +
-                 scale_colour_manual(values=c(wes_palette("Darjeeling2"))) +
+                 facet_wrap(~roi) +
+                 scale_colour_manual(values=c(wes_palette("IsleofDogs1"))) +
                  ylab("CNR") + 
                  theme(strip.text.x = element_text(size=8)) + 
                  theme_cowplot() 
+
+ggsave(filename='~/Dropbox/documents/MC-Docs/seqtest-writeup/images/thrsh_comp_mutSNR.png', plot=CNR.p, width=6, height=6, units="in", dpi=300)
 ```
 
 
 ```{r, out.width="600px", fig.align='center', fig.cap="CNR values: A) showing CNR differences for protocol pairwise comparisons, B) showing CNR differences between ROIs, C) example data showing CNR values for each participant for each protocol and ROI for the response hand (LvsR) contrast"}
-top_row <- plot_grid(me.prot.p, me.roi.p, labels=c('A','B'), label_size=12)
-plot_grid(top_row, CNR.p, labels=c('', 'C'), label_size = 12, ncol=1, rel_heights=c(2,5))
 # ggsave this!
 ```
 
-
-```{r, stats_bt_conts, echo=TRUE, results="hide"}
-
-# this code shows the main effect of TR, and then shows the followup comparisions
-
-mod.c <- lmer( R ~ TR*roi*contrast + (1|sub), data=CNR %>% filter(contrast_type == "condition") )
-lme.an.c <- Anova(mod.c, test.statistic="F")
-lme.an.c
-
-```
-  
 
 
 
@@ -534,46 +522,88 @@ lme.an.c
 
 ```{r, load_and_tidy_FIR_dat}
 
-FIR = read.csv('data/FIR_data_across_subs.csv')
+FIR = read.csv('~/Dropbox/documents/MC-Docs/seqtest-writeup/data/FIR_data_across_subs.csv')
 
 FIR$sub <- as.factor(FIR$sub)
 FIR$TR <- as.factor(FIR$TR)
-FIR$reg <- as.factor(FIR$reg)
+FIR$TR <- FIR$TR %>% recode('700' = 'ME',
+                            '1510' = 'CMRR',
+                            '1920' = '3D')
+FIR$reg <- NULL
 FIR$condition <- as.factor(FIR$condition)
 levels(FIR$condition) <- c("l","r")
 
-regs <- c("FEF", "IPS", "LOC", "CN", "GPe", "GPi", "Put", "VS")
+#regs <- c("FEF", "IPS", "LOC", "CN", "GPe", "GPi", "Put", "VS")
 # separately extracting STN, as insufficient voxels to have tertiarty split, 
 # therefore using all of them
-muSTN <- FIR %>% filter(reg == "STN") %>%
-                 group_by(sub, TR, reg, order) %>%
-                 summarise(beta = mean(value, na.rm=T))
-muFIR <- FIR %>% filter(reg %in% regs) %>%
-                 filter(third == 3) %>%
-                 group_by(sub, TR, reg, order) %>%
-                 summarise(beta = mean(value))
-muFIR <- rbind(muFIR, muSTN)
-muFIR <- muFIR %>% filter(sub != "1")
+# muSTN <- FIR %>% filter(reg == "STN") %>%
+#                  group_by(sub, TR, reg, order) %>%
+#                  summarise(beta = mean(value, na.rm=T))
+muFIR <- FIR %>% filter(third == 3) %>%
+                 filter(sub != "1") %>%
+                 group_by(sub, TR, order) %>%
+                 filter(condition == "l") %>%
+                 summarise(mean=mean(value))
+names(muFIR)[names(muFIR) == "mean"] = "beta"
+#muFIR <- rbind(muFIR, muSTN)
+#muFIR <- muFIR %>% filter(sub != "1")
 ```
 
 ```{r, out.width="600px", fig.align='center', fig.cap="Figure xxx: Showing the FIR function for each subject, TR sequence and striatal ROI for the top 33.3% of voxels"}
 
-muFIR %>%  filter(reg %in% c("CN", "GPe", "GPi", "Put", "STN", "VS")) %>%
-           ggplot(aes(x=order, y=beta, group=sub)) +
+# muFIR %>%  filter(reg %in% c("CN", "GPe", "GPi", "Put", "STN", "VS")) %>%
+#            ggplot(aes(x=order, y=beta, group=sub)) +
+#            geom_line(aes(color=sub), lwd=1.1, alpha=.75) +
+#            xlab("t") + 
+#            scale_x_continuous(breaks=seq(2,18,by=2),
+#                               labels = c("2","","","","10","","","","18")) +
+#            scale_y_continuous(breaks=seq(-0.025, .1, by = 0.025),
+#            labels=c("","0","",".05","",".1")) +
+#            facet_grid(vars(TR), vars(reg), scales="free_y") +
+#            scale_colour_manual(values=c(wes_palette("Darjeeling2"))) +
+#            ylab(expression(beta)) + theme_cowplot() 
+muFIR %>%  ggplot(aes(x=order, y=beta, group=sub)) +
            geom_line(aes(color=sub), lwd=1.1, alpha=.75) +
-           xlab("t") + 
+           xlab("t") +
            scale_x_continuous(breaks=seq(2,18,by=2),
                               labels = c("2","","","","10","","","","18")) +
-           scale_y_continuous(breaks=seq(-0.025, .1, by = 0.025),
-           labels=c("","0","",".05","",".1")) +
-           facet_grid(vars(TR), vars(reg), scales="free_y") +
-           scale_colour_manual(values=c(wes_palette("Darjeeling2"))) +
-           ylab(expression(beta)) + theme_cowplot() 
-
+           facet_grid(vars(TR), scales="free_y") +
+           scale_colour_manual(values=c(wes_palette("FantasticFox1")[c(2:5)])) +
+           ylab(expression(beta)) + theme_cowplot() +
+           theme( axis.text.y = element_blank(),
+                  strip.background = element_blank(),
+                  strip.text.x = element_blank())
+ggsave(filename='~/Dropbox/documents/MC-Docs/seqtest-writeup/images/thrsh_HAND_FIR.png', plot=last_plot(), width=2.45, height=2.95, units="in", dpi=300)
 
 ```
 
 
-<br>
+```{r, load_and_tidy_roi_FIR_dat}
+
+fir = read.csv('~/Dropbox/documents/MC-Docs/seqtest-writeup/data/ROI_FIR_data_across_subs.csv')
+
+fir$sub <- as.factor(fir$sub)
+fir$TR <- as.factor(fir$TR)
+fir$TR <- fir$TR %>% recode('700' = 'ME',
+                            '1510' = 'CMRR',
+                            '1920' = '3D')
+fir$reg <- as.factor(fir$reg)
+fir$condition <- as.factor(fir$condition)
+levels(fir$condition) <- c("l","r")
+fir <- fir %>% mutate(roi=factor(reg, levels = c('FEF', 'IPS', 'LOC', 'VS', 'CN', 'Put', 'GPe', 'GPi', 'STN')))
+#regs <- c("FEF", "IPS", "LOC", "CN", "GPe", "GPi", "Put", "VS")
+# separately extracting STN, as insufficient voxels to have tertiarty split, 
+# therefore using all of them
+# muSTN <- FIR %>% filter(reg == "STN") %>%
+#                  group_by(sub, TR, reg, order) %>%
+#                  summarise(beta = mean(value, na.rm=T))
+mu_firs <- fir %>% filter(third == 3) %>%
+                   filter(sub != "1") %>%
+                   group_by(sub, TR, roi, order) %>%
+                   summarise(beta=mean(value)) %>%
+                   ungroup()
+#muFIR <- rbind(muFIR, muSTN)
+#muFIR <- muFIR %>% filter(sub != "1")
+```
 
 
