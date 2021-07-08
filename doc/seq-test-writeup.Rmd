@@ -42,11 +42,11 @@ keywords:
 bibliography: refs.bib
 biblio-style: unsrt
 output: 
-  bookdown::word_document2:
-    toc: true
   bookdown::pdf_book:
     base_format: rticles::arxiv_article
     keep_tex: true
+  bookdown::word_document2:
+    toc: true
 ---
 
 ```{r knitr_options, echo=FALSE}
@@ -83,6 +83,7 @@ source("../R/data_wrangles.R")
 \clearpage
 
 # Introduction
+
 \label{sec:Introduction}
 
   For the 
@@ -91,12 +92,13 @@ source("../R/data_wrangles.R")
 -> protocols at 7T have typically been optimised for action based tasks (attention to action - Puckett etc, executing and witholding actions - Forstmann etc), makes sense as the basal ganglia is well mapped to action selection and production. However, it remains unknown what is optimal for detecting contrasts that don't require an overt action.
 -> Multiple demands to meet when imaging the basal ganglia and the cortex during visual spatial attention tasks. Specifically field of view requirements to cover relevant cortical regions (frontal, parietal and occipital), as well as striatal. Resolution - some nuclei that are relevant are x mm size. Time - very rapid events of interest (several hundred ms).
 -> we sought to compare protocols collected while participants performed a visual cueing task. briefly describe task.
--> protocols we compared were x because of y. \@ref{fig:figaims}
+-> protocols we compared were x because of y. \@ref{fig:aims}
 -> motivate tSNR and CNR e.g. For a measure of BOLD-sensitivity to each contrast, the resulting _t_-scores were used as a measure of activation sensitivity. Temporal SNR measures, once augmented to account for temporal correlations in the data, amount to computing the _t_-score for the mean signal change; i.e. the _t_-score serves as a contrast-to-noise ratio (CNR) measure  [@corbinAccurateModelingTemporal2018]. 
+-> performed signal comparisons on the basis of where strongest signal vs meta-analytic/regional approach
+-> contrasts of interest
 
 
-
-```{r aims, fig.align='center', out.width"70%", fig.cap="Regions of interest. A) Basal Ganglia anterior view, B) Basal Ganglia posterior view, C) Cortical ROIs. CN = Caudate Nucleus, GPe = Globus Pallidus External, GPi = Globus Pallidus Internal, Put = Putamen, STN = Subthalamic Nucleus, VS = Ventral Striatum, FEF = Frontal Eye Fields, IPS = Intraparietal Sulcus, LOC = Lateral Occipital Complex"}
+```{r aims, out.width = "50%", fig.cap="Regions of interest. A) Basal Ganglia anterior view, B) Basal Ganglia posterior view, C) Cortical ROIs. CN = Caudate Nucleus, GPe = Globus Pallidus External, GPi = Globus Pallidus Internal, Put = Putamen, STN = Subthalamic Nucleus, VS = Ventral Striatum, FEF = Frontal Eye Fields, IPS = Intraparietal Sulcus, LOC = Lateral Occipital Complex"}
 paradigm.fig.pth <- '../images/Fig_ROIs.png'
 #paradigm.fig <- readPNG(paradigm.fig.pth, native=TRUE, info=TRUE)
 include_graphics(paradigm.fig.pth)
@@ -120,7 +122,7 @@ Participants attended four experimental sessions; an initial behavioural session
 ### Behavioural Paradigm
 \label{sec:BehavParadigm}
 
-We adapted a previously published spatial cueing task where participants made orientation judgements to a visual target, while ignoring a distractor. The target and distractor are prececed by probabilistic spatial and incentive value cues [@garnerIncentiveValueSpatial2021] (see Figure \@ref{fig:paradigm}). Note that while we used a combination of value and spatial cues, as we intend to use both in future work, we currently focus on only the influence of spatial cues, given the robustness and size of this effect [posnerOrientingAttention1980; @chicaSpatialOrientingParadigm2014] and our current sample size.               
+We adapted a previously published spatial cueing task where participants made orientation judgements to a visual target, while ignoring a distractor. The target and distractor are prececed by probabilistic spatial and incentive value cues [@garnerIncentiveValueSpatial2021] (see Figure \@ref{fig:paradigm}). Note that while we used a combination of value and spatial cues, as we intend to use both in future work, we currently focus on only the influence of spatial cues, given the robustness and size of this effect [@posnerOrientingAttention1980; @chicaSpatialOrientingParadigm2014] and our current sample size.               
 
 ### Experimental Task Apparatus
 \label{sec:Apparatus}
@@ -148,7 +150,7 @@ Participants had received extensive instructions and training in the aforementio
 
 <br>  
 
-```{r paradigm, fig.align='center', out.width"70%", fig.cap="Cueing paradigm. A) Trial sequence, B) value- and C) spatial-cue contingencies, D) Behaviour: Inverse efficiency (RT/accuracy) given the probability of the target location, shown for each each protocol. Error bars reflect SEM. T=target, D=distractor, CW=clockwise, CCW=counterclockwise, ME=multi-echo, CMRR=, 3D=3D Echo Planar Imaging"}
+```{r paradigm, out.width = "70%", fig.cap="Cueing paradigm. A) Trial sequence, B) value- and C) spatial-cue contingencies, D) Behaviour: Inverse efficiency (RT/accuracy) given the probability of the target location, shown for each each protocol. Error bars reflect SEM. T=target, D=distractor, CW=clockwise, CCW=counterclockwise, ME=multi-echo, CMRR=, 3D=3D Echo Planar Imaging"}
 paradigm.fig.pth <- '../images/ParadigmBehav.png' 
 include_graphics(paradigm.fig.pth)
 ```
@@ -196,13 +198,13 @@ All anatomical and functional data were preprocessed using _fMRIprep_ (version 1
 Each T1-weighted (T1w) image was corrected for intensity non-uniformity (INU) with `N4BiasFieldCorrection` [@tustisonN4ITKImprovedN32010], distributed with ANTs 2.2.0 [@avantsSymmetricDiffeomorphicImage2008, RRID:SCR_004757]. The T1w-reference was then skull-stripped with a *Nipype* implementation of the `antsBrainExtraction.sh` workflow (from ANTs), using OASIS30ANTs as target template. Brain tissue segmentation of cerebrospinal fluid (CSF), white-matter (WM) and gray-matter (GM) was performed on the brain-extracted T1w using `fast` [FSL 5.0.9, RRID:SCR_002823, @zhangSegmentationBrainMR2001]. A T1w-reference map was computed after registration of 3 T1w images (after INU-correction) using `mri_robust_template` [FreeSurfer 6.0.1, @reuterHighlyAccurateInverse2010]. Brain surfaces were reconstructed using `recon-all` [FreeSurfer 6.0.1, RRID:SCR_001847, @daleCorticalSurfaceBasedAnalysis1999], and the brain mask estimated previously was refined with a custom variation of the method to reconcile ANTs-derived and FreeSurfer-derived segmentations of the cortical gray-matter of Mindboggle [RRID:SCR_002438, @kleinMindbogglingMorphometryHuman2017]. Volume-based spatial normalization to one standard space (MNI152NLin2009cAsym) was performed through nonlinear registration with `antsRegistration` (ANTs 2.2.0), using brain-extracted versions of both T1w reference and the T1w template. The following template was selected for spatial normalization: *ICBM 152 Nonlinear Asymmetrical template version 2009c* [@fonovUnbiasedNonlinearAverage2009, RRID:SCR_008796; TemplateFlow ID: MNI152NLin2009cAsym]. 
 
 **Regions of Interest**
-Of pertinent interest to the current work was the sensitivity of the three protocols to activation in the basal ganglia and in cortical nodes that have been consistently related to visual selection behaviours. Thus, ROIs were selected based on human striatal anatomy, and on a meta-analysis of results from functional mapping of visual selection behaviours to the cortex.
+Of pertinent interest to the current work was the sensitivity of the three protocols to activation in the basal ganglia and in cortical nodes that have been consistently related to visual selection behaviours. Thus, ROIs were selected based on human basal ganglia anatomy, and for cortical regions of interest; on a meta-analysis of previous findings.
 
 _Nuclei of the Basal Ganglia_: The ROIs from the basal ganglia were the caudate nucleus (CN), the ventral striatum (VS), putamen (Put), globus pallidus external (GPe), globus pallidus internal (GPi), and the sub-thalamic nucleus (STN). These were identifed using a published atlas derived from high-resolution 7T anatomical imaging [@keukenProbabilisticAtlasBasal2015], including the manual division of the striatum into the CN, Put, and VS reported in [@puckettUsingMultiechoSimultaneous2018]. As the goal of the analysis was to ascertain the sensitivity of each protocol to the contrasts of interest in each ROI, rather than seeking to assess any directional relationships between spatial attention and laterality of functional response, the left and right images of each ROI were joined to form a bilateral mask image. 
   
 _Cortical ROIs_: The cortical regions of interest were identified using the Neurosynth meta-analytic association test from  [topic 303](https://neurosynth.org/analyses/topics/v4-topics-400/303), of the set [v4-topics-400](https://neurosynth.org/analyses/topics/v4-topics-400/), which contains the top-loading topic terms: attention, orienting, spatial, attentional, cued, target, cue, cueing and endogenous cues. This meta-analysis identified 5 ROIs including the left and right frontal eye fields (FEF), left and right intra-parietal sulcus (IPS), and the left lateral occipital complex (LOC). The approximate centre of each ROI was defined in MNI co-ordinates, and a sphere with a radius of 5 mm was defined around the co-ordinates using `fslmaths`. The resulting images were binarised and served as the cortical masks.
 
-Each mask was transformed from MNI space to participant space using the ANTs `ApplyTransforms` wrapper, using the reverse of the transforms provided by fMRIprep [*from-MNI152NLin2009cAsym_to_t1w_mode-image_xfm.h5*]. Each mask file in subject space was then resliced (using SPM's `Reslice` wrapper) to match the dimensions of the functional images from each T2* protocol. The resulting resliced mask files were then used to extract the relevant data from the ROIs using FSLs `BinaryMaths` wrapper.
+Each mask was transformed from MNI space to participant space using the ANTs `ApplyTransforms` wrapper, using the reverse of the transforms provided by fMRIprep [*from-MNI152NLin2009cAsym_to_t1w_mode-image_xfm.h5*]. Each mask file in subject space was then resliced (using SPM's `Reslice` wrapper) to match the dimensions of the functional images from each T2* protocol. 
 
 **Functional data processing**
 For each BOLD run, the following preprocessing was performed. First, a reference volume and its skull-stripped version were generated using a custom methodology of *fMRIPrep*. A deformation field to correct for susceptibility distortions was estimated based on *fMRIPrep*'s *fieldmap-less* approach. The deformation field is that resulting from co-registering the BOLD reference to the same-subject T1w-reference with its intensity inverted [@wangComparisonImageIntensity2017; @huntenburgLaminarPythonTools2017]. Registration is performed with `antsRegistration` (ANTs 2.2.0), and the process regularized by constraining deformation to be nonzero only along the phase-encoding direction, and modulated with an average fieldmap template [@treiberCharacterizationCorrectionGeometric2016]. Based on the estimated susceptibility distortion, a corrected EPI (echo-planar imaging) reference was calculated for a more accurate co-registration with the anatomical reference. The BOLD reference was then co-registered to the T1w reference using `bbregister` (FreeSurfer) which implements boundary-based registration [@greveAccurateRobustBrain2009]. Co-registration was configured with six degrees of freedom. Head-motion parameters with respect to the BOLD reference (transformation matrices, and six corresponding rotation and translation parameters) are estimated before any spatiotemporal filtering using `mcflirt` [FSL 5.0.9, @jenkinsonImprovedOptimizationRobust2002]. BOLD runs were slice-time corrected using `3dTshift` from AFNI 20160207 [@coxSoftwareToolsAnalysis1997, RRID:SCR_005927]. The BOLD time-series, were resampled to surfaces on the following spaces: *fsaverage*, *fsnative*. The BOLD time-series (including slice-timing correction) were resampled onto their original, native space by applying a single, composite transform to correct for head-motion and susceptibility distortions. These resampled BOLD time-series will be referred to as *preprocessed BOLD in original space*, or just *preprocessed BOLD*. The BOLD time-series were resampled into standard space, generating a *preprocessed BOLD run in 'MNI152NLin2009cAsym' space*. First, a reference volume and its skull-stripped version were generated using a custom methodology of *fMRIPrep*. Several confounding time-series were calculated based on the *preprocessed BOLD*: framewise displacement (FD), DVARS and three region-wise global signals. FD and DVARS are calculated for each functional run, both using their implementations in *Nipype* [following the definitions by @power_fd_dvars]. The three global signals are extracted within the CSF, the WM, and the whole-brain masks. 
@@ -251,14 +253,14 @@ This and all subsequent analyses were conducted using R (version 3.3.2, [@Rcitat
 ## Behaviour
 \label{sec:Behaviour}
 
-Given the N of 5 participants, we present the influence of cue certainty on participant's behaviour for visual inspection (see Figure \@ref{fig:paradigm}, panel D), rather than applying inferential statistics, owing to the low statistical power for group-level inference. However, analysis of the individual participant data from the previous behavioural session that contained more trials demonstrated a statistically significant influence of both cue types (spatial and value) on each participant's response times (RTs). An online description of this data is available [here](). 
+Given the N of 5 participants, we present the influence of cue certainty on participant's behaviour for visual inspection (see Figure \@ref{fig:paradigm}, panel D), rather than applying inferential statistics, owing to the low statistical power for group-level inference. However, analysis of the individual participant data from the initial behavioural session demonstrated a statistically significant influence of both cue types (spatial and value) on each participant's response times (RTs). An online description of this data is available [here](). 
 
-Outliers from correct response times (RTs) for each participant, protocol and cueing condition were defined as those less than 200 ms, or greater than 2.5 times the standard deviation above the mean, and were removed from the data. As both RT and accuracy are influenced by the certainty offered by spatial cues, an inverse efficiency score was computed for each participant, protocol and cueing condition by taking $\frac{RT_{mu}}{Acc}$. Given the widespread replication of the influence of spatial cues on visual selection [@chicaSpatialOrientingParadigm2014], including in a paradigm with a very similar set up [@garnerIncentiveValueSpatial2021], we interpret our data as reflecting a cost to visual selection at unlikely target locations (p=.2).
+Outliers from correct response times (RTs) were defined as those less than 200 ms, or greater than 2.5 times the standard deviation above the mean for each participant, protocol and cueing condition, and were removed from the data. As both RT and accuracy are influenced by the certainty offered by spatial cues, an inverse efficiency score was computed for each participant, protocol and cueing condition by taking $\frac{RT_{mu}}{Acc}$. Given the widespread replication of the influence of spatial cues on visual selection [@chicaSpatialOrientingParadigm2014], including a very similar previously published paradigm [@garnerIncentiveValueSpatial2021], we interpret our data as reflecting a cost to visual selection at unlikely target locations (p=.2).
 
 ## Comparison of tSNR between protocols
 \label{sec:tSNRResults}
 
-The tSNR data were extracted for each subject, protocol and ROI, the results of which are presented in Figure \@ref{fig:tSNR}. As can be seen from the example whole brain tSNR map (panel A), strongest tSNR was observed for the ME protocol, then for the 3D EPI, and last for the CMRR protocol. 
+First we sought to determine which protocol yielded the highest tSNR values across the _a priori_ defined ROIs. The tSNR data were extracted for each subject, protocol and ROI, the results of which are presented in Figure \@ref{fig:tSNR}. As can be seen from the example whole brain tSNR map, strongest tSNR was observed for the ME protocol, then for the 3D EPI, and last for the CMRR protocol. 
 
 ```{r loadtSNR, echo=FALSE, message=F, warning=F}
 
@@ -308,23 +310,21 @@ cntrst_sc_tsnr_int <- contrast(sc_tsnr_int, adjust = 'sidak')
 
 The tSNR scores differed by protocol, and this difference was modulated across ROIs. This was evidenced by a significant TR x ROI interaction (F(`r tst_tsnr_mod["TR:roi", "Df"]`, `r tst_tsnr_mod["TR:roi", "Df.res"]`) = `r tst_tsnr_mod["TR:roi", "F"]`, p = `r tst_tsnr_mod["TR:roi", "Pr(>F)"]`). To further investigate this interaction, and given the known signal differences between cortical and subcortical regions, the same analysis was applied separately to the cortical and the subcortical ROIs. Indeed, Figure \@ref{fig:tSNR}, panel B shows the signal advantage for a representative cortical ROI (IPS) relative to representative subcortical ROIs. For the cortical ROIs, tSNR differed between protocols consistently across the IPS, FEF and LOC. This was evidenced by a main effect of protocol (F(`r tst_cort_tsnr_mod["TR", "Df"]`, `r tst_cort_tsnr_mod["TR", "Df.res"]`) = `r tst_cort_tsnr_mod["TR", "F"]`, p = `r tst_cort_tsnr_mod["TR", "Pr(>F)"]`), whereas neither the main effect of ROI nor the protocol x ROI interaction achieved statistical significance (both ps > `r tst_cort_tsnr_mod["roi", "Pr(>F)"]`). With regard to the main effect of protocol, the ME protocol showed increased tSNR relative to the CMRR (t(`r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","df"]`) = `r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","statistic"]`, $d$ = `r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","estimate"]/(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","std.error"]*sqrt(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","df"]+1))`, p = `r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","adj.p.value"]`), and the 3D-EPI showed higher tSNR relative to the CMRR protocol (t(`r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","df"]`) = `r abs(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","statistic"])`, $d$ = `r abs(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","estimate"]/(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","std.error"]*sqrt(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","df"]+1)))`, p = `r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","adj.p.value"]`). In contrast, the effect of protocol was modulated across subcortical ROIs, as was evidenced by a significant protocol x ROI interaction (F(`r tst_sc_tsnr_mod["TR:roi", "Df"]`, `r tst_sc_tsnr_mod["TR:roi", "Df.res"]`) = `r tst_sc_tsnr_mod["TR:roi", "F"]`, p = `r tst_sc_tsnr_mod["TR:roi", "Pr(>F)"]`). For each subcortical ROI, tSNR scores differed between each protocol with ME > 3D EPI > CMRR (all ps < .0001), apart from in the VS, where the difference between the ME and CMRR protocol did not reach statistical significance (p = .334). Overall, the ME protocol fared better in terms of tSNR across all ROIs, apart from in the VS, where it was not distinguishable from the 3D-EPI protocol.
 
-```{r tSNR, fig.align='center', out.width"50%", fig.cap="tSNR observed for the 3 protocols. A) tSNR across the whole brain for each protocol, for one example subject and session. B) Mean tSNR values from 3 key ROIs, across protocols (x-axis). Each line reflects data from one subject. ME = multi-echo, CMRR =, 3D = 3D Echo Planar Imaging, IPS = intra-parietal sulcus, CN = caudate nucleus, Put = putamen"}
+The extent to which tSNR differed across protocols was modulated by the ROI factor, as was evidenced by a significant TR x ROI interaction (F(`r tst_tsnr_mod["TR:roi", "Df"]`, `r tst_tsnr_mod["TR:roi", "Df.res"]`) = `r tst_tsnr_mod["TR:roi", "F"]`, p = `r tst_tsnr_mod["TR:roi", "Pr(>F)"]`). To further investigate this interaction, the same analysis was applied separately to the cortical and the subcortical ROIs. For the cortical ROIs, tSNR differed between protocols consistently across the IPS, FEF and LOC. This was evidenced by a main effect of protocol (F(`r tst_cort_tsnr_mod["TR", "Df"]`, `r tst_cort_tsnr_mod["TR", "Df.res"]`) = `r tst_cort_tsnr_mod["TR", "F"]`, p = `r tst_cort_tsnr_mod["TR", "Pr(>F)"]`), whereas neither the main effect of protocol nor ROI achieved statistical significance (both ps > `r tst_cort_tsnr_mod["roi", "Pr(>F)"]`). Specifically, the ME protocol showed increased tSNR relative to the CMRR (t(`r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","df"]`) = `r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","statistic"]`, $d$ = `r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","estimate"]/(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","std.error"]*sqrt(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","df"]+1))`, p = `r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","adj.p.value"]`). The 3D-EPI showed higher tSNR relative to the CMRR protocol (t(`r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","df"]`) = `r abs(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","statistic"])`, $d$ = `r abs(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","estimate"]/(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","std.error"]*sqrt(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","df"]+1)))`, p = `r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","adj.p.value"]`). In contrast, the effect of protocol differed between subcortical ROIs, as was evidenced by a significant protocol x roi interaction (F(`r tst_sc_tsnr_mod["TR:roi", "Df"]`, `r tst_sc_tsnr_mod["TR:roi", "Df.res"]`) = `r tst_sc_tsnr_mod["TR:roi", "F"]`, p = `r tst_sc_tsnr_mod["TR:roi", "Pr(>F)"]`). For each subcortical ROI, tSNR scores were different between each protocol with ME > 3D EPI > CMRR (all ps < .0001), apart from the VS, where the difference between the ME and CMRR protocol did not reach statistical significance (p = .334).
+
+
+```{r tSNR, out.width="50%", fig.cap="tSNR observed for the 3 protocols. A) tSNR across the whole brain for each protocol, for one example subject and session. B) Mean tSNR values from 3 key ROIs, across protocols (x-axis). Each line reflects data from one subject. ME = multi-echo, CMRR =, 3D = 3D Echo Planar Imaging, IPS = intra-parietal sulcus, CN = caudate nucleus, Put = putamen"}
 
 tSNR_fig_pth <- '../images/tSNR_wholebrain_byReg.png' 
 include_graphics(tSNR_fig_pth)
 ```
 
 
-## Comparison of CNR between protocols
-\label{sec:tSNRResults}
+### Comparing CNR Between Sequences
+\label{sec:CNRResults}
 
-Comparison of CNR between protocols occurred over the following steps: first we sought to compare CNR values between protocols, using voxels from across the whole brain that were responsive to the manipulation of interest. This provides an understanding of how the protocols fare where the signal is strongest, and thus provides a basis for comparison when subsequently comparing CNR values from the _a priori_ defined ROIs, which were derived theoretically and from meta-analyses, rather than from an examination of the current signal.
-
-### Thresholded voxels
-\label{sec:thrshVox}
-
-We first applied a threshold of p< .001 to each contrast image (response hand, target laterality, cue probability and laterality x cue probability interaction), and computed the average CNR value from the remaining voxels. The resulting images from a representative participant are shown in Figure \@ref{fig:}, for the response hand contrast (panel A) and the target laterality x cue probability interaction (panel C). In accordance with the tSNR analysis, there was a statistically significant main effect of protocol (F(`r thrsh_lme_an["TR", "Df"]`, `r thrsh_lme_an["TR", "Df.res"]`) = `r thrsh_lme_an["TR", "F"]`, p = `r thrsh_lme_an["TR", "Pr(>F)"`]). 
-
+#### Thresholded voxels
+\label{sec:Thrshvox}
 
 ```{r loadCNRdat, echo=FALSE, message=F, warning=F}
 
@@ -353,12 +353,13 @@ CNR <- rbind(CNR, tmp)
 CNR$TR <- CNR$TR %>% recode('700' = 'ME',
                             '1510' = 'CMRR',
                             '1920' = '3D EPI')
-
-muCNR <- CNR %>% group_by(sub, TR, contrast) %>%
+names(CNR)[names(CNR) == "contrast"] <- "comp"
+muCNR <- CNR %>% group_by(sub, TR, comp) %>%
                  summarise(mu = mean(CNR))
 
 ```
 
+<<<<<<< HEAD
 ```{r thrshlook, echo=FALSE, message=F, warning=F}
 bpthrsh <- with(muCNR, boxplot(mu~contrast*TR))
 ```
@@ -369,32 +370,40 @@ thrsh_lme_an <- Anova(thrshmod, test.statistic="F")
 thrsh_lme_an
 ```
 
-```{r, FUProt, echo=TRUE, results="hide"}
-m.prot <- emmeans(mod, "TR")
-c.prot <- contrast(m.prot, 'tukey') 
-c.prot <- c.prot %>% broom::tidy()
-c.prot <- c.prot %>% filter(adj.p.value<.05)
-c.prot
+```{r, thrsh_me_prot_FU, echo=TRUE, results="hide"}
+thrsh_me_prot <- emmeans(thrsh_mod, "TR")
+thrsh_me_cont <- contrast(thrsh_me_prot, 'tukey', adjust = 'sidak') 
+thrsh_me_cont <- thrsh_me_cont %>% broom::tidy()
 ```  
 
-```{r, plotCNRDens, warning=FALSE, fig.align='center', out.width="600pix", fig.cap="Do caption later"}
+```{r, thrsh_me_cntrst_FU, echo=TRUE, results="hide"}
+thrsh_me_cont_mu <- emmeans(thrsh_mod, "comp")
+thrsh_me_cont_cont <- contrast(thrsh_me_cont_mu, 'tukey', adjust = 'sidak') 
+thrsh_me_cont_cont <- thrsh_me_cont_cont %>% broom::tidy()
+thrsh_me_cont_cont <- thrsh_me_cont_cont %>% filter(adj.p.value<.05)
+```  
 
+```{r thrshCNR, out.width="70%", fig.cap="CNR from voxels thresholded at p< .001 for each contrast. A) CNR values from the response hand contrast for one representative subject and session. B) Densities of CNR scores. Overall, the ME protocol showed higher mean CNR scores than the 3D EPI sequence. C) Showing the target laterality x cue probability contrast for the same subject and session as panel A. D) Beta estimates (y-axis) across time (x-axis) as estimated by a FIR model. The model recovered a typical HRF function. ME = multi-echo, CMRR =, 3D = 3D Echo Planar Imaging, CNR = contrast noise ratio, t = time."}
+
+thrsh_CNR_fig_pth <- '../images/thrsh_CNR.png' 
+include_graphics(thrsh_CNR_fig_pth)
 ```
 
-<br>
+Next we sought to determine which protocol yielded the highest CNR values, taking into account the voxels that showed the strongest response to the experimental manipulations of interest (response hand, target laterality, cue probability, and the cue probability x target laterality interaction). In accordance with the findings from the tSNR measure above, the ME protocol yielded statistically higher CNR relative to the 3D EPI sequence (t(`r thrsh_me_cont[thrsh_me_cont$contrast == "ME - 3D EPI", "df"]`) = `r thrsh_me_cont[thrsh_me_cont$contrast == "ME - 3D EPI", "statistic"]`, $d$ = `r thrsh_me_cont[thrsh_me_cont$contrast == "ME - 3D EPI", "estimate"] / (thrsh_me_cont[thrsh_me_cont$contrast == "ME - 3D EPI", "std.error"]*sqrt(thrsh_me_cont[thrsh_me_cont$contrast == "ME - 3D EPI", "df"]+1))`, p = `r thrsh_me_cont[thrsh_me_cont$contrast == "ME - 3D EPI", "adj.p.value"]`). However, unlike the findings pertaining to tSNR, none of the other comparisons achieved statistical siginifance (`r min(thrsh_me_cont$adj.p.value[thrsh_me_cont$adj.p.value > .05])`). As anticipated, the response hand contrast yielded higher CNR values than the remaining contrasts (all ps < .0001, $d$ range = [`r thrsh_me_cont_cont[1,"estimate"] / (thrsh_me_cont_cont[1,"std.error"]*sqrt(thrsh_me_cont_cont[1,"df"]+1))`, `r thrsh_me_cont_cont[3,"estimate"] / (thrsh_me_cont_cont[3,"std.error"]*sqrt(thrsh_me_cont_cont[3,"df"]+1))`]. Overall, the ME fared better than the 3D EPI sequence, however the advantage relative to the CMRR protocol found with the tSNR scores was not found in this CNR data.
 
-  Visual inspection of the CNR data showed that one of the participants scored greater than 3 standard deviations from the group mean on all measures. Therefore their data is excluded from the subsequent analysis. 
+#### ROI CNR
 
-```{r loadCNRdat, echo=FALSE, message=F, warning=F}
+Next we sought to determine whether the advantage of the ME sequence remained evident when the CNR data was taken from the _a priori_ defined ROIs. We extracted CNR values for each ROI and computed an average CNR score for each. Visual inspection of the data showed that one of the participants scored greater than 3 standard deviations from the group mean on all measures. Therefore their data is excluded from the subsequent analysis. 
+
+```{r loadROICNRdat, echo=FALSE, message=F, warning=F}
 
 # Load and tidy data
-roi_cnr = read.csv('~/Dropbox/documents/MC-Docs/seqtest-writeup/data/TC_tCNR_ROI_agg.csv')
+roi_cnr = read.csv('../data/TC_tCNR_ROI_agg.csv')
 roi_cnr$sub <- factor(roi_cnr$sub)
 roi_cnr$TR <- factor(roi_cnr$TR)
 roi_cnr$roi <- factor(roi_cnr$roi)
 roi_cnr$contrast <- factor(roi_cnr$contrast)
 names(roi_cnr)[names(roi_cnr) == "tT"] = "CNR"
-
 roi_cnr$contrast <- roi_cnr$contrast %>% recode('1' = 'tgt side',
                                         '2' = 'cert',
                                         '3' = 'cert x tgt side')
@@ -408,8 +417,8 @@ names(tmp)[names(tmp) == "tT"] = "CNR"
 tmp$contrast <- "resp hand"
 tmp$TR <- factor(tmp$TR)
 tmp$TR <- tmp$TR %>% recode('700' = 'ME',
-                             '1510' = 'CMRR',
-                              '1920' = '3D')
+                            '1510' = 'CMRR',
+                            '1920' = '3D')
 roi_cnr <- rbind(roi_cnr, tmp)
 
 ```
@@ -425,163 +434,42 @@ roi_cnr <-roi_cnr %>% filter(sub != "1")
 ```{r, stats_bl_conts, echo=TRUE, results="hide"}
 
 # this code shows the main effect of TR, and then shows the followup comparisions
+roi_SNR_mod <- lmer( CNR ~ TR*roi*contrast + (1|sub), data=roi_cnr )
+roi_SNR_mod_an <- Anova(roi_SNR_mod, test.statistic="F")
 
-roi.mod <- lmer( CNR ~ TR*roi*contrast + (1|sub), data=roi_cnr )
-roi.lme.an <- Anova(roi.mod, test.statistic="F")
-roi.lme.an
+```
+
+```{r, tSNR_TR_roi_int, echo=TRUE, results="hide"}
+roi_tsnr_mus <- emmeans(roi_SNR_mod, ~TR | roi)
+roi_tsnr_cont <- contrast(roi_tsnr_mus, 'tukey', adjust = 'sidak')
+roi_tsnr_cont <- roi_tsnr_cont  %>% broom::tidy()
+roi_tsnr_cont
+```
+
+Comparable to the tSNR data, the extent to which CNR values differed between protocols was modulated by the ROI factor, as evidenced by a protocol x ROI interaction (F(`r roi_SNR_mod_an["TR:roi","Df"]`, `r roi_SNR_mod_an["TR:roi","Df.res"]`) = `r roi_SNR_mod_an["TR:roi","F"]`, p = `r roi_SNR_mod_an["TR:roi","Pr(>F)"]`). However, the pattern of modulation was different for the CNR data, relative to the tSNR data. Of the cortical ROIs, only the IPS region showed a pattern of CNR values that matched the tSNR findings, where the ME protocol yielded higher CNR values relative the CMRR protocol (t(`r roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - CMRR", "df"]`) = `r roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - CMRR", "statistic"]`, $d$ = `r roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - CMRR", "estimate"]/(roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - CMRR", "std.error"] * sqrt(roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - CMRR", "df"]+1))`, p = `r roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - CMRR", "adj.p.value"]`), and to the 3D-EPI protocol (t(`r roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - 3D", "df"]`) = `r roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - 3D", "statistic"]`, $d$ = `r roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - 3D", "estimate"]/(roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - 3D", "std.error"] * sqrt(roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - 3D", "df"]+1))`, p = `r roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - 3D", "adj.p.value"]`), albeit to a small effect (see Figure \@ref(fig:cortCNR), panels A and B). CNR values from the LOC ROI were also statistical higher for the ME relative to the 3D EPI sequence (t(`r roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "ME - 3D", "df"]`) = `r roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "ME - 3D", "statistic"]`, $d$ = `r roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "ME - 3D", "estimate"]/(roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "ME - 3D", "std.error"] * sqrt(roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "ME - 3D", "df"]+1))`, p = `r roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "ME - 3D", "adj.p.value"]`). In contrast to the tSNR and IPS CNR findings, CNR was also higher for the CMRR relative to the 3D EPI sequence (t(`r roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "CMRR - 3D", "df"]`) = `r roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "CMRR - 3D", "statistic"]`, $d$ = `r roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "CMRR - 3D", "estimate"]/(roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "CMRR - 3D", "std.error"] * sqrt(roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "CMRR - 3D", "df"]+1))`, p = `r roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "CMRR - 3D", "adj.p.value"]`) . However, visual inspection of the CNR images (see Figure \@ref(fig:cortCNR), panel C) suggests that this difference may be driven by a single subject, and therefore may reflect a spurious difference. All remaining comparisions did not achieve statistical significance.
+
+```{r, cortCNR, out.width="80%", fig.cap="CNR data from cortical regions of interest. A) CNR values for the target laterality x cue probability contrast from each protocol (columns) for two representative subjects (rows) with the IPS region outlined in blue. B) Average CNR scores by subject for each protocol (x-axis) and cortical region (panels). The ME protocol showed higher mean CNR scores than the CMRR protocol. C) Same as panel A, but with the LOC region outlined in blue. P = protocol, ME = multi-echo, CMRR =, 3D EPI = 3D Echo Planar Imaging, CNR = contrast noise ratio, IPS = intraparietal sulcus, FEF = frontal eye fields, LOC = lateral occipital complex, sub = subjects."}
+
+cort_CNR_fig_pth <- '../images/CNR_cortical_story.png' 
+include_graphics(cort_CNR_fig_pth)
 
 ```
 
 
-```{r, FUPROI, echo=TRUE, results="hide"}
+In contrast, no statistical differences between were detected when CNR values from the subcortical ROIs were compared between protocols (all ps > `r min(roi_tsnr_cont$adj.p.value[roi_tsnr_cont$adj.p.value > .05])`). The CNR images are presented in Figure \@ref{fig:subcortCNR}. Minimal CNR values were observed across subcortical ROIs (see Figure \@ref{fig:subcortCNR} panels A & B for CNR data from the response hand and target lateratlity x cue probability contrasts respectively, and panel C for the mean CNR values for two example subcortical ROIs). Visual inspection of the parameters recovered by the FIR model showed a typical HRF shape for the subcortical ROIs (panel D), which was much lower in amplitude relative to the parameters recovered from the cortical ROIs. 
 
-m.roi <- emmeans(roi.mod, "roi")
-c.roi <- contrast(m.roi, 'tukey')
-c.roi <- c.roi %>% broom::tidy()
-c.roi <- c.roi %>% filter(adj.p.value < .05)
-c.roi
-```   
 
-```{r, plotMEROI, echo=TRUE, results="hide"}
+```{r, subcortCNR, out.width="70%", fig.cap="CNR data from subcortical regions of interest. A) CNR values from a representative subject for the response hand contrast from each protocol (columns) for the CN and Put (rows, outlined). B) CNR values from the target laterality x cue probability contrast with the same configuration as panel A. C) Mean CNR values for each protocol (x-axis) for the CN and Put (panels). Each line reflects one subject. D) Parameters recovered by the FIR function for the IPS, CN and Put."}
 
-c.roi <- c.roi %>% mutate(lower=estimate-(1.96*std.error), upper=estimate+(1.96*std.error))
-me.roi.p <-  c.roi %>% ggplot(aes(contrast, estimate, ymin=lower, ymax=upper, col=contrast)) +
-                        geom_pointrange() + ylab("CNR") + xlab("ROI contrast") + theme_cowplot() +
-                        scale_colour_manual(values=wes_palette("IsleofDogs1")[rep(1,13)]) +
-                        scale_fill_manual(values=wes_palette("IsleofDogs1")[rep(1,13)]) +
-                        geom_hline(yintercept=0, linetype=2) +
-                        theme(legend.position = "None")
+subcort_CNR_fig_pth <- '../images/CNR_subcortical_story.png' 
+include_graphics(subcort_CNR_fig_pth)
 
 ```
-
-
-```{r, plot_sub_resp_byROI, echo=TRUE, results="hide"}
-
-CNR.p <- CNR %>% group_by(sub, TR, roi) %>% summarise(R=mean(R)) %>%
-                 ggplot(aes(x=TR, y=R, group=sub)) +
-                 geom_line(aes(color=sub), lwd=1.1, alpha=.75) +
-                 xlab("P") + 
-                 facet_wrap(~roi) +
-                 scale_colour_manual(values=c(wes_palette("IsleofDogs1"))) +
-                 ylab("CNR") + 
-                 theme(strip.text.x = element_text(size=8)) + 
-                 theme_cowplot() 
-
-ggsave(filename='~/Dropbox/documents/MC-Docs/seqtest-writeup/images/thrsh_comp_mutSNR.png', plot=CNR.p, width=6, height=6, units="in", dpi=300)
-```
-
-
-```{r, out.width="600px", fig.align='center', fig.cap="CNR values: A) showing CNR differences for protocol pairwise comparisons, B) showing CNR differences between ROIs, C) example data showing CNR values for each participant for each protocol and ROI for the response hand (LvsR) contrast"}
-# ggsave this!
-```
-
-
-
-
-  
-  Post-hoc Tukey test's on the main effect of ROI revealed, as anticipated, higher CNR values in some of the cortical nodes, relative to striatal regions. Specificially, higher CNR values were found in the IPS relative to multiple striatal regions, namely VS (t(564) = 4.51, p<.001), CN (t(564) = 4.6, p<.001), Put (t(564) = 4.96, p<.0001), GPe (t(564) = 5.75, p<.0001) and GPi (t(564) = 5.40, p<.0001). Moreover, higher CNR values were observed in LOC relative to the GPe (t(564) = 4.79, p<.0001) and the GPi (t(564) = 4.45, p<.001), see Figure xxx).
-  
-
-
 
 
   
 
 
 
-<br>
-
-## Visual inspection of HRF recovered using the Finite Impulse Response Model
-
-<br>
-
-[INSERT DESCRIPTION]
-
-
-```{r, load_and_tidy_FIR_dat}
-
-FIR = read.csv('~/Dropbox/documents/MC-Docs/seqtest-writeup/data/FIR_data_across_subs.csv')
-
-FIR$sub <- as.factor(FIR$sub)
-FIR$TR <- as.factor(FIR$TR)
-FIR$TR <- FIR$TR %>% recode('700' = 'ME',
-                            '1510' = 'CMRR',
-                            '1920' = '3D')
-FIR$reg <- NULL
-FIR$condition <- as.factor(FIR$condition)
-levels(FIR$condition) <- c("l","r")
-
-#regs <- c("FEF", "IPS", "LOC", "CN", "GPe", "GPi", "Put", "VS")
-# separately extracting STN, as insufficient voxels to have tertiarty split, 
-# therefore using all of them
-# muSTN <- FIR %>% filter(reg == "STN") %>%
-#                  group_by(sub, TR, reg, order) %>%
-#                  summarise(beta = mean(value, na.rm=T))
-muFIR <- FIR %>% filter(third == 3) %>%
-                 filter(sub != "1") %>%
-                 group_by(sub, TR, order) %>%
-                 filter(condition == "l") %>%
-                 summarise(mean=mean(value))
-names(muFIR)[names(muFIR) == "mean"] = "beta"
-#muFIR <- rbind(muFIR, muSTN)
-#muFIR <- muFIR %>% filter(sub != "1")
-```
-
-```{r, out.width="600px", fig.align='center', fig.cap="Figure xxx: Showing the FIR function for each subject, TR sequence and striatal ROI for the top 33.3% of voxels"}
-
-# muFIR %>%  filter(reg %in% c("CN", "GPe", "GPi", "Put", "STN", "VS")) %>%
-#            ggplot(aes(x=order, y=beta, group=sub)) +
-#            geom_line(aes(color=sub), lwd=1.1, alpha=.75) +
-#            xlab("t") + 
-#            scale_x_continuous(breaks=seq(2,18,by=2),
-#                               labels = c("2","","","","10","","","","18")) +
-#            scale_y_continuous(breaks=seq(-0.025, .1, by = 0.025),
-#            labels=c("","0","",".05","",".1")) +
-#            facet_grid(vars(TR), vars(reg), scales="free_y") +
-#            scale_colour_manual(values=c(wes_palette("Darjeeling2"))) +
-#            ylab(expression(beta)) + theme_cowplot() 
-muFIR %>%  ggplot(aes(x=order, y=beta, group=sub)) +
-           geom_line(aes(color=sub), lwd=1.1, alpha=.75) +
-           xlab("t") +
-           scale_x_continuous(breaks=seq(2,18,by=2),
-                              labels = c("2","","","","10","","","","18")) +
-           facet_grid(vars(TR), scales="free_y") +
-           scale_colour_manual(values=c(wes_palette("FantasticFox1")[c(2:5)])) +
-           ylab(expression(beta)) + theme_cowplot() +
-           theme( axis.text.y = element_blank(),
-                  strip.background = element_blank(),
-                  strip.text.x = element_blank())
-ggsave(filename='~/Dropbox/documents/MC-Docs/seqtest-writeup/images/thrsh_HAND_FIR.png', plot=last_plot(), width=2.45, height=2.95, units="in", dpi=300)
-
-```
-
-
-```{r, load_and_tidy_roi_FIR_dat}
-
-fir = read.csv('~/Dropbox/documents/MC-Docs/seqtest-writeup/data/ROI_FIR_data_across_subs.csv')
-
-fir$sub <- as.factor(fir$sub)
-fir$TR <- as.factor(fir$TR)
-fir$TR <- fir$TR %>% recode('700' = 'ME',
-                            '1510' = 'CMRR',
-                            '1920' = '3D')
-fir$reg <- as.factor(fir$reg)
-fir$condition <- as.factor(fir$condition)
-levels(fir$condition) <- c("l","r")
-fir <- fir %>% mutate(roi=factor(reg, levels = c('FEF', 'IPS', 'LOC', 'VS', 'CN', 'Put', 'GPe', 'GPi', 'STN')))
-#regs <- c("FEF", "IPS", "LOC", "CN", "GPe", "GPi", "Put", "VS")
-# separately extracting STN, as insufficient voxels to have tertiarty split, 
-# therefore using all of them
-# muSTN <- FIR %>% filter(reg == "STN") %>%
-#                  group_by(sub, TR, reg, order) %>%
-#                  summarise(beta = mean(value, na.rm=T))
-mu_firs <- fir %>% filter(third == 3) %>%
-                   filter(sub != "1") %>%
-                   group_by(sub, TR, roi, order) %>%
-                   summarise(beta=mean(value)) %>%
-                   ungroup()
-#muFIR <- rbind(muFIR, muSTN)
-#muFIR <- muFIR %>% filter(sub != "1")
-```
 
 

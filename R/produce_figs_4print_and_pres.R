@@ -80,7 +80,8 @@ CNR_dens <- ggplot(CNR, aes(x=CNR, fill=sub)) +
 ggsave(filename='~/Dropbox/documents/MC-Docs/seqtest-writeup/images/thrsh_comp_densities.png', 
        plot=last_plot(), width= 2.45, height= 2.95, units="in", dpi=300)
 
-CNR.p <- roi_cnr %>% filter(roi == "IPS" | roi == "CN" | roi == "Put") %>%
+CNR.p <- roi_cnr %>% filter(roi == "IPS" | roi == "LOC" | roi == "FEF") %>%
+  mutate(roi = factor(roi, levels=c("IPS", "FEF", "LOC"))) %>%
   group_by(sub, TR, roi) %>% summarise(R=mean(CNR)) %>%
   ggplot(aes(x=TR, y=R, group=sub)) +
   geom_line(aes(color=sub), lwd=1.1, alpha=.75) +
@@ -95,12 +96,70 @@ CNR.p <- roi_cnr %>% filter(roi == "IPS" | roi == "CN" | roi == "Put") %>%
          legend.position = "none",
          text = element_text(size = 10),
          axis.text.x = element_text(size = 8),
-         axis.text.y = element_text(size = 8))
-ggsave(filename='~/Dropbox/documents/MC-Docs/seqtest-writeup/images/CNR_by_key_reg.png', 
+         axis.text.y = element_text(size = 8)) + ylim(c(0,4))
+ggsave(filename='~/Dropbox/documents/MC-Docs/seqtest-writeup/images/CNR_by_cor_reg.png', 
        plot=CNR.p, width = 3.5, height = 2.45, units="in", dpi=300)
 
 #############################################################################################
 ### Plot FIR by selected regions for each sequence
+FIR = read.csv('~/Dropbox/documents/MC-Docs/seqtest-writeup/data/FIR_data_across_subs.csv')
+
+FIR$sub <- as.factor(FIR$sub)
+FIR$TR <- as.factor(FIR$TR)
+FIR$TR <- FIR$TR %>% recode('700' = 'ME',
+                            '1510' = 'CMRR',
+                            '1920' = '3D')
+FIR$reg <- NULL
+FIR$condition <- as.factor(FIR$condition)
+levels(FIR$condition) <- c("l","r")
+
+muFIR <- FIR %>% filter(third == 3) %>%
+  filter(sub != "1") %>%
+  group_by(sub, TR, order) %>%
+  filter(condition == "l") %>%
+  summarise(mean=mean(value, na.rm =TRUE))
+names(muFIR)[names(muFIR) == "mean"] = "beta"
+
+
+muFIR %>%  ggplot(aes(x=order, y=beta, group=sub)) +
+  geom_line(aes(color=sub), lwd=1.1, alpha=.75) +
+  xlab("t") +
+  scale_x_continuous(breaks=seq(2,18,by=2),
+                     labels = c("2","","","","10","","","","18")) +
+  facet_grid(vars(TR), scales="free_y") +
+  scale_colour_manual(values=c(wes_palette("FantasticFox1")[c(2:5)])) +
+  ylab(expression(beta)) + theme_cowplot() +
+  theme( axis.text.y = element_blank(),
+         strip.background = element_blank(),
+         strip.text.x = element_blank())
+ggsave(filename='~/Dropbox/documents/MC-Docs/seqtest-writeup/images/thrsh_HAND_FIR.png', plot=last_plot(), width=2.45, height=2.95, units="in", dpi=300)
+
+fir = read.csv('~/Dropbox/documents/MC-Docs/seqtest-writeup/data/ROI_FIR_data_across_subs.csv')
+
+fir$sub <- as.factor(fir$sub)
+fir$TR <- as.factor(fir$TR)
+fir$TR <- fir$TR %>% recode('700' = 'ME',
+                            '1510' = 'CMRR',
+                            '1920' = '3D')
+fir$reg <- as.factor(fir$reg)
+fir$condition <- as.factor(fir$condition)
+levels(fir$condition) <- c("l","r")
+fir <- fir %>% mutate(roi=factor(reg, levels = c('FEF', 'IPS', 'LOC', 'VS', 'CN', 'Put', 'GPe', 'GPi', 'STN')))
+#regs <- c("FEF", "IPS", "LOC", "CN", "GPe", "GPi", "Put", "VS")
+# separately extracting STN, as insufficient voxels to have tertiarty split, 
+# therefore using all of them
+# muSTN <- FIR %>% filter(reg == "STN") %>%
+#                  group_by(sub, TR, reg, order) %>%
+#                  summarise(beta = mean(value, na.rm=T))
+mu_firs <- fir %>% filter(third == 3 | third == 2) %>%
+  filter(sub != "1") %>%
+  group_by(sub, TR, roi, order) %>%
+  summarise(beta=mean(value, na.rm=TRUE)) %>%
+  ungroup()
+#muFIR <- rbind(muFIR, muSTN)
+#muFIR <- muFIR %>% filter(sub != "1")
+
+
 mu_firs %>% filter(roi == "IPS" | roi == "CN" | roi == "Put") %>%
   ggplot(aes(x=order, y=beta, group=sub)) +
   geom_line(aes(color=sub), lwd=1.1, alpha=.75) +
