@@ -95,10 +95,14 @@ This challenge has been well addressed in previous works that have sought to ima
 
 We therefore sought to compare between EPI protocols from images collected while participants performed a cued visual-selection task. Participants monitored two locations for an upcoming oriented gabor, which was preceded by cues that indicated the likely location or the incentive value of the upcoming gabor. The current work focuses on the spatial cue aspect of the paradigm for the following reasons; the influence of spatial cues on visual-selection has been documented over multiple decades (e.g. @posnerOrientingAttention1980, @carrascoVisualAttention252011, @chicaSpatialOrientingParadigm2014), particularly in relation to corresponding cortical activity [@corbettaControlGoaldirectedStimulusdriven2002, @desimoneNeuralMechanismsSelective1995, @fiebelkornDynamicInterplayFrontoparietal2018], and has been the subject of recent scrutiny with regard to the contribution of basal ganglia/cortical interactions [@wangInvolvementStriatalDirect2020, @arcizetCovertSpatialSelection2018, @hermanAttentionrelatedModulationCaudate2020]. The incentive value cues were included in the current paradigm as this task formed the basis for a larger, ongoing study that seeks to map the human brain networks whose functional activity corresponds to both cue types, which will be reported elsewhere. 
 
-Thus we compared the signal yielded between ME and SE multi-band and 3D EPI protocols at 7T, deployed as participants completed a task where spatial cues modulated expectancies with regard to upcoming targets. To assess signal quality we compared both temporal signal-to-noise (tSNR) and contrast-noise (CNR) ratios. tSNR, computed as the ratio of the mean of the timeseries relative to the standard deviation of the timeseries ($\frac{mu_{T}}{\sigma_{T}}$) provides a measure of the strength of the activation signal of the time course, relative to several sources of noise such as system, physiological and task-related. The measure of the activation signal contains both baseline signal and task-related fluctuations. Thus the measure of tSNR quantifies how the global signal level is related to the noise of the signal [@welvaertDefinitionSignalToNoiseRatio2013]. CNR measurements were defined by taking the $t$-score from contrasts of interest that are defined below. The $t$-score provides a measure of the amplitude of activation (relative to baseline), relative to the noise [@corbinAccurateModelingTemporal2018], and thus provides a measure of the suitability of the protocol to measure signals of task-related interest.
+Thus we compared the signal yielded between ME and SE multi-band and 3D EPI protocols at 7T, deployed as participants completed a task where spatial cues modulated expectancies with regard to upcoming targets. To assess signal quality we compared both temporal signal-to-noise (tSNR) and contrast-noise (CNR) ratios. tSNR, computed as the ratio of the mean of the timeseries relative to the standard deviation of the timeseries ($\frac{mu_{T}}{\sigma_{T}}$) provides a measure of the strength of the activation signal of the time course, relative to several sources of noise such as system, physiological and task-related. The measure of the activation signal contains both baseline signal and task-related fluctuations. Thus the measure of tSNR quantifies how the global signal level is related to the noise of the signal [@welvaertDefinitionSignalToNoiseRatio2013]. CNR measurements were defined by taking the $t$-score from contrasts of interest that are defined below. 
 
 -> motivate tSNR and CNR e.g. For a measure of BOLD-sensitivity to each contrast, the resulting _t_-scores were used as a measure of activation sensitivity. Temporal SNR measures, once augmented to account for temporal correlations in the data, amount to computing the _t_-score for the mean signal change; i.e. the _t_-score serves as a contrast-to-noise ratio (CNR) measure  [@corbinAccurateModelingTemporal2018]. 
 -> performed signal comparisons on the basis of where strongest signal vs meta-analytic/regional approach \@ref{fig:aims}
+
+We chose to model response hand as motoric contrasts are typically used to assess sensitivity of imaging sequences to signal in the basal ganglia [@puckettUsingMultiechoSimultaneous2018; mileticFMRIProtocolOptimization2020], and this therefore provides a good basis for comparison to the results attained when modelling the attentional manipulations of interest. 
+
+the main effect of response hand (left hand vs right hand response), as this manipulation is most likely to yield the largest differences in the basal ganglia e.g. [@puckettUsingMultiechoSimultaneous2018]. the main effect of target laterality (left vs right), as previous evidence suggests that cells in the striatum respond to combined object location and identity [@yamamotoWhatWhereInformation2012]. The main effect of cue probability (p=.5 vs .8), as the basal ganglia has been hypothesised to encode the probability of sensory inputs in visual decision making [@caballeroProbabilisticDistributedRecursive2018]. The cue probability x target location interaction, to ascertain sensitivity to the lateralised expectation and inhibition that has been hypothesised to occur when spatial targets enable prioritisation of locations for upcoming target processing [@schmitzNormalizationCholinergicMicrocircuit2018; @reynoldsNormalizationModelAttention2009].
 
 
 ```{r aims, out.width = "50%", fig.cap="Regions of interest. A) Basal Ganglia anterior view, B) Basal Ganglia posterior view, C) Cortical ROIs. CN = Caudate Nucleus, GPe = Globus Pallidus External, GPi = Globus Pallidus Internal, Put = Putamen, STN = Subthalamic Nucleus, VS = Ventral Striatum, FEF = Frontal Eye Fields, IPS = Intraparietal Sulcus, LOC = Lateral Occipital Complex"}
@@ -233,10 +237,10 @@ We computed tSNR for each functional run, by computing for each voxel the ratio 
 #### CNR
 \label{sec:CNRMeth}
 
-All T2* data were then temporally filtered using a highpass filter (cut-off 1/128 Hz) to remove slow drifts. Spatial smoothing was applied, using a Gaussian kernel of 2 mm FWHM, as this was found to stabilise CNR estimates. We next fit two GLMs to each participant's data, one to model the effect of the response hand of the button press, and one to model the effect of spatial cue and the laterality of the visual target. Response hand was modelled using two regressors; one for each hand of response (left or right). We chose to model response hand as motoric contrasts are typically used to assess sensitivity of imaging sequences to signal in the basal ganglia [@puckettUsingMultiechoSimultaneous2018; mileticFMRIProtocolOptimization2020], and this therefore provides a good basis for comparison to our attentional manipulations of interest. To assess the effect of the attentional manipulations, the second GLM contained 4 regressors, reflecting the 2 x 2 design of target laterality (left vs right_ x spatial cue probability (p= .5 vs .8). GLMs were fit using the canonical double-gamma haemodynamic response function (HRF) [@fristonAnalysisFunctionalMRI1994, @fristonEventRelatedFMRICharacterizing1998, @fristonStatisticalParametricMaps1994, @gloverDeconvolutionImpulseResponse1999] with time and dispersion derivatives, and using the FAST option for pre-whitening [@corbinAccurateModelingTemporal2018]. GLM model specification and estimation were conducted using the `SpecifySPMModel`, `Level1Design` and `EstimateModel` wrapper functions from Nipype. 
+We sought to acertain the sensitivity of the three protocols to the experimental events of interest. We therefore computed for each voxel the $t$-score for activation strength relative to baseline, for a given condition mean. This is directly related to the computation for tSNR measures that quantify the amplitude of activation (relative to baseline), relative to the noise [@corbinAccurateModelingTemporal2018]. The resulting $t$-scores thus provide a measure of the sensitivity of each protocol to the key experimental events. To attain $t$-scores for the events of interest, T2* data were first temporally filtered using a highpass filter (cut-off 1/128 Hz) to remove slow drifts. Spatial smoothing was then applied, using a Gaussian kernel of 2 mm FWHM, as this was found to stabilise the $t$-score estimates. 
 
--> contrasts of interest - motivate with a little more literature.
-We sought to determine the sensitivity of the three protocols to the following contrasts; the main effect of response hand (left hand vs right hand response), as this manipulation is most likely to yield the largest differences in the basal ganglia e.g. [@puckettUsingMultiechoSimultaneous2018]. the main effect of target laterality (left vs right), as previous evidence suggests that cells in the striatum respond to combined object location and identity [@yamamotoWhatWhereInformation2012]. The main effect of cue probability (p=.5 vs .8), as the basal ganglia has been hypothesised to encode the probability of sensory inputs in visual decision making [@caballeroProbabilisticDistributedRecursive2018]. The cue probability x target location interaction, to ascertain sensitivity to the lateralised expectation and inhibition that has been hypothesised to occur when spatial targets enable prioritisation of locations for upcoming target processing [@schmitzNormalizationCholinergicMicrocircuit2018; @reynoldsNormalizationModelAttention2009].
+We next fit two GLMs to each participant's data; one that would allow computation of $t$-scores for conditions of overt action, and one for computation of $t$-scores for the attentional manipulations of interest. We opted to fit the two GLMs separately to the data as this allowed us to model the data with relatively simple GLMs, and response-hand was fully counterbalanced over the attentional manipulations. To model the effect of response hand, a GLM with two regressors were defined, one for left hand responses and one for right hand responses. To model the effect of the attentional manipulations, a second GLM was fit that contained 4 regressors, reflecting the 2 x 2 design of target laterality (left vs right) x spatial cue probability (p= .5 vs .8). GLMs were fit using the canonical double-gamma haemodynamic response function (HRF) [@fristonAnalysisFunctionalMRI1994, @fristonEventRelatedFMRICharacterizing1998, @fristonStatisticalParametricMaps1994, @gloverDeconvolutionImpulseResponse1999] with time and dispersion derivatives, and using the FAST option for pre-whitening [@corbinAccurateModelingTemporal2018]. GLM model specification and estimation were conducted using the `SpecifySPMModel`, `Level1Design` and `EstimateModel` wrapper functions from Nipype. 
+We sought to determine the sensitivity of the three protocols to the following condition means of interest; left hand or right hand response, left or right target laterality, spatial cue certainty of p = .5 or p = .8, and left targets|p = .8 or right targets|p=.8. These latter two cells were chosen as they should reflect the strongest psychological response to the cue, and also a cell containing of the lowest number of trials that may be used to generate a mean value in a subsequent experiment. Therefore the last two contrasts show the weakest or worst case tSNR scenario for an experimental event of interest, where a psychological effect of interest is evident. Thus a total of eight $t$-contrasts (against zero) were applied. We now refer to the $t$-score measure as the contrast-noise-ratio (CNR). 
 
 #### Assessment of recovered HRF functions
 \label{sec:AssessHRF}
@@ -246,7 +250,7 @@ To assess visually whether the current protocols yielded a typical HRF in subcor
 #### Statistical Approach
 \label{sec:StatsApproach}
 
-Statistical analyses comparing the protocols were based on those presented in Puckett et al [-@puckettUsingMultiechoSimultaneous2018] and Miletic et al [-@mileticFMRIProtocolOptimization2020]. We extracted average tSNR or CNR scores per subject, protocol and ROI and applied a linear mixed effects model with average tSNR or CNR scores as the dependent variable, using the lme4 package [@batesFittingLinearMixedEffects2015]. ROI, protocol, and contrast (where relevant) served as predictor variables, including all possible interaction terms. Random intercepts were included for each subject. Statistical significance of the predictor variables was assessed using Type II Wald chisquare tests, using the car package [foxCompanionAppliedRegression2019]. Statistically significant effects were followed up with post-hoc t-tests, with application of the Sidak adjustment for multiple comparisons [@sidakRectangularConfidenceRegions1967]. Where relevant, effect sizes were computed using Cohen's $d$. 
+Statistical analyses comparing the protocols were based on those presented in Puckett et al [-@puckettUsingMultiechoSimultaneous2018] and Miletic et al [-@mileticFMRIProtocolOptimization2020]. We extracted average tSNR or CNR scores per subject, protocol and ROI and applied linear mixed effects models with average tSNR or CNR scores as the dependent variable, using the lme4 package [@batesFittingLinearMixedEffects2015]. ROI, protocol, and contrast (where relevant) served as predictor variables, including all possible interaction terms. Random intercepts were included for each subject. Statistical significance of the predictor variables was assessed using Type II Wald chisquare tests, using the car package [foxCompanionAppliedRegression2019]. Statistically significant effects were followed up with post-hoc t-tests, with application of the Sidak adjustment for multiple comparisons [@sidakRectangularConfidenceRegions1967]. Where relevant, effect sizes were computed using Cohen's $d$. 
 
 # Results
 \label{sec:Results}
@@ -329,6 +333,100 @@ include_graphics(tSNR_fig_pth)
 #### Thresholded voxels
 \label{sec:Thrshvox}
 
+```{r loadCNRdatT, echo=FALSE, message=F, warning=F}
+
+# Load and tidy data HAND GLM DATA
+tconts_thrsh = read.csv('../data/HANDS_activationC_tCNR_stat_vox_agg.csv')
+tconts_thrsh$sub <- factor(tconts_thrsh$sub)
+tconts_thrsh$TR <- factor(tconts_thrsh$TR)
+tconts_thrsh$roi <- factor(tconts_thrsh$roi)
+tconts_thrsh$contrast <- factor(tconts_thrsh$contrast)
+names(tconts_thrsh)[names(tconts_thrsh) == "tT"] = "CNR"
+tconts_thrsh$contrast <- tconts_thrsh$contrast %>%  recode('2' = 'left_hand',
+                                                           '3' = 'right_hand') 
+
+tmp = read.csv('../data/TC_activationC_tCNR_stat_vox_agg.csv')
+tmp$sub <- factor(tmp$sub)
+tmp$TR <- factor(tmp$TR)
+tmp$roi <- factor(tmp$roi)
+tmp$contrast <- factor(tmp$contrast)
+names(tmp)[names(tmp) == "tT"] = "CNR"
+
+tmp$contrast <- tmp$contrast %>% recode('4' = 'lft tgt',
+                                        '5' = 'rght tgt',
+                                        '6' = 'p8',
+                                        '7' = 'p5',
+                                        '8' = 'lft_p8',
+                                        '9' = 'rght_p9')
+
+tconts_thrsh <- rbind(tconts_thrsh, tmp)
+
+tconts_thrsh$TR <- tconts_thrsh$TR %>% recode('700' = 'ME',
+                                              '1510' = 'CMRR',
+                                              '1920' = '3D EPI')
+names(tconts_thrsh)[names(tconts_thrsh) == "contrast"] <- "comp"
+mutConts <- tconts_thrsh %>% group_by(sub, TR, comp) %>%
+                            summarise(mu = mean(CNR)) %>% ungroup()
+rm(tmp)
+```
+
+```{r thrshlook, echo=FALSE, message=F, warning=F}
+bpkpsubs <- with(mutConts %>% filter(comp == "left_hand" | comp == "right_hand"), boxplot(mu~comp*TR))
+#bpkpsubs
+```
+
+
+```{r thrshLME_handT, echo=FALSE, message=F, warning=F}
+thrshmod_handT <- lmer( mu ~ TR*comp + (1|sub), data = mutConts %>% filter(comp == "left_hand" | comp == "right_hand"))
+thrshmod_handT_an <- Anova(thrshmod_handT, test.statistic="F")
+thrshmod_handT_an
+```
+
+
+```{r, thrsh_me_prot_FU, echo=TRUE, results="hide"}
+Tthrsh_me_prot <- emmeans(Tthrshmod, "TR")
+Tthrsh_me_cont <- contrast(Tthrsh_me_prot, 'tukey', adjust = 'sidak') 
+Tthrsh_me_cont <- Tthrsh_me_cont %>% broom::tidy()
+```  
+
+```{r, thrsh_me_cntrst_FU, echo=TRUE, results="hide"}
+Tthrsh_me_cont_mu <- emmeans(Tthrsh_mod, "comp")
+thrsh_me_cont_cont <- contrast(thrsh_me_cont_mu, 'tukey', adjust = 'sidak') 
+thrsh_me_cont_cont <- thrsh_me_cont_cont %>% broom::tidy()
+thrsh_me_cont_cont <- thrsh_me_cont_cont %>% filter(adj.p.value<.05)
+```  
+
+```{r thrshCNR, out.width="70%", fig.cap="CNR from voxels thresholded at p< .001 for each contrast. A) CNR values from the response hand contrast for one representative subject and session. B) Densities of CNR scores. Overall, the ME protocol showed higher mean CNR scores than the 3D EPI sequence. C) Showing the target laterality x cue probability contrast for the same subject and session as panel A. D) Beta estimates (y-axis) across time (x-axis) as estimated by a FIR model. The model recovered a typical HRF function. ME = multi-echo, CMRR =, 3D = 3D Echo Planar Imaging, CNR = contrast noise ratio, t = time."}
+
+thrsh_CNR_fig_pth <- '../images/ActStatsT_hands_CNR.pdf' 
+include_graphics(thrsh_CNR_fig_pth)
+```
+
+Next we sought to determine which protocol yielded the highest CNR values, at the voxels that showed the strongest activations to the experimental manipulations of interest. To attain responsive voxels, each contrast image was thresholded at p<.001. Next we examined the activation values for the response hand (left or right > 0). 
+
+
+### ROI section - add bit about taking the absolute value
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ```{r loadCNRdat, echo=FALSE, message=F, warning=F}
 
 # Load and tidy data HAND GLM DATA
@@ -362,7 +460,7 @@ muCNR <- CNR %>% group_by(sub, TR, comp) %>%
 
 ```
 
-<<<<<<< HEAD
+
 ```{r thrshlook, echo=FALSE, message=F, warning=F}
 bpthrsh <- with(muCNR, boxplot(mu~contrast*TR))
 ```

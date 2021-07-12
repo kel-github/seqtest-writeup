@@ -67,17 +67,17 @@ ggsave(filename="../images/behav_by_Prot.png", plot=last_plot(),
 
 #############################################################################################
 # plot distributions of CNR data 
-CNR_dens <- ggplot(CNR, aes(x=CNR, fill=sub)) +
-  geom_density(alpha=0.4, trim=TRUE) +
-  facet_grid(rows=vars(TR)) +
-  xlim(c(5.44, 25)) + xlab("CNR") + 
-  theme_cowplot() +
-  scale_colour_manual(values=wes_palette("FantasticFox1")[1:5]) +
-  scale_fill_manual(values=wes_palette("FantasticFox1")[1:5]) +
-  theme( axis.text.y = element_blank(),
-         strip.background = element_blank(),
-         strip.text.x = element_blank())
-ggsave(filename='~/Dropbox/documents/MC-Docs/seqtest-writeup/images/thrsh_comp_densities.png', 
+CNR_dens <- ggplot(tconts_thrsh %>% filter(comp == "left_hand" | comp == "right_hand"), aes(x=CNR, fill=sub)) +
+                             geom_density(alpha=0.4, trim=TRUE) +
+                             facet_grid(rows=vars(TR)) +
+                             xlim(c(5.44, 25)) + xlab("CNR") + 
+                             theme_cowplot() +
+                             scale_colour_manual(values=wes_palette("FantasticFox1")[1:5]) +
+                             scale_fill_manual(values=wes_palette("FantasticFox1")[1:5]) +
+                             theme( axis.text.y = element_blank(),
+                                    strip.background = element_blank(),
+                                    strip.text.x = element_blank())
+ggsave(filename='~/Projects/seqtest-writeup/images/Tthrsh_handcomp_densities.png', 
        plot=last_plot(), width= 2.45, height= 2.95, units="in", dpi=300)
 
 CNR.p <- roi_cnr %>% filter(roi == "IPS" | roi == "LOC" | roi == "FEF") %>%
