@@ -317,9 +317,6 @@ cntrst_sc_tsnr_int <- contrast(sc_tsnr_int, adjust = 'sidak')
 
 The tSNR scores differed by protocol, and this difference was modulated across ROIs. This was evidenced by a significant TR x ROI interaction (F(`r tst_tsnr_mod["TR:roi", "Df"]`, `r tst_tsnr_mod["TR:roi", "Df.res"]`) = `r tst_tsnr_mod["TR:roi", "F"]`, p = `r tst_tsnr_mod["TR:roi", "Pr(>F)"]`). To further investigate this interaction, and given the known signal differences between cortical and subcortical regions, the same analysis was applied separately to the cortical and the subcortical ROIs. Indeed, Figure \@ref{fig:tSNR}, panel B shows the signal advantage for a representative cortical ROI (IPS) relative to representative subcortical ROIs. For the cortical ROIs, tSNR differed between protocols consistently across the IPS, FEF and LOC. This was evidenced by a main effect of protocol (F(`r tst_cort_tsnr_mod["TR", "Df"]`, `r tst_cort_tsnr_mod["TR", "Df.res"]`) = `r tst_cort_tsnr_mod["TR", "F"]`, p = `r tst_cort_tsnr_mod["TR", "Pr(>F)"]`), whereas neither the main effect of ROI nor the protocol x ROI interaction achieved statistical significance (both ps > `r tst_cort_tsnr_mod["roi", "Pr(>F)"]`). With regard to the main effect of protocol, the ME protocol showed increased tSNR relative to the CMRR (t(`r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","df"]`) = `r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","statistic"]`, $d$ = `r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","estimate"]/(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","std.error"]*sqrt(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","df"]+1))`, p = `r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","adj.p.value"]`), and the 3D-EPI showed higher tSNR relative to the CMRR protocol (t(`r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","df"]`) = `r abs(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","statistic"])`, $d$ = `r abs(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","estimate"]/(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","std.error"]*sqrt(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","df"]+1)))`, p = `r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","adj.p.value"]`). In contrast, the effect of protocol was modulated across subcortical ROIs, as was evidenced by a significant protocol x ROI interaction (F(`r tst_sc_tsnr_mod["TR:roi", "Df"]`, `r tst_sc_tsnr_mod["TR:roi", "Df.res"]`) = `r tst_sc_tsnr_mod["TR:roi", "F"]`, p = `r tst_sc_tsnr_mod["TR:roi", "Pr(>F)"]`). For each subcortical ROI, tSNR scores differed between each protocol with ME > 3D EPI > CMRR (all ps < .0001), apart from in the VS, where the difference between the ME and CMRR protocol did not reach statistical significance (p = .334). Overall, the ME protocol fared better in terms of tSNR across all ROIs, apart from in the VS, where it was not distinguishable from the 3D-EPI protocol.
 
-The extent to which tSNR differed across protocols was modulated by the ROI factor, as was evidenced by a significant TR x ROI interaction (F(`r tst_tsnr_mod["TR:roi", "Df"]`, `r tst_tsnr_mod["TR:roi", "Df.res"]`) = `r tst_tsnr_mod["TR:roi", "F"]`, p = `r tst_tsnr_mod["TR:roi", "Pr(>F)"]`). To further investigate this interaction, the same analysis was applied separately to the cortical and the subcortical ROIs. For the cortical ROIs, tSNR differed between protocols consistently across the IPS, FEF and LOC. This was evidenced by a main effect of protocol (F(`r tst_cort_tsnr_mod["TR", "Df"]`, `r tst_cort_tsnr_mod["TR", "Df.res"]`) = `r tst_cort_tsnr_mod["TR", "F"]`, p = `r tst_cort_tsnr_mod["TR", "Pr(>F)"]`), whereas neither the main effect of protocol nor ROI achieved statistical significance (both ps > `r tst_cort_tsnr_mod["roi", "Pr(>F)"]`). Specifically, the ME protocol showed increased tSNR relative to the CMRR (t(`r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","df"]`) = `r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","statistic"]`, $d$ = `r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","estimate"]/(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","std.error"]*sqrt(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","df"]+1))`, p = `r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "ME - CMRR","adj.p.value"]`). The 3D-EPI showed higher tSNR relative to the CMRR protocol (t(`r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","df"]`) = `r abs(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","statistic"])`, $d$ = `r abs(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","estimate"]/(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","std.error"]*sqrt(cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","df"]+1)))`, p = `r cntrst_cort_tsnr_me[cntrst_cort_tsnr_me$contrast == "CMRR - 3D","adj.p.value"]`). In contrast, the effect of protocol differed between subcortical ROIs, as was evidenced by a significant protocol x roi interaction (F(`r tst_sc_tsnr_mod["TR:roi", "Df"]`, `r tst_sc_tsnr_mod["TR:roi", "Df.res"]`) = `r tst_sc_tsnr_mod["TR:roi", "F"]`, p = `r tst_sc_tsnr_mod["TR:roi", "Pr(>F)"]`). For each subcortical ROI, tSNR scores were different between each protocol with ME > 3D EPI > CMRR (all ps < .0001), apart from the VS, where the difference between the ME and CMRR protocol did not reach statistical significance (p = .334).
-
-
 ```{r tSNR, out.width="50%", fig.cap="tSNR observed for the 3 protocols. A) tSNR across the whole brain for each protocol, for one example subject and session. B) Mean tSNR values from 3 key ROIs, across protocols (x-axis). Each line reflects data from one subject. ME = multi-echo, CMRR =, 3D = 3D Echo Planar Imaging, IPS = intra-parietal sulcus, CN = caudate nucleus, Put = putamen"}
 
 tSNR_fig_pth <- '../images/tSNR_wholebrain_byReg.png' 
@@ -332,6 +329,8 @@ include_graphics(tSNR_fig_pth)
 
 #### Thresholded voxels
 \label{sec:Thrshvox}
+
+Next we sought to determine which protocol yielded the highest CNR values, at the voxels that showed the strongest activations to the experimental manipulations of interest. To attain responsive voxels, each contrast image was thresholded at p<.001. First we examined the CNR values for each response hand (left or right > 0), by applying a linear mixed effects model to the response hand $t$-scores, with contrast (left or right hand) and protocol and their interaction as fixed factors, and a random effects intercept term for each subject.
 
 ```{r loadCNRdatT, echo=FALSE, message=F, warning=F}
 
@@ -379,31 +378,42 @@ bpkpsubs <- with(mutConts %>% filter(comp == "left_hand" | comp == "right_hand")
 ```{r thrshLME_handT, echo=FALSE, message=F, warning=F}
 thrshmod_handT <- lmer( mu ~ TR*comp + (1|sub), data = mutConts %>% filter(comp == "left_hand" | comp == "right_hand"))
 thrshmod_handT_an <- Anova(thrshmod_handT, test.statistic="F")
-thrshmod_handT_an
 ```
 
 
 ```{r, thrsh_me_prot_FU, echo=TRUE, results="hide"}
-Tthrsh_me_prot <- emmeans(Tthrshmod, "TR")
-Tthrsh_me_cont <- contrast(Tthrsh_me_prot, 'tukey', adjust = 'sidak') 
-Tthrsh_me_cont <- Tthrsh_me_cont %>% broom::tidy()
+thrsh_handT_me_prot <- emmeans(thrshmod_handT, "TR")
+thrsh_handT_me_cont <- contrast(thrsh_handT_me_prot, 'tukey', adjust = 'sidak') 
+thrsh_handT_me_cont <- thrsh_handT_me_cont %>% broom::tidy()
+thrsh_handT_me_prot <-thrsh_handT_me_prot %>% broom::tidy()
+thrsh_handT_me_cont
 ```  
 
-```{r, thrsh_me_cntrst_FU, echo=TRUE, results="hide"}
-Tthrsh_me_cont_mu <- emmeans(Tthrsh_mod, "comp")
-thrsh_me_cont_cont <- contrast(thrsh_me_cont_mu, 'tukey', adjust = 'sidak') 
-thrsh_me_cont_cont <- thrsh_me_cont_cont %>% broom::tidy()
-thrsh_me_cont_cont <- thrsh_me_cont_cont %>% filter(adj.p.value<.05)
-```  
+The data from this analysis are presented in see Figure \@ref{fig:thrshCNR}, panels A & B. CNR differed between protocols, as evidenced by a significant main effect (F(`r thrshmod_handT_an["TR", "Df"]`, `r thrshmod_handT_an["TR", "Df.res"]`) = `r thrshmod_handT_an["TR", "F"]`, `r thrshmod_handT_an["TR", "Pr(>F)"]`. Post-hoc contrasts showed that CNR values were statistically higher for the ME protocol (mean = `r thrsh_handT_me_prot %>% filter(TR == "ME") %>% select("estimate")`, sd = `r thrsh_handT_me_prot %>% filter(TR == "ME") %>% select("std.error")*sqrt(thrsh_handT_me_prot %>% filter(TR == "ME") %>% select("df"))`) relative to the CMRR protocol (mean = `r thrsh_handT_me_prot %>% filter(TR == "CMRR") %>% select("estimate")`, sd = `r thrsh_handT_me_prot %>% filter(TR == "CMRR") %>% select("std.error")*sqrt(thrsh_handT_me_prot %>% filter(TR == "CMRR") %>% select("df"))`, t(`r thrsh_handT_me_cont %>% filter(contrast == "ME - CMRR") %>% select(df)`) = `r thrsh_handT_me_cont %>% filter(contrast == "ME - CMRR") %>% select(statistic)`, $d$ = `r thrsh_handT_me_cont %>% filter(contrast == "ME - CMRR") %>% select(estimate) / (thrsh_handT_me_cont %>% filter(contrast == "ME - CMRR") %>% select(std.error)*sqrt(thrsh_handT_me_cont %>% filter(contrast == "ME - CMRR") %>% select(df)))`, p = `r thrsh_handT_me_cont %>% filter(contrast == "ME - CMRR") %>% select(adj.p.value)`), and relative to the 3D EPI protocol (mean = `r thrsh_handT_me_prot %>% filter(TR == "3D EPI") %>% select("estimate")`, sd = `r thrsh_handT_me_prot %>% filter(TR == "3D EPI") %>% select("std.error")*sqrt(thrsh_handT_me_prot %>% filter(TR == "3D EPI") %>% select("df"))`, t(`r thrsh_handT_me_cont %>% filter(contrast == "ME - 3D EPI") %>% select(df)`) = `r thrsh_handT_me_cont %>% filter(contrast == "ME - 3D EPI") %>% select(statistic)`, $d$ = `r thrsh_handT_me_cont %>% filter(contrast == "ME - 3D EPI") %>% select(estimate) / (thrsh_handT_me_cont %>% filter(contrast == "ME - 3D EPI") %>% select(std.error)*sqrt(thrsh_handT_me_cont %>% filter(contrast == "ME - 3D EPI") %>% select(df)))`, p = `r thrsh_handT_me_cont %>% filter(contrast == "ME - 3D EPI") %>% select(adj.p.value)`). Moreover, and in contrast to the tSNR values, CNR for the CMRR protocol was statistically higher than for the 3D EPI protocol ( t(`r thrsh_handT_me_cont %>% filter(contrast == "CMRR - 3D EPI") %>% select(df)`) = `r thrsh_handT_me_cont %>% filter(contrast == "CMRR - 3D EPI") %>% select(statistic)`, $d$ = `r thrsh_handT_me_cont %>% filter(contrast == "CMRR - 3D EPI") %>% select(estimate) / (thrsh_handT_me_cont %>% filter(contrast == "CMRR - 3D EPI") %>% select(std.error)*sqrt(thrsh_handT_me_cont %>% filter(contrast == "CMRR - 3D EPI") %>% select(df)))`, p = `r thrsh_handT_me_cont %>% filter(contrast == "CMRR - 3D EPI") %>% select(adj.p.value)`). Neither the main effect of contrast nor the protocol x contrast interaction achieved statistical significance (both ps > `r min(thrshmod_handT_an[thrshmod_handT_an[,"Pr(>F)"] > .05, "Pr(>F)"])`). 
 
-```{r thrshCNR, out.width="70%", fig.cap="CNR from voxels thresholded at p< .001 for each contrast. A) CNR values from the response hand contrast for one representative subject and session. B) Densities of CNR scores. Overall, the ME protocol showed higher mean CNR scores than the 3D EPI sequence. C) Showing the target laterality x cue probability contrast for the same subject and session as panel A. D) Beta estimates (y-axis) across time (x-axis) as estimated by a FIR model. The model recovered a typical HRF function. ME = multi-echo, CMRR =, 3D = 3D Echo Planar Imaging, CNR = contrast noise ratio, t = time."}
+
+```{r thrshCNR, out.width="70%", fig.cap="CNR from voxels thresholded at p< .001 for each contrast. A) CNR values from the left response hand activation contrast for one representative subject and session. B) Densities of CNR scores for both the left and right hand response for each protocol. C) Showing the left target laterality contrast for the same subject and session as panel A. D) Beta estimates (y-axis) across time (x-axis) as estimated by a FIR model. The model recovered a typical HRF function. ME = multi-echo, CMRR =, 3D = 3D Echo Planar Imaging, CNR = contrast noise ratio, t = time."}
 
 thrsh_CNR_fig_pth <- '../images/ActStatsT_hands_CNR.pdf' 
 include_graphics(thrsh_CNR_fig_pth)
 ```
 
-Next we sought to determine which protocol yielded the highest CNR values, at the voxels that showed the strongest activations to the experimental manipulations of interest. To attain responsive voxels, each contrast image was thresholded at p<.001. Next we examined the activation values for the response hand (left or right > 0). 
+```{r thrshLME_handT, echo=FALSE, message=F, warning=F}
+thrshmod_TCT <- lmer( mu ~ TR*comp + (1|sub), data = mutConts %>% filter(comp == "lft tgt" | comp == "rght tgt"))
+thrshmod_TCT_an <- Anova(thrshmod_TCT, test.statistic="F")
+```
 
+```{r thrshLME_handT, echo=FALSE, message=F, warning=F}
+thrshmod_pspatial_T <- lmer( mu ~ TR*comp + (1|sub), data = mutConts %>% filter(comp == "p8" | comp == "p5"))
+thrshmod_pspatial_an <- Anova(thrshmod_pspatial_T, test.statistic="F")
+```
+
+```{r thrshLME_handT, echo=FALSE, message=F, warning=F}
+thrshmod_lat_pspatial_T <- lmer( mu ~ TR*comp + (1|sub), data = mutConts %>% filter(comp == "lft_p8" | comp == "rght_p9"))
+thrshmod_lat_pspatial_an <- Anova(thrshmod_lat_pspatial_T, test.statistic="F")
+```
+
+The main effect and pattern of protocol differences was replicated with CNR data taken from the target laterality (left or right) (F()), the spatial cue probability (p=.8 or p=.5) or lateralised target with high cue probability contrasts
 
 ### ROI section - add bit about taking the absolute value
 
