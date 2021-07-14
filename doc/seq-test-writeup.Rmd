@@ -325,7 +325,7 @@ include_graphics(tSNR_fig_pth)
 ```
 
 
-### Comparing CNR Between Sequences
+### Comparing CNR Between Protocols
 \label{sec:CNRResults}
 
 #### Thresholded voxels
@@ -423,10 +423,44 @@ thrsh_CNR_ps <- thrsh_CNR_ps[thrsh_CNR_ps > .05]
 
 The main effect and pattern of protocol differences was consistent across the remaining analyses, whether CNR data were computed using the target laterality (left or right) contrasts (F(`r thrshmod_TCT_an["TR", "Df"]`, `r thrshmod_TCT_an["TR", "Df.res"]`) = `r thrshmod_TCT_an["TR", "F"]`, p = `r thrshmod_TCT_an["TR", "Pr(>F)"]`), the spatial cue probability contrasts (p=.8 or p=.5, F(`r thrshmod_pspatial_an["TR", "Df"]`, `r thrshmod_pspatial_an["TR", "Df.res"]`) = `r thrshmod_pspatial_an["TR", "F"]`, p = `r thrshmod_pspatial_an["TR", "Pr(>F)"]`) or the target laterality|p = .8 contrasts (F(`r thrshmod_lat_pspatial_an["TR", "Df"]`, `r thrshmod_lat_pspatial_an["TR", "Df.res"]`) = `r thrshmod_lat_pspatial_an["TR", "F"]`, p = `r thrshmod_lat_pspatial_an["TR", "Pr(>F)"]`). Also consistent was the absence of statistically significant influences of contrast, or any contrast x protocol interactions (all ps > `r min(thrsh_CNR_ps)`). Therefore, across all modelled experimental events of interest, the ME protocol outperformed the CMRR protocol which in turn outperformed the 3D EPI. 
 
-### ROI section - add bit about taking the absolute value
+#### Regions of interest
+\label{sec:CNR_ROI}
 
+```{r load_roi_act, echo=FALSE, message=F, warning=F}
 
+# Load and tidy data HAND GLM DATA
+roi_act= read.csv('../data/HANDS_tCont_quantCNR_ROI_agg.csv')
+roi_act$sub <- factor(roi_act$sub)
+roi_act$TR <- factor(roi_act$TR)
+roi_act$roi <- factor(roi_act$roi)
+roi_act$contrast <- factor(roi_act$contrast)
+names(roi_act)[names(roi_act) == "tT"] = "CNR"
+roi_act$contrast <- roi_act$contrast %>%  recode('LH' = 'lft_hnd',
+                                                 'RH' = 'rght_hnd') 
 
+tmp = read.csv('../data/TC_tCont_quantCNR_ROI_agg.csv')
+tmp$sub <- factor(tmp$sub)
+tmp$TR <- factor(tmp$TR)
+tmp$roi <- factor(tmp$roi)
+tmp$contrast <- factor(tmp$contrast)
+names(tmp)[names(tmp) == "tT"] = "CNR"
+
+##### checking extraction code
+roi_act <- rbind(roi_act, tmp)
+
+roi_act$TR <- roi_act$TR %>% recode('700' = 'ME',
+                                    '1510' = 'CMRR',
+                                    '1920' = '3D EPI')
+mutConts <- tconts_thrsh %>% group_by(sub, TR, contrast) %>%
+                            summarise(mu = mean(CNR)) %>% ungroup()
+rm(tmp)
+```
+
+```{r}
+tmp <- lmer( CNR ~ TR*contrast*q*roi + (1|sub), data = roi_act %>% filter(contrast == "lft_hnd" | contrast == "rght_hnd"))
+Anova(tmp, test.statistic="F")
+
+```
 
 
 
