@@ -86,7 +86,7 @@ source("../R/data_wrangles.R")
 
 \label{sec:Introduction}
 
-Characterising the neurophysiology that underpins the brain's ability to filter and extract goal-relevant information from the visual world has been a priority in neuroscience for multiple decades [e.g. @desimoneNeuralMechanismsSelective1995, @buschmanBehaviorNeuralDynamics2015a]. At the cortical level, visual information processing has been relatively well mapped out; many observations have demonstrated the correspondence of neural activity in frontal, parietal and visual cortices to the biasing of the visual system towards the specific the specific spaces or features that have been indicated as goal-relevant, i.e. visual selection [@buschmanBehaviorNeuralDynamics2015a, @corbettaControlGoaldirectedStimulusdriven2002]. However, the putative contribution of less interrogated subcortical structures such as the basal ganglia has only more recently become evident. For example, electrophysiological recordings from macaques indicate that cells in the caudate nucleus (CN) respond to the joint location and identity of objects [@yamamotoWhatWhereInformation2012], and contribute to the circuitry that guides both eye-movements [@amitaOptogeneticManipulationValuecoding2020] and covert attention shifts [@arcizetCovertSpatialSelection2018] towards goal-relevant objects. Furthering theory for how the brain performs visual selection therefore requires an understanding of how subcortical and cortical structures interact to produce behaviour. Attaining this understanding in the human model is not a simple task, given the relative inaccessibility of basal ganglia activity to non-invasive imaging approaches. 
+Characterizing the neurophysiology that underpins the brain's ability to filter and extract goal-relevant information from the visual world has been a priority in neuroscience for multiple decades [e.g. @desimoneNeuralMechanismsSelective1995, @buschmanBehaviorNeuralDynamics2015a]. At the cortical level, visual information processing has been relatively well mapped out; many observations have demonstrated the correspondence of neural activity in frontal, parietal and visual cortices to the biasing of the visual system towards the specific the specific spaces or features that have been indicated as goal-relevant, i.e. visual selection [@buschmanBehaviorNeuralDynamics2015a, @corbettaControlGoaldirectedStimulusdriven2002]. However, the putative contribution of less interrogated subcortical structures such as the basal ganglia has only more recently become evident. For example, electrophysiological recordings from macaques indicate that cells in the caudate nucleus (CN) respond to the joint location and identity of objects [@yamamotoWhatWhereInformation2012], and contribute to the circuitry that guides both eye-movements [@amitaOptogeneticManipulationValuecoding2020] and covert attention shifts [@arcizetCovertSpatialSelection2018] towards goal-relevant objects. Furthering theory for how the brain performs visual selection therefore requires an understanding of how subcortical and cortical structures interact to produce behaviour. Attaining this understanding in the human model is not a simple task, given the relative inaccessibility of basal ganglia activity to non-invasive imaging approaches. 
 
 One potentially fruitful avenue is the utilisation of high-resolution functional magnetic resonance imaging (fMRI). Imaging the functional activity of the basal ganglia is challenging for multiple reasons. First, the relatively higher iron content of the nuclei of the basal ganglia [@drayerMagneticResonanceImaging1986] results in shorter $T^{*}_{2}$ relaxation times (~15 ms) compared to the cortex (~25-35 ms, @keukenUltraHigh7TMRI2013, @petersT2MeasurementsHuman2007, vanderzwaagFMRICharacterisingBOLD2009, yacoubImagingBrainFunction2001]). For optimal BOLD-sensitivity, the echo time (TE) of a single echo-planar imaging (EPI) protocol should be equal to the $T^{*}_{2}$ of the tissue of interest [Posse, 1999]. Therefore, striking a balance in TE values to capture signal at both subcortex and cortex is not without challenge. [Have a chat with Markus about this section]. 
 Introduce multi-echo, CMRR and 3D EPI].
@@ -417,8 +417,6 @@ thrshmod_lat_pspatial_an <- Anova(thrshmod_lat_pspatial_T, test.statistic="F")
 ```{r, concatCNRps, echo=FALSE, message=F, warning=F}
 thrsh_CNR_ps <- c(thrshmod_TCT_an[,"Pr(>F)"], thrshmod_pspatial_an[,"Pr(>F)"], thrshmod_lat_pspatial_an[,"Pr(>F)"]) 
 thrsh_CNR_ps <- thrsh_CNR_ps[thrsh_CNR_ps > .05]
-
-
 ```
 
 The main effect and pattern of protocol differences was consistent across the remaining analyses, whether CNR data were computed using the target laterality (left or right) contrasts (F(`r thrshmod_TCT_an["TR", "Df"]`, `r thrshmod_TCT_an["TR", "Df.res"]`) = `r thrshmod_TCT_an["TR", "F"]`, p = `r thrshmod_TCT_an["TR", "Pr(>F)"]`), the spatial cue probability contrasts (p=.8 or p=.5, F(`r thrshmod_pspatial_an["TR", "Df"]`, `r thrshmod_pspatial_an["TR", "Df.res"]`) = `r thrshmod_pspatial_an["TR", "F"]`, p = `r thrshmod_pspatial_an["TR", "Pr(>F)"]`) or the target laterality|p = .8 contrasts (F(`r thrshmod_lat_pspatial_an["TR", "Df"]`, `r thrshmod_lat_pspatial_an["TR", "Df.res"]`) = `r thrshmod_lat_pspatial_an["TR", "F"]`, p = `r thrshmod_lat_pspatial_an["TR", "Pr(>F)"]`). Also consistent was the absence of statistically significant influences of contrast, or any contrast x protocol interactions (all ps > `r min(thrsh_CNR_ps)`). Therefore, across all modelled experimental events of interest, the ME protocol outperformed the CMRR protocol which in turn outperformed the 3D EPI. 
@@ -451,24 +449,43 @@ roi_act <- rbind(roi_act, tmp)
 roi_act$TR <- roi_act$TR %>% recode('700' = 'ME',
                                     '1510' = 'CMRR',
                                     '1920' = '3D EPI')
-mutConts <- tconts_thrsh %>% group_by(sub, TR, contrast) %>%
-                            summarise(mu = mean(CNR)) %>% ungroup()
+
 rm(tmp)
 ```
 
-```{r}
-tmp <- lmer( CNR ~ TR*contrast*q*roi + (1|sub), data = roi_act %>% filter(contrast == "lft_hnd" | contrast == "rght_hnd"))
-Anova(tmp, test.statistic="F")
+```{r tst_roi_act_hnds, echo=FALSE, message=F, warning=F}
 
+roi_act_hands <- lmer( CNR ~ TR*contrast*q*roi + (1|sub), data = roi_act %>% filter(contrast == "lft_hnd" | contrast == "rght_hnd"))
+roi_act_hands_an <- Anova(roi_act_hands, test.statistic="F")
+roi_act_hands_an
+```
+```{r, FU}
+# follow up the interaction at each roi
+rois <- unique(roi_act$roi)
+
+post_hoc <- lapply(unique(roi_act$roi), function(x) Anova(lmer( CNR ~ TR*contrast*q + (1|sub), data = roi_act %>% filter(contrast == "lft_hnd" | contrast == "rght_hnd") %>% filter(roi == x)), test.statistic="F"))
+names(post_hoc) <- unique(roi_act$roi)
 ```
 
 
 
+```{r, follow_up_roi_hand_act, echo=FALSE, message=F, warning=F}
+
+roi_act_hands_mus <- emmeans(roi_act_hands, ~TR|q|roi)
+roi_act_hands_cont <- contrast(roi_act_hands_mus, 'tukey', adjust = 'sidak')
+
+thrsh_handT_me_cont <- contrast(thrsh_handT_me_prot, 'tukey', adjust = 'sidak') 
+thrsh_handT_me_cont <- thrsh_handT_me_cont %>% broom::tidy()
+thrsh_handT_me_prot <-thrsh_handT_me_prot %>% broom::tidy()
+thrsh_handT_me_cont
+
+roi_tsnr_mus <- emmeans(roi_SNR_mod, ~TR | roi)
+roi_tsnr_cont <- contrast(roi_tsnr_mus, 'tukey', adjust = 'sidak')
+roi_tsnr_cont <- roi_tsnr_cont  %>% broom::tidy()
+roi_tsnr_cont
 
 
-
-
-
+```
 
 
 
