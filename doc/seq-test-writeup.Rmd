@@ -251,12 +251,16 @@ To assess visually whether the current protocols yielded a typical HRF in subcor
 #### Statistical Approach
 \label{sec:StatsApproach}
 
-Statistical analyses comparing the protocols were based on those presented in Puckett et al [-@puckettUsingMultiechoSimultaneous2018] and Miletic et al [-@mileticFMRIProtocolOptimization2020]. We extracted average tSNR or CNR scores per subject, protocol and ROI and applied linear mixed effects models with average tSNR or CNR scores as the dependent variable, using the lme4 package [@batesFittingLinearMixedEffects2015]. ROI, protocol, and contrast (where relevant) served as predictor variables, including all possible interaction terms. Random intercepts were included for each subject. Statistical significance of the predictor variables was assessed using Type II Wald chisquare tests, using the car package [foxCompanionAppliedRegression2019]. Statistically significant effects were followed up with post-hoc t-tests, with application of the Sidak adjustment for multiple comparisons [@sidakRectangularConfidenceRegions1967]. Where relevant, effect sizes were computed using Cohen's $d$. 
+Statistical analyses were conducted using R (version 3.3.2, [@Rcitation]) and RStudio (version 1.1.456, [@rstudiocitation]). Protocol comparison methods were based on those presented in Puckett et al [-@puckettUsingMultiechoSimultaneous2018] and Miletic et al [-@mileticFMRIProtocolOptimization2020]. We extracted average tSNR scores per subject, protocol and ROI and applied linear mixed effects models with average tSNR as the dependent variable, using the lme4 package [@batesFittingLinearMixedEffects2015]. ROI, protocol, and contrast (where relevant) served as predictor variables, including all possible interaction terms. Random intercepts were included for each subject. 
+
+For the CNR scores, we repeated the same method as above, except that we instead computed quantile scores (p=.1, .2, .5, .7, .9) for each ROI, rather than only the mean score. Given the strong existing evidence suggesting that any of the experimental manipulations should influence activation in a functionally localised subset of voxels within a given striatal region [@liuFunctionalParcellationHuman2021, @choiOrganizationHumanStriatum2012, @ogawaStriatalSubdivisionsThat2018, @haberCorticostriatalCircuitry2016a], and that some of the anatomical ROIs contain thousands of voxels, the impact of averaging across all voxels in a given region may serve to wash out genuinely observable differences between protocols, when the response is functionally localised. Therefore, we instead sought to understand how the influence of protocol was modulated by activation strength in response to the experimental event of interest. To this end we fitted linear mixed effects models to the quantiled CNR data where ROI, protocol, contrast and quantile served as predictor variables. Again, random intercepts were included for each subject. 
+
+For both tSNR and CNR models, statistical significance of the predictor variables was assessed using Type II Wald chisquare tests, using the car package [foxCompanionAppliedRegression2019]. Significant 3-way interactions were followed up with reduced linear-mixed effects models with application of the false discovery rate (FDR, benjaminiControllingFalseDiscovery1995a). All simpler statistically significant effects were followed up with post-hoc Tukey contrasts, with application of the Sidak adjustment for multiple comparisons [@sidakRectangularConfidenceRegions1967]. Where relevant, effect sizes are reported using Cohen's $d$. 
 
 # Results
 \label{sec:Results}
 
-This and all subsequent analyses were conducted using R (version 3.3.2, [@Rcitation]) and RStudio (version 1.1.456, [@rstudiocitation]). 
+This and  
 
 ## Behaviour
 \label{sec:Behaviour}
@@ -459,14 +463,29 @@ roi_act_hands <- lmer( CNR ~ TR*contrast*q*roi + (1|sub), data = roi_act %>% fil
 roi_act_hands_an <- Anova(roi_act_hands, test.statistic="F")
 roi_act_hands_an
 ```
-```{r, FU}
+```{r hands_FU_qTRROI, echo=FALSE, message=F, warning=F}
 # follow up the interaction at each roi
 rois <- unique(roi_act$roi)
 
-post_hoc <- lapply(unique(roi_act$roi), function(x) Anova(lmer( CNR ~ TR*contrast*q + (1|sub), data = roi_act %>% filter(contrast == "lft_hnd" | contrast == "rght_hnd") %>% filter(roi == x)), test.statistic="F"))
-names(post_hoc) <- unique(roi_act$roi)
+post_hoc_roi_hands <- lapply(unique(roi_act$roi), function(x) Anova(lmer( CNR ~ TR*contrast*q + (1|sub), data = roi_act %>% filter(contrast == "lft_hnd" | contrast == "rght_hnd") %>% filter(roi == x)), test.statistic="F"))
+names(post_hoc_roi_hands) <- unique(roi_act$roi)
+hand_rois_ps <- do.call(cbind, lapply(rois, function(x) post_hoc_roi_hands[[x]][,"Pr(>F)"]))
+hand_rois_ps <- as.vector(hand_rois_ps)
+hand_rois_sig <- matrix(p.adjust(ps, method = "fdr") < .05, nrow = 7, byrow = FALSE)
+hand_roi_of_int <- rois[colSums(hand_rois_sig) > 1]
 ```
 
+The influence of protocol on CNR values varied by region and activation strength, as was evidenced by a significant protocol x roi x quantile interaction (F(`r roi_act_hands_an["TR:q:roi", "Df"]`, `r roi_act_hands_an["TR:q:roi", "Df.res"]`) = `r roi_act_hands_an["TR:q:roi", "F"]`, p = `r roi_act_hands_an["TR:q:roi", "Pr(>F)"]`). To follow up this 3-way interaction, we applied a linear-mixed effects model to the data from each ROI with protocol, contrast and quantile as the fixed-effect predictors, all resulting p-values were FDR corrected. Significant influences of protocol were found for the FEF, LOC, GPe, GPi, and the VS. For the FEF and LOC, protocol interacted with quantiles to influence CNR values (both ps < `r post_hoc_roi_hands[["LOC"]]["TR:q", "Pr(>F)"]`), whereas for the GPe, GPi and VS, there was a main effect of protocol (all ps < `r post_hoc_roi_hands[["VS"]]["TR", "Pr(>F)"]`) that did not interact with quantile (all ps > ) GPi:  0.019, GPe: 5.7e-05 VS: 0.2015 
+
+
+
+```{r hands_FU_ROI_of_int, echo=FALSE, message=F, warning=F}
+
+hand_FU_mods_2attain <- hand_roi_of_int
+
+
+
+```
 
 
 ```{r, follow_up_roi_hand_act, echo=FALSE, message=F, warning=F}
