@@ -58,6 +58,12 @@ opts_chunk$set(fig.align = 'center', cache = FALSE, warning = FALSE,
   message = TRUE, echo = FALSE)
 options(digits = 3, width = 88, knitr.graphics.auto_pdf = TRUE,
         knitr.kable.NA = '')
+knit_hooks$set(inline = function(x) {
+  x <- sprintf("%1.2f", x)
+  paste(x, collapse = ", ")
+})
+# add this bit to differentiate p from stat values before sending around
+# https://stackoverflow.com/questions/48199137/set-number-of-decimal-places-to-show-in-output
 ```
 
 ```{r, libraries, echo=FALSE, message=F, warning=F}
@@ -87,7 +93,7 @@ Characterizing the neurophysiology that underpins the ability to filter and extr
 One potentially fruitful avenue is the utilisation of high-resolution functional magnetic resonance imaging (fMRI). Imaging the functional activity of the basal ganglia is challenging for multiple reasons. First, the relatively higher iron content of the nuclei of the basal ganglia [@drayerMagneticResonanceImaging1986] results in shorter $T^{*}_{2}$ relaxation times (~15 ms) compared to the cortex (~25-35 ms, @keukenUltraHigh7TMRI2013; @petersT2MeasurementsHuman2007; @vanderzwaagFMRICharacterisingBOLD2009; @yacoubImagingBrainFunction2001). For optimal BOLD-sensitivity, the echo time (TE) of a single echo-planar imaging (EPI) protocol should be equal to the $T^{*}_{2}$ of the tissue of interest [Posse, 1999]. Therefore, striking a balance in TE values to capture signal at both subcortex and cortex is not without challenge. [Have a chat with Markus about this section]. 
 Introduce multi-echo, CMRR and 3D EPI].
 
-This challenge has been well addressed in previous works that have sought to image functional basal ganglia activity during performance of overt actions at 7T. For example, Puckett et al [-@puckettUsingMultiechoSimultaneous2018] compared outcomes for SE and ME SMS EPI protocols when participants performed an overt action task that involved simple and complex sequences of self-paced button presses. The theoretical contribution of the basal ganglia to overt action is well documented [see Caligiore et al, 2017, Gurney et al, 2004 for reviews], and therefore imposing a cognitive challenge during overt action selection is the ideal starting point for determining the potential of 7T ME imaging for attaining good signal quality from the basal ganglia. The authors found that signal-to-noise ratios (SNR) were improved for the ME relative to the SE protocol, notably in CN and the putamen (Put). Furthermore, the extent of the improvement was negatively related to the underlying $T^{*}_{2}$ of the voxels. Therefore, signal from the tissues with shorter $T^{*}_{2}$, such as the basal ganglia, showed the greatest signal improvements with the ME protocol. This suggests that ME sequences may be of particularly benefit when imaging basal ganglia activity. In contrast, Militec et al [-@mileticFMRIProtocolOptimization2020] compared ME and SE protocols during performance of a stop-signal task where participants execute or withhold an overt motor response depending on a given visual signal. The authors sought to optimise protocol parameters in order to attain whole brain coverage, while maintaining the spatial and temporal resolution required to capture signal from subcortical regions. Specifically, they held spatial resolution constant at 1.6 mm isotropic, and increased parallel acceleration to attain an ME sequence that was comparable in all other respects to the SE sequence. The authors found only marginal differences between SE and ME protocols, suggesting that the advantages of a ME sequence may be limited when testing more subtle manipulations of overt action control. It remains unknown whether ME protocols provide benefits when imaging basal ganglia activity during theoretically relevant cognitive operations that do not involve overt action, such as when visual selection is biased during a covert visual selection task.
+This challenge has been well addressed in previous works that have sought to image functional basal ganglia activity during performance of overt actions at 7T. For example, Puckett et al [-@puckettUsingMultiechoSimultaneous2018] compared outcomes for SE and ME SMS EPI protocols when participants performed an overt action task that involved simple and complex sequences of self-paced button presses. The theoretical contribution of the basal ganglia to overt action is well documented [see Caligiore et al, 2017, Gurney et al, 2004 for reviews], and therefore imposing a cognitive challenge during overt action selection is the ideal starting point for determining the potential of 7T ME imaging for attaining good signal quality from the basal ganglia. The authors found that signal-to-noise ratios (SNR) were improved for the ME relative to the SE protocol, notably in CN and the putamen (Put). Furthermore, the extent of the improvement was negatively related to the underlying $T^{*}_{2}$ of the voxels. Therefore, signal from the tissues with shorter $T^{*}_{2}$, such as the basal ganglia, showed the greatest signal improvements with the ME protocol. This suggests that ME sequences may be of particularly benefit when imaging basal ganglia activity. In contrast, Militec et al [-@mileticFMRIProtocolOptimization2020] compared ME and SE protocols during performance of a stop-signal task where participants execute or withhold an overt motor response depending on a given auditory signal. The authors sought to optimise protocol parameters in order to attain whole brain coverage, while maintaining the spatial and temporal resolution required to capture signal from subcortical regions. Specifically, they held spatial resolution constant at 1.6 mm isotropic, and increased parallel acceleration to attain an ME sequence that was comparable in all other respects to the SE sequence. The authors found only marginal differences between SE and ME protocols, suggesting that the advantages of a ME sequence may be limited when testing more subtle manipulations of overt action control. It remains unknown whether ME protocols provide benefits when imaging basal ganglia activity during theoretically relevant cognitive operations that do not involve overt action, such as when visual selection is biased during a covert visual selection task.
 
 We therefore sought to compare SNR for basal ganglia activity between protocols used to take whole brain images while participants performed a covert visual-selection task. The task required participants to monitor two spatial locations for an upcoming target (oriented gabor). The target and a distractor stimulus were preceded by probabilistic spatial cues that indicated the likely location of the upcoming target, as well as incentive value cues that signalled reward availability on any given trial. We compared the signal yielded between ME and SE multi-band and 3D EPI protocols at 7T. To assess signal quality we compared both temporal signal-to-noise (tSNR) and contrast-noise (CNR) ratios. tSNR, computed as the ratio of the mean of the timeseries relative to the standard deviation of the timeseries ($\frac{mu_{T}}{\sigma_{T}}$) provides a measure of the strength of the activation signal of the time course, relative to several sources of noise such as system, physiological and task-related. The measure of activation (i.e. signal) contains both baseline signal and task-related fluctuations. Thus the measure of tSNR quantifies how the global signal level is related to the noise [@welvaertDefinitionSignalToNoiseRatio2013]. To assess the strength of signal changes in relation to key experimental events, we computed $t$-scores from key contrasts of interest that are defined below. This is equivalent to computing the temporal SNR for the mean signal change [@corbinAccurateModelingTemporal2018]. Thus we sought to understand how our chosen protocols influenced these two complementary measures of signal strength in key regions of interest.
 
@@ -357,7 +363,7 @@ rm(tmp)
 ```
 
 ```{r thrshlook, echo=FALSE, message=F, warning=F}
-bpkpsubs <- with(mutConts %>% filter(comp == "left_hand" | comp == "right_hand"), boxplot(mu~comp*TR))
+# bpkpsubs <- with(mutConts %>% filter(comp == "left_hand" | comp == "right_hand"), boxplot(mu~comp*TR))
 #bpkpsubs
 ```
 
@@ -368,34 +374,33 @@ thrshmod_handT_an <- Anova(thrshmod_handT, test.statistic="F")
 ```
 
 
-```{r, thrsh_me_prot_FU, echo=TRUE, results="hide"}
+```{r, thrsh_me_prot_FU, echo=FALSE, message=F, warning=F}
 thrsh_handT_me_prot <- emmeans(thrshmod_handT, "TR")
 thrsh_handT_me_cont <- contrast(thrsh_handT_me_prot, 'tukey', adjust = 'sidak') 
 thrsh_handT_me_cont <- thrsh_handT_me_cont %>% broom::tidy()
 thrsh_handT_me_prot <-thrsh_handT_me_prot %>% broom::tidy()
-thrsh_handT_me_cont
+#thrsh_handT_me_cont
 ```  
 
 The thresholded CNR data from the response hand contrasts are presented in see Figure \@ref{fig:thrshCNR}, panels A & B. A significant main effect showed that CNR differed between protocols (F(`r thrshmod_handT_an["TR", "Df"]`, `r thrshmod_handT_an["TR", "Df.res"]`) = `r thrshmod_handT_an["TR", "F"]`, `r thrshmod_handT_an["TR", "Pr(>F)"]`. Post-hoc contrasts showed that CNR values were statistically higher for the ME protocol (mean = `r thrsh_handT_me_prot %>% filter(TR == "ME") %>% select("estimate")`, sd = `r thrsh_handT_me_prot %>% filter(TR == "ME") %>% select("std.error")*sqrt(thrsh_handT_me_prot %>% filter(TR == "ME") %>% select("df"))`) relative to the CMRR protocol (mean = `r thrsh_handT_me_prot %>% filter(TR == "CMRR") %>% select("estimate")`, sd = `r thrsh_handT_me_prot %>% filter(TR == "CMRR") %>% select("std.error")*sqrt(thrsh_handT_me_prot %>% filter(TR == "CMRR") %>% select("df"))`, t(`r thrsh_handT_me_cont %>% filter(contrast == "ME - CMRR") %>% select(df)`) = `r thrsh_handT_me_cont %>% filter(contrast == "ME - CMRR") %>% select(statistic)`, $d$ = `r thrsh_handT_me_cont %>% filter(contrast == "ME - CMRR") %>% select(estimate) / (thrsh_handT_me_cont %>% filter(contrast == "ME - CMRR") %>% select(std.error)*sqrt(thrsh_handT_me_cont %>% filter(contrast == "ME - CMRR") %>% select(df)))`, p = `r thrsh_handT_me_cont %>% filter(contrast == "ME - CMRR") %>% select(adj.p.value)`), and relative to the 3D EPI protocol (mean = `r thrsh_handT_me_prot %>% filter(TR == "3D EPI") %>% select("estimate")`, sd = `r thrsh_handT_me_prot %>% filter(TR == "3D EPI") %>% select("std.error")*sqrt(thrsh_handT_me_prot %>% filter(TR == "3D EPI") %>% select("df"))`, t(`r thrsh_handT_me_cont %>% filter(contrast == "ME - 3D EPI") %>% select(df)`) = `r thrsh_handT_me_cont %>% filter(contrast == "ME - 3D EPI") %>% select(statistic)`, $d$ = `r thrsh_handT_me_cont %>% filter(contrast == "ME - 3D EPI") %>% select(estimate) / (thrsh_handT_me_cont %>% filter(contrast == "ME - 3D EPI") %>% select(std.error)*sqrt(thrsh_handT_me_cont %>% filter(contrast == "ME - 3D EPI") %>% select(df)))`, p = `r thrsh_handT_me_cont %>% filter(contrast == "ME - 3D EPI") %>% select(adj.p.value)`). Moreover, and in contrast to the tSNR values, CNR for the CMRR protocol was statistically higher than for the 3D EPI protocol ( t(`r thrsh_handT_me_cont %>% filter(contrast == "CMRR - 3D EPI") %>% select(df)`) = `r thrsh_handT_me_cont %>% filter(contrast == "CMRR - 3D EPI") %>% select(statistic)`, $d$ = `r thrsh_handT_me_cont %>% filter(contrast == "CMRR - 3D EPI") %>% select(estimate) / (thrsh_handT_me_cont %>% filter(contrast == "CMRR - 3D EPI") %>% select(std.error)*sqrt(thrsh_handT_me_cont %>% filter(contrast == "CMRR - 3D EPI") %>% select(df)))`, p = `r thrsh_handT_me_cont %>% filter(contrast == "CMRR - 3D EPI") %>% select(adj.p.value)`). Neither the main effect of contrast nor the protocol x contrast interaction achieved statistical significance (both ps > `r min(thrshmod_handT_an[thrshmod_handT_an[,"Pr(>F)"] > .05, "Pr(>F)"])`). The thresholded CNR data therefore corroborate the tSNR findings that the ME protocol yields the best signal. However, in contrast to the tSNR findings, the data also show that when CNR instead of tSNR is considered, then the CMRR protocol also fares better than the 3D EPI protocol. Therefore although the 3D EPI may show higher levels of baseline activation, it appears that this protocol may be less sensitive to experimentally relevant signal, at least in the context of a spatial visual selection task.
 
-
-```{r thrshCNR, out.width="70%", fig.cap="CNR from voxels thresholded at p< .001 for each contrast. A) CNR values from the left response hand activation contrast for one representative subject and session. B) Densities of CNR scores for both the left and right hand response for each protocol. C) Showing the left target laterality contrast for the same subject and session as panel A. D) Beta estimates (y-axis) across time (x-axis) as estimated by a FIR model. The model recovered a typical HRF function. ME = multi-echo, CMRR =, 3D = 3D Echo Planar Imaging, CNR = contrast noise ratio, t = time."}
+```{r actStatsCNR, out.width="70%", fig.cap="CNR from voxels thresholded at p< .001 for each contrast. A) CNR values from the left response hand activation contrast for one representative subject and session. B) Densities of CNR scores for both the left and right hand response for each protocol. C) Showing the left target laterality contrast for the same subject and session as panel A. D) Beta estimates (y-axis) across time (x-axis) as estimated by a FIR model. The model recovered a typical HRF function. ME = multi-echo, CMRR =, 3D = 3D Echo Planar Imaging, CNR = contrast noise ratio, t = time."}
 
 thrsh_CNR_fig_pth <- '../images/ActStatsT_hands_CNR.pdf' 
 include_graphics(thrsh_CNR_fig_pth)
 ```
 
-```{r thrshLME_handT, echo=FALSE, message=F, warning=F}
+```{r thrshLME_TCT, echo=FALSE, message=F, warning=F}
 thrshmod_TCT <- lmer( mu ~ TR*comp + (1|sub), data = mutConts %>% filter(comp == "lft tgt" | comp == "rght tgt"))
 thrshmod_TCT_an <- Anova(thrshmod_TCT, test.statistic="F")
 ```
 
-```{r thrshLME_handT, echo=FALSE, message=F, warning=F}
+```{r thrshLME_pspatialT, echo=FALSE, message=F, warning=F}
 thrshmod_pspatial_T <- lmer( mu ~ TR*comp + (1|sub), data = mutConts %>% filter(comp == "p8" | comp == "p5"))
 thrshmod_pspatial_an <- Anova(thrshmod_pspatial_T, test.statistic="F")
 ```
 
-```{r thrshLME_handT, echo=FALSE, message=F, warning=F}
+```{r thrshLME_latpspatialT, echo=FALSE, message=F, warning=F}
 thrshmod_lat_pspatial_T <- lmer( mu ~ TR*comp + (1|sub), data = mutConts %>% filter(comp == "lft_p8" | comp == "rght_p9"))
 thrshmod_lat_pspatial_an <- Anova(thrshmod_lat_pspatial_T, test.statistic="F")
 ```
@@ -443,16 +448,14 @@ rm(tmp)
 
 roi_act_hands <- lmer( CNR ~ TR*contrast*roi + (1|sub), data = roi_act %>% filter(contrast == "lft_hnd" | contrast == "rght_hnd"))
 roi_act_hands_an <- Anova(roi_act_hands, test.statistic="F")
-roi_act_hands_an
 ```
+
 ```{r hands_FU_cort, echo=FALSE, message=F, warning=F}
 roi_act_hands_cort <- lmer( CNR ~ TR*contrast*roi + (1|sub), data = roi_act %>% filter(contrast == "lft_hnd" | contrast == "rght_hnd") %>% filter(roi %in% c("FEF", "LOC", "IPS")))
 roi_act_hands_cort_an <- Anova(roi_act_hands_cort, test.statistic="F")
-roi_act_hands_cort_an
 roi_act_hands_cort_mus <- emmeans(roi_act_hands_cort, ~TR|roi)
 roi_act_hands_cort_cont <- contrast(roi_act_hands_cort_mus, 'tukey', adjust = 'sidak')
 roi_act_hands_cort_cont <- roi_act_hands_cort_cont %>% broom::tidy()
-roi_act_hands_cort_cont
 roi_act_hands_cort_mus <- roi_act_hands_cort_mus %>% broom::tidy()
 roi_act_hands_cort_ps <- roi_act_hands_cort_cont %>% select(adj.p.value) 
 
@@ -471,23 +474,22 @@ roi_act_hands_subcort_mus <- roi_act_hands_subcort_mus %>% broom::tidy()
 roi_act_hands_subcort_ps <- roi_act_hands_subcort_cont %>% select(adj.p.value) 
 
 ```
-
-For the subcortical ROIs, there was a statistically significant main effect of protocol (F(`r  roi_act_hands_subcort_an["TR","Df"]`, `r roi_act_hands_subcort_an["TR","Df.res"]`) = `r roi_act_hands_subcort_an["TR","F"]`, p = `r roi_act_hands_subcort_an["TR","Pr(>F)"]`), suggesting that the protocols yielded a consistent modulatory effect on CNR values across the striatal regions under study. However, although the CNR data from the 3D EPI protocol showed a higher numerical mean (mean = `r roi_act_hands_subcort_mus %>% filter(TR == "3D EPI") %>% select(estimate)`, sd = `r roi_act_hands_subcort_mus %>% filter(TR == "3D EPI") %>% select(std.error)*sqrt(roi_act_hands_subcort_mus %>% filter(TR == "3D EPI") %>% select(df))`) relative to the ME (mean = `r roi_act_hands_subcort_mus %>% filter(TR == "ME") %>% select(estimate)`) and CMRR protocols (mean = `r roi_act_hands_subcort_mus %>% filter(TR == "CMRR") %>% select(estimate)`), none of the pairwise comparisons between the three protocols survived correction for multiple comparisons  (all ps > `r min(roi_act_hands_subcort_ps))`, suggesting a non-robust influence of protocol on the CNR observed in the subcortical ROIs. For the remaining sets of contrasts (left or right target, p = .8 or .5 spatial cue, left target | p = .8 or right target | p = .8), none of the analyses showed a statistically significant influence of protocol on the CNR data (all ps > `r min(c(roi_act_lat_pspatial_an[,"Pr(>F)"], roi_act_TC_an[,"Pr(>F)"], roi_act_pspatial_an[,"Pr(>F)"]))`). Therefore the results suggest that although the ME sequence yields reliably higher CNR values for cortical activation, the impact of protocol is minimal in the striatal regions studied here.
-
 ```{r tst_roi_act_tgtlat, echo=FALSE, message=F, warning=F}
 roi_act_TC <- lmer( CNR ~ TR*contrast + (1|sub), data = roi_act %>% filter(contrast == "LT" | contrast == "RT"))
 roi_act_TC_an <- Anova(roi_act_TC, test.statistic="F")
 ```
 
-```{r thrshLME_handT, echo=FALSE, message=F, warning=F}
+```{r tst_roi_act_pspatial, echo=FALSE, message=F, warning=F}
 roi_act_pspatial_T <- lmer( CNR ~ TR*contrast + (1|sub), data = roi_act %>% filter(contrast == "p8" | contrast == "p5"))
 roi_act_pspatial_an <- Anova(roi_act_pspatial_T, test.statistic="F")
 ```
 
-```{r thrshLME_handT, echo=FALSE, message=F, warning=F}
+```{r tst_roi_act_lat_spat, echo=FALSE, message=F, warning=F}
 roi_act_lat_pspatial_T <- lmer( CNR ~ TR*contrast + (1|sub), data = roi_act %>% filter(contrast ==  "LTp8" | contrast == "RTp8"))
 roi_act_lat_pspatial_an <- Anova(roi_act_lat_pspatial_T, test.statistic="F")
 ```
+
+For the subcortical ROIs, there was a statistically significant main effect of protocol (F(`r  roi_act_hands_subcort_an["TR","Df"]`, `r roi_act_hands_subcort_an["TR","Df.res"]`) = `r roi_act_hands_subcort_an["TR","F"]`, p = `r roi_act_hands_subcort_an["TR","Pr(>F)"]`), suggesting that the protocols yielded a consistent modulatory effect on CNR values across the striatal regions under study. However, although the CNR data from the 3D EPI protocol showed a higher numerical mean (mean = `r roi_act_hands_subcort_mus %>% filter(TR == "3D EPI") %>% select(estimate)`, sd = `r roi_act_hands_subcort_mus %>% filter(TR == "3D EPI") %>% select(std.error)*sqrt(roi_act_hands_subcort_mus %>% filter(TR == "3D EPI") %>% select(df))`) relative to the ME (mean = `r roi_act_hands_subcort_mus %>% filter(TR == "ME") %>% select(estimate)`) and CMRR protocols (mean = `r roi_act_hands_subcort_mus %>% filter(TR == "CMRR") %>% select(estimate)`), none of the pairwise comparisons between the three protocols survived correction for multiple comparisons  (all ps > `r min(roi_act_hands_subcort_ps)`, suggesting a non-robust influence of protocol on the CNR observed in the subcortical ROIs. For the remaining sets of contrasts (left or right target, p = .8 or .5 spatial cue, left target | p = .8 or right target | p = .8), none of the analyses showed a statistically significant influence of protocol on the CNR data (all ps > `r min(c(roi_act_lat_pspatial_an[,"Pr(>F)"], roi_act_TC_an[,"Pr(>F)"], roi_act_pspatial_an[,"Pr(>F)"]))`). Therefore the results suggest that although the ME sequence yields reliably higher CNR values for cortical activation, the impact of protocol is minimal in the striatal regions studied here.
 
 ### Comparing CNR Between Protocols for Experimental Comparisons 
 \label{sec:CNR_exp_comps}
@@ -526,24 +528,23 @@ muCNR <- CNR %>% group_by(sub, TR, comp) %>%
 ```
 
 
-```{r thrshlook, echo=FALSE, message=F, warning=F}
-bpthrsh <- with(muCNR, boxplot(mu~contrast*TR))
+```{r thrshlook_CNR, echo=FALSE, message=F, warning=F}
+#bpthrsh <- with(muCNR, boxplot(mu~contrast*TR))
 ```
 
 ```{r thrshLME, echo=FALSE, message=F, warning=F}
-thrshmod <- lmer( mu ~ TR*contrast + (1|sub), data=muCNR)
+thrshmod <- lmer( mu ~ TR*comp + (1|sub), data=muCNR)
 thrsh_lme_an <- Anova(thrshmod, test.statistic="F")
-thrsh_lme_an
 ```
 
-```{r, thrsh_me_prot_FU, echo=TRUE, results="hide"}
-thrsh_me_prot <- emmeans(thrsh_mod, "TR")
+```{r, thrsh_me_prot_EC_FU, echo=FALSE, message=F, warning=F}
+thrsh_me_prot <- emmeans(thrshmod, "TR")
 thrsh_me_cont <- contrast(thrsh_me_prot, 'tukey', adjust = 'sidak') 
 thrsh_me_cont <- thrsh_me_cont %>% broom::tidy()
 ```  
 
-```{r, thrsh_me_cntrst_FU, echo=TRUE, results="hide"}
-thrsh_me_cont_mu <- emmeans(thrsh_mod, "comp")
+```{r, thrsh_me_cntrst_EC_FU, echo=FALSE, message=F, warning=F}
+thrsh_me_cont_mu <- emmeans(thrshmod, "comp")
 thrsh_me_cont_cont <- contrast(thrsh_me_cont_mu, 'tukey', adjust = 'sidak') 
 thrsh_me_cont_cont <- thrsh_me_cont_cont %>% broom::tidy()
 thrsh_me_cont_cont <- thrsh_me_cont_cont %>% filter(adj.p.value<.05)
@@ -595,14 +596,14 @@ roi_cnr <- rbind(roi_cnr, tmp)
 ```
 
 
-```{r, boxplot, echo=TRUE, results="hide"}
+```{r, boxplot, echo=FALSE, message=F, warning=F}
 
-with(roi_cnr, boxplot(CNR~contrast*roi*TR))
-with(roi_cnr %>% filter(sub != "1"), boxplot(CNR~contrast*roi*TR)) # sub 1 = outlier, remove
+#with(roi_cnr, boxplot(CNR~contrast*roi*TR))
+#with(roi_cnr %>% filter(sub != "1"), boxplot(CNR~contrast*roi*TR)) # sub 1 = outlier, remove
 roi_cnr <-roi_cnr %>% filter(sub != "1")
 ```
 
-```{r, stats_bl_conts, echo=TRUE, results="hide"}
+```{r, stats_bl_conts, echo=FALSE, message=F, warning=F}
 
 # this code shows the main effect of TR, and then shows the followup comparisions
 roi_SNR_mod <- lmer( CNR ~ TR*roi*contrast + (1|sub), data=roi_cnr )
@@ -610,16 +611,16 @@ roi_SNR_mod_an <- Anova(roi_SNR_mod, test.statistic="F")
 
 ```
 
-```{r, tSNR_TR_roi_int, echo=TRUE, results="hide"}
+```{r, tSNR_TR_roi_int, echo=FALSE, message=F, warning=F}
 roi_tsnr_mus <- emmeans(roi_SNR_mod, ~TR | roi)
 roi_tsnr_cont <- contrast(roi_tsnr_mus, 'tukey', adjust = 'sidak')
 roi_tsnr_cont <- roi_tsnr_cont  %>% broom::tidy()
-roi_tsnr_cont %>% filter(adj.p.value < .05)
+#roi_tsnr_cont %>% filter(adj.p.value < .05)
 ```
 
 Comparable to the tSNR data, the extent to which CNR values differed between protocols was modulated by the ROI factor, as evidenced by a protocol x ROI interaction (F(`r roi_SNR_mod_an["TR:roi","Df"]`, `r roi_SNR_mod_an["TR:roi","Df.res"]`) = `r roi_SNR_mod_an["TR:roi","F"]`, p = `r roi_SNR_mod_an["TR:roi","Pr(>F)"]`). Of the cortical ROIs, the IPS region showed a pattern of CNR values that exactly matched the tSNR findings, where the ME protocol yielded higher CNR values relative to both the CMRR protocol (t(`r roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - CMRR", "df"]`) = `r roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - CMRR", "statistic"]`, $d$ = `r roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - CMRR", "estimate"]/(roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - CMRR", "std.error"] * sqrt(roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - CMRR", "df"]+1))`, p = `r roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - CMRR", "adj.p.value"]`), and to the 3D-EPI protocol (t(`r roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - 3D", "df"]`) = `r roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - 3D", "statistic"]`, $d$ = `r roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - 3D", "estimate"]/(roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - 3D", "std.error"] * sqrt(roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - 3D", "df"]+1))`, p = `r roi_tsnr_cont[roi_tsnr_cont$roi == "IPS" & roi_tsnr_cont$contrast == "ME - 3D", "adj.p.value"]`), albeit with a small effect size (see Figure \@ref(fig:cortCNR), panels A and B). CNR values from the LOC ROI were also statistically higher for the ME relative to the 3D EPI sequence (t(`r roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "ME - 3D", "df"]`) = `r roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "ME - 3D", "statistic"]`, $d$ = `r roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "ME - 3D", "estimate"]/(roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "ME - 3D", "std.error"] * sqrt(roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "ME - 3D", "df"]+1))`, p = `r roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "ME - 3D", "adj.p.value"]`). Additionally in the LOC, CNR was also higher for the CMRR relative to the 3D EPI sequence (t(`r roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "CMRR - 3D", "df"]`) = `r roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "CMRR - 3D", "statistic"]`, $d$ = `r roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "CMRR - 3D", "estimate"]/(roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "CMRR - 3D", "std.error"] * sqrt(roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "CMRR - 3D", "df"]+1))`, p = `r roi_tsnr_cont[roi_tsnr_cont$roi == "LOC" & roi_tsnr_cont$contrast == "CMRR - 3D", "adj.p.value"]`, see Figure \@ref(fig:cortCNR), panel C). All remaining comparisions did not achieve statistical significance. Thus the ME protocol fares best across multiple measurements of signal quality for cortical ROIs, with the CMRR outperforming the 3D EPI sequence less consistently. 
 
-```{r, cortCNR, out.width="80%", fig.cap="CNR data from cortical regions of interest. A) CNR values for the target laterality x cue probability contrast from each protocol (columns) for two representative subjects (rows) with the IPS region outlined in blue. B) Average CNR scores by subject for each protocol (x-axis) and cortical region (panels). The ME protocol showed higher mean CNR scores than the CMRR protocol. C) Same as panel A, but with the LOC region outlined in blue. P = protocol, ME = multi-echo, CMRR =, 3D EPI = 3D Echo Planar Imaging, CNR = contrast noise ratio, IPS = intraparietal sulcus, FEF = frontal eye fields, LOC = lateral occipital complex, sub = subjects."}
+```{r, cortCNR, out.width="60%", fig.cap="CNR data from cortical regions of interest. A) CNR values for the target laterality x cue probability contrast from each protocol (columns) for two representative subjects (rows) with the IPS region outlined in blue. B) Average CNR scores by subject for each protocol (x-axis) and cortical region (panels). The ME protocol showed higher mean CNR scores than the CMRR protocol. C) Same as panel A, but with the LOC region outlined in blue. P = protocol, ME = multi-echo, CMRR =, 3D EPI = 3D Echo Planar Imaging, CNR = contrast noise ratio, IPS = intraparietal sulcus, FEF = frontal eye fields, LOC = lateral occipital complex, sub = subjects."}
 
 cort_CNR_fig_pth <- '../images/CNR_cortical_story.png' 
 include_graphics(cort_CNR_fig_pth)
@@ -632,22 +633,29 @@ We next tested whether the same pattern of findings would hold for the subcortic
 
 subcort_CNR_fig_pth <- '../images/CNR_subcortical_story.png' 
 include_graphics(subcort_CNR_fig_pth)
-
 ```
 
-
-  
 # Discussion
 
-Summary of results - namely, that ME and CMRR showed CNR advantage over the 3D-EPI for CNR, particularly for comparisons between experimental events of interest.
+Given the recent strong theoretical interest in the contribution of the basal ganglia to spatial visual attention function, we sought to compare SNR between protocols at 7T when imaging basal ganglia activity during a visual selection task. We compared a multi-echo, multi-band sequence (ME), a single-echo multiband sequence (CMRR) and a 3D EPI sequence. Importantly, we constrained the field-of-view (FOV) across sequences, so that each was well suited to concurrently capturing activity from the known cortical visual-selection network (FEF, IPS, LOC) and from the theoretically relevant nuclei of the basal ganglia. Participants completed a visual selection paradigm where probabilistic cues signalled the likely location of upcoming targets. The task was performed over 3 sessions, using 1 run from each protocol at each session. SNR was assessed using two methods; temporal signal-to-noise ratio (tSNR) and contrast-noise-ratio (CNR). CNR was assessed for each protocol for voxels i) that showed a strong response to the experimental events or comparisons of interest, ii) from the cortical nodes of interest and iii) from the nuceli of the basal ganglia. tSNR measures indicated that the ME protocol outperformed the 3D EPI protocol, which in turn outperformed the CMRR protocol, for both cortical and subcortical ROIs. CNR measures instead showed that the ME protocol outperformed the other two protocols only when experimental events included an overt action. In contrast, both the ME and CMRR protocols fared better than the 3D EPI protocol when experimental events and comparisons involved more subtle manipulations, such as a response to a spatial visual cue. Moreover, the ME and CMRR protocols could not be distinguished from one another under these latter conditions. Although this was the case for the cortical nodes of interest, signal in the basal ganglia nuclei were consistently low, and protocol had minimal influence on signal in these regions. Therefore, although the ME protocol clearly offered signal advantages across SNR tests, comparable signal performance may be gained from a similar single-echo protocol (CMRR) when assessing signal changes in the visual attention system.
 
-First conclusion is that ME or CMRR both show advantages when looking at modeling visual attention function events. This was not the case when modelling overt responses. Therefore it may be that once events become sufficiently subtle - such as psychological manipulations, there may be an upper bound on activation, and good sequences turn out comparable.
+Therefore, our data show that SE or ME multi-band protocols fare as well as each other for SNR when the goal is to model activity in response to visual events of interest. Militec et al [-@mileticFMRIProtocolOptimization2020] drew comparable conclusions when examining SNR in the basal ganglia during completion of a task that involves the execution or witholding of overt actions. Given that most pre-processing and analysis pipelines are built to more readily handle SE data, then it makes practical sense to use an optimised SE protocol when seeking to gain whole brain coverage at 7T. It is interesting that this was not observed in our data when modeling activity in response to overt action. In this case, our findings align more closely with those of Puckett et al [-@puckettUsingMultiechoSimultaneous2018], who found an advantage for ME over SE protocols across tSNR and CNR measurements. These authors used a block design comparing complex and simple overt movement sequences, which should have ensured maximal fluctuations in BOLD activity, given the robust manipulation. One possibility is that the advantages of ME is evident under conditions that induce strong activation changes, such as during the execution of overt actions. It may therefore be that when induced signal changes are more subtle, such as event-related manipulations in the psychological response to well-matched visual stimuli, there may be an upper bound for what can be gained for SNR when retaining a whole-brain FOV, which is reached by both ME and SE multi-band protocols. It would be of interest to see if these conclusions generalise when imaging activity in response to multiple cognitive phenomena. 
 
-It appears that in no case did we see basal ganglia signal increases, even for overt action. Describe how action used here differs from that in Puckett and Forstmann. Therefore, all signals were equal at this point, so maybe use the one that is simplest.
+Interestingly, although the SNR advantages were clear when imaging cortical activity, we observed consistently low SNR in the basal ganglia despite modeling overt actions, and despite the converging evidence and theory suggesting that activity in basal ganglia nuclei should be modulated in correspondence to shifts in covert visual selection [@arcizetCovertSpatialSelection2018; @amitaOptogeneticManipulationValuecoding2020a; yamamotoWhatWhereInformation2012; @espositoSubcorticalNetworkImplicit2021]. There was some suggestion in the current data that CNR for activation changes may be better for 3D EPI sequences when imaging the basal ganglia. However, given that overall CNR levels were well below what would be expected for voxels that would be deemed as statictially significant, and given that this finding was not replicated for remaining CNR-based comparisons, it is likely that this finding could be spurious. These findings may be due to the fact that motoric events in our current design were very brief. Specifically, we used an event-related design, responses (button presses) were spaced out by multiple seconds, and were rapid in execution. We had assumed that the randomised order of response hand (across trials) would amount to an appropriately efficient experimental design [@henson2007efficient]. However, it may be that adding a randomised interval between motoric events [@mileticFMRIProtocolOptimization2020], or selectively increasing the duration of action-related processes [@mileticFMRIProtocolOptimization2020; @puckettUsingMultiechoSimultaneous2018], or employing a block design [@puckettUsingMultiechoSimultaneous2018], may have resulted in better efficiency to image basal ganglia activity in the current study. Alternatively, previous work has shown increases in putamen activity when trial by trial violations of visual-spatial expectations are encoded as a regressor to the first-level GLM [vosselCorticalCouplingReflects2015]. Therefore, combining the anatomical ROI approach as we have used here, in conjunction with an experimental scheme that incorporates quantification of trial-by-trial belief updates may more succesfully elicit more robust changes in basal ganglia activity that are related to visual-selection function.
 
-Although there is strong theoretical reason to believe that the basal ganglia nuclei contribute to visual selection, it is not readily visible with 7T. Future efforts may seek to be more precise than the anatomical region - e.g. performing a functional localiser combined with ROI approach (any examples in the literature?).
+The findings pertaining to SNR observed in the cortex was broadly consistent across CNR measures (based on activation or comparison). The ME protocol always out performed the 3D EPI protocol, and so too did the CMRR when CNR measures were based on experimental comparisons. However, when activation based CNR measures were used, protocol differences were only observed for FEF, whereas when CNR measures were based on comparison contrasts (e.g. left target - right target), then protocol differences were observed only for IPS and LOC. Visual inspection of figure \@ref{fig:cortCNR} shows that in the case of IPS and LOC, the _a priori_ defined ROI neighboured the regions of strongest signal change. These results suggest that the conditions under which previous work elucidated ROIs should be taken into account when defining the contrasts that will be used to measure SNR within a given region of interest; i.e. a comparison contrast may yield more stable SNR measures for some regions such as the LOC or IPS. Moreover, the current findings, in tandem with those that show that activity peaks in the networks that underpin cognitive effort may be subject to large individual differences [@crittendenTaskDifficultyManipulation2014], suggest that defining cortical ROIs solely from meta-analyses of functional localisation may not be the most optimal approach when seeking to understand how CNR varies within a given ROI. Indeed, the meta-analysis used in the current study would have been largely based on data collected from 3T, and recent findings suggest that functional localisation can differ when the same task is used at both 3T and 7T [@torrisiStatisticalPowerComparisons2018]. Therefore a method that combines both functional and anatomical information to identify cortical areas of interest, such as using the intersection of a functional meta-analysis and a standard parcellation of the cortex, could potentially yield more stable CNR estimates across contrasts.
 
-Reason the results varied for the cortical ROIs - differences between 3T and 7T. Also it may be that individual variation is too large to apply a meta-analytic approach/define cortical ROIs based on localisation of function. Future efforts may wish to use a cortical parcellation scheme instead.
+We also observed differences between protocol comparisons when tSNR measures were used, relative to CNR measures. Specifically, both the ME and 3D EPI protocols outperformed the CMRR protocol for the tSNR measure, whereas both the ME and CMRR protocol outperformed the 3D EPI protocol when we used the CNR measures. This shows that tSNR measures are insensitive to the relative contributions of baseline and activation signal strength, yet the latter is critically important for task-related fMRI. We noticed during preprocessing that the 3D EPI sequence suffered from distortion to a greater extent than was observed for the other two sequences, which likely contributed to its poorer performance with the CNR measures. Regardless, it is clear from the current findings that protocol optimisation judgements should not be made on tSNR measures alone, at least in the context of task-related fMRI.
 
-Conclusions/summary
+The primary goal of the current work was to optimise imaging protocols at 7T for the basal ganglia and the cortical nodes of the visual-selection network. Therefore the primary consideration when selecting protocols was to minimise TE time while maintaining a sufficient field of view to capture all the ROIs. These contraints meant that our protocols were required to vary along various other dimensions such as TR, voxel size and multiband factor. We therefore do not lay claim as to the causal factor that resulted in comparable SNR benefits for the ME and CMRR protocols. Instead, we provide this data as a guideline for other researchers wishing to use 7T to image brain activity during visual-selection, or during other psychological phenomena of interest. Broadly, although ME protocols offer stronger SNR more consistently than other protocols, it appears that both multiband protocols (ME or SE) offer comparable SNR performance when making experimental comparisons between cognitive events at the whole-brain level. 
 
+*Conclusions*
+
+
+# Acknowledgements
+
+We thank Nicole Atcheson, Sarah Daniel and Aiman Al-Najjar for their essential support in 7T data collection. We also thank Aswin Narayanan and the UQ RDM team for organising and supplying the infrastructure that greatly facilitated data governance for this project. We also thank Johan van der Meer and Remi Gau for their discussions on the relative merits of various preprocessing choices, and Remi particularly for the enthusiastic discussions on the benefits of carpet plots. We also thank Paul Dux for his helpful comments on an initial draft of this manuscript.
+
+\clearpage
+
+# References
